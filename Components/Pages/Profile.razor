@@ -1,0 +1,33 @@
+﻿@page "/profile"
+
+<section id="profile">
+    <div id="username">
+        <p>Użytkownik <span style="font-weight: normal;">@username</span></p>
+    </div>
+    <form>
+        <div id="weight">
+        <span>Waga</span><input type="number" placeholder="[kg]"/>
+    </div>
+    <div id="height">
+        <span>Wzrost</span><input type="number" placeholder="[cm]" />
+    </div>
+    <div id="activity">
+        <span>Aktywność fizyczna</span>
+        <select type="number" placeholder="[cm]">
+            <option selected value="3">Wysoka</option>
+            <option value="2">Średnia</option>
+            <option value="1">Niska</option>
+            <option value="0">Brak</option>
+        </select>
+    </div>
+    <div id="btns">
+        <button class="accept">Zapisz</button>
+        <button class="cancel">Anuluj</button>
+    </div>
+      </form>
+</section>
+
+@code {
+    [Parameter]
+    public string username { get; set; } = "username@gmail.com";
+}

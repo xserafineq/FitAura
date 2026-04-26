@@ -1,0 +1,72 @@
+#profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 25px;
+    padding: 60px;
+}
+
+
+#username {
+    font-size: 30px;
+    text-align: center;
+    font-weight: bold;
+    color: black;
+    font-family: 'Comic Sans MS'
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+#weight, #height, #activity {
+    display: flex;
+    font-size: 20px;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    color: black;
+    gap: 15px;
+    font-weight: bold;
+}
+
+input, select {
+    background-color: #C5C5C5;
+    border-radius: 15px;
+    border: 3px solid #C5C5C5;
+    font-size: 16px;
+    padding: 5px;
+    width: 150px;
+}
+
+#btns {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    justify-content: center;
+    width: 100%;
+    padding: 40px;
+}
+
+.accept, .cancel {
+    display: flex;
+    width: 150px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 15px;
+    color: white;
+    font-weight: bold;
+    border: none;
+    padding: 5px;
+}
+
+.accept {
+    background-color: var(--green, green);
+}
+.cancel {
+    background-color: red;
+   
+}

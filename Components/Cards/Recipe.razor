@@ -1,0 +1,34 @@
+<div class="recipe-card">
+    <img src="images/@(img)" height="200" width="auto" alt="recipe-picture"/>
+    <div id="name">@name</div>
+    <div id="kcal"><img src="images/kcal.svg" height="20" alt="kcal-icon"/> @kcal kcal</div>
+    <div id="nutrients">
+        <div class="nutrient">
+            <div>20g</div>
+            <div>białka</div>
+        </div>
+        <div class="nutrient">
+            <div>20g</div>
+            <div>węgli</div>
+        </div>
+        <div class="nutrient">
+            <div>20g</div>
+            <div>tłuszczy</div>
+        </div>
+    </div>
+    <div id="categories">
+        <div class="category">Vegan</div>
+        <div class="category">Keto</div>
+        <div class="category">Low fat</div>
+    </div>
+</div>
+
+
+@code {
+    [Parameter]
+    public string name { get; set; }
+    [Parameter]
+    public int kcal { get; set; }
+    [Parameter]
+    public string img { get; set; }
+}

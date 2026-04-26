@@ -1,5 +1,40 @@
 ﻿@page "/"
+@using FitAura.Components.Cards
 
-<h1>Hello, world!</h1>
 
-Welcome to your new app.
+<main>
+    <div id="today">
+        <div id="date">@displayDate</div>
+        <div id="kcal">800 / 2000 kcal</div>
+    </div>
+    <section id="meals">
+        <Meal name="Śniadanie" kcal="2000" isFilled=true/>
+        <Meal name="Nowy posiłek"/>
+    </section>
+    <section id="diary">
+        <p>Dziennik Aktywności</p>
+        <div id="container">
+            <Activity name="Trening" activityIcon="trening.svg">
+                <div>0 kcal</div>
+            </Activity>
+            <Activity name="Sen" activityIcon="dream.svg">
+                <div>wyspany</div>
+            </Activity>
+            <Activity name="Kroki" activityIcon="steps.svg">
+                <div>2500</div>
+            </Activity>
+            <Activity name="Pomiary" activityIcon="measurements.svg">
+                <div>Dziś (0)</div>
+            </Activity>
+        </div>
+    </section>
+</main>
+
+@code {
+    private string? displayDate;
+
+    protected override void OnInitialized()
+    {
+        displayDate = DateTime.Now.ToString("dd.MM.yyyy");
+    }
+}

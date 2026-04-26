@@ -1,0 +1,18 @@
+﻿@page "/shoppinglist"
+
+<section id="shoppinglist">
+    <div id="list">
+        <p>Lista zakupów</p>
+    </div>
+    <ol>
+        <li class="item">produkt <div class="delete"><img height="22" src="images/delete_sweep.svg"</div></li>
+        <li class="item">produkt <div class="delete"><img height="22" src="images/delete_sweep.svg"</div></li>
+        <li class="item">produkt <div class="delete"><img height="22" src="images/delete_sweep.svg"</div></li>
+        <li class="item"><input type="text" placeholder="nowy produkt" /><div class="delete"><img height="15" src="images/add.svg"</div></li>
+    </ol>
+</section>
+
+@code {
+    [Parameter]
+    public string username { get; set; } = "username@gmail.com";
+}

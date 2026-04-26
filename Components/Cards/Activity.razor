@@ -1,0 +1,21 @@
+<div class="activity">
+    <img src="/images/@activityIcon" height="50" alt="@name"/>
+
+    <div id="state">
+        <div id="name">@name</div>
+        <div id="content">
+            @ChildContent
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string name { get; set; }
+
+    [Parameter]
+    public string activityIcon { get; set; } = "trening.svg";
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+}

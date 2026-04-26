@@ -1,0 +1,48 @@
+#recipes {
+    display: flex;
+    padding: 20px;
+    flex-direction: column;
+    gap: 20px;
+    background-color: white;
+    color: black;
+}
+
+#recipes p {
+    font-size: 30px;
+    font-family: 'Comic Sans MS';
+    text-align: center;
+    font-weight: bold;
+}
+
+#recipes #search {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+#recipe-input {
+    background-color: #C5C5C5;
+    border-radius: 15px;
+    padding: 5px;
+    border: 3px solid #C5C5C5;
+    width: 350px;
+    min-width: 150px;
+}
+
+.filter-icon {
+    background-color: var(--green);
+    border-radius: 10px;
+    width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px;
+}
+
+#container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    justify-content: center;
+    padding: 20px;
+}

@@ -1,0 +1,19 @@
+﻿@page "/recipes"
+@using FitAura.Components.Cards
+
+<main>
+    <section id="recipes">
+        <p>Wyszukaj przepis</p>
+        <div id="search">
+            <input id="recipe-input" type="text" placeholder="przepis"/>
+            <div class="filter-icon"><img height="15" src="images/filter.svg"</div>
+            <div class="filter-icon"><img height="25" src="images/arrow_upward.svg"</div>
+        </div>
+        <div id="container">
+            <Recipe name="Sushi" kcal="400" img="sushi.png"/>
+            <Recipe name="omlet" kcal="550" img="omlet.png" />
+            <Recipe name="omlet" kcal="550" img="omlet.png" />
+            <Recipe name="omlet" kcal="550" img="omlet.png" />
+        </div>
+    </section>
+</main>
