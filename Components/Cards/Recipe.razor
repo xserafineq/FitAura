@@ -1,4 +1,7 @@
-<div class="recipe-card">
+@using MudBlazor
+@using FitAura.Components.Modals
+@inject IDialogService DialogService
+<button @onclick='() => DialogService.ShowAsync<ShowRecipe>("Podgląd", new DialogOptions { FullWidth = true, MaxWidth = MaxWidth.Small })' class="recipe-card">
     <img src="images/@(img)" height="200" width="auto" alt="recipe-picture"/>
     <div id="name">@name</div>
     <div id="kcal"><img src="images/kcal.svg" height="20" alt="kcal-icon"/> @kcal kcal</div>
@@ -21,7 +24,7 @@
         <div class="category">Keto</div>
         <div class="category">Low fat</div>
     </div>
-</div>
+</button>
 
 
 @code {

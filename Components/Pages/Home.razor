@@ -1,5 +1,7 @@
 ﻿@page "/"
 @using FitAura.Components.Cards
+@using FitAura.Components.Modals
+
 
 
 <main>
@@ -8,7 +10,7 @@
         <div id="kcal">800 / 2000 kcal</div>
     </div>
     <section id="meals">
-        <Meal name="Śniadanie" kcal="2000" isFilled=true/>
+        <Meal name="Śniadanie" kcal="2000" isFilled=true />
         <Meal name="Nowy posiłek"/>
     </section>
     <section id="diary">
@@ -28,6 +30,9 @@
             </Activity>
         </div>
     </section>
+    <AddMeal/>
+    <ShowMeal/>
+    <ShowRecipe/>
 </main>
 
 @code {

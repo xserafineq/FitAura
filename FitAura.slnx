@@ -1,3 +1,5 @@
 <Solution>
-  <Project Path="FitAura.csproj" />
+  <Project Path="FitAura.csproj">
+    <Deploy Solution="Debug|*" />
+  </Project>
 </Solution>
