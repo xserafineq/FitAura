@@ -1,5 +1,7 @@
 ﻿@using FitAura.Models
+@using FitAura.Services
 @using MudBlazor
+@inject FitAura.Services.ProductService ProductService
 @inject HttpClient Http
 
 <MudDialog>
@@ -66,45 +68,13 @@
 
     private void Cancel() => MudDialog.Cancel();
 
-    private async Task GetProduct(string barcodeToFetch)
+    
+    private async Task GetProduct(string barcode)
     {
-        if (string.IsNullOrWhiteSpace(barcodeToFetch)) return;
-
-        try
-        {
-            var response = await Http.GetStringAsync($"api/v2/product/{barcodeToFetch}.json");
-            var node = System.Text.Json.Nodes.JsonNode.Parse(response);
-            var p = node?["product"];
-            var n = p?["nutriments"];
-
-            if (p == null)
-            {
-                myProduct = null;
-                StateHasChanged();
-                return;
-            }
-
-        
-            myProduct = new FitAura.Models.Product(
-                name: p?["product_name"]?.ToString() ?? "Brak nazwy",
-                grammage: p?["quantity"]?.ToString() ?? "Brak danych",
-                barCode: node?["code"]?.ToString() ?? barcodeToFetch,
-                kcal: (double?)n?["energy-kcal_100g"] ?? 0.0,
-                protein: (int)Math.Round((double?)n?["proteins_100g"] ?? 0.0),
-                fats: (int)Math.Round((double?)n?["fat_100g"] ?? 0.0),
-                carbs: (int)Math.Round((double?)n?["carbohydrates_100g"] ?? 0.0),
-                imageUrl: p?["image_front_url"]?.ToString()
-            );
-
-            StateHasChanged(); 
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Błąd pobierania: {ex.Message}");
-            myProduct = null;
-            StateHasChanged();
-        }
+        myProduct = await ProductService.GetProductAsync(barcode);
+        StateHasChanged(); 
     }
+
     private async Task HandleKeyUp(KeyboardEventArgs e)
     {
         if (e.Key == "Enter")
