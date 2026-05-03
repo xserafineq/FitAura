@@ -1,0 +1,56 @@
+﻿@using MudBlazor
+
+<style>
+
+    #workout {
+        display: flex;
+        width: 90%;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+        #workout span {
+            font-size: 16px;
+            font-weight: bold;
+            color: black;
+        }
+
+        #workout div {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        #workout input {
+            width: 150px;
+            background-color: #FEFEFEFE;
+            border: 2px solid lightgray;
+            padding: 8px;
+            font-size: 14px;
+            border-radius: 15px;
+        }
+
+</style>
+
+<MudDialog>
+    <DialogContent>
+        <div id="workout">
+            <div>
+                <span>Spalone kalorie</span>
+                <input type="number" placeholder="kcal" />
+            </div>
+        </div>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Anuluj</MudButton>
+        <MudButton Color="Color.Secondary" OnClick="Submit">Zapisz</MudButton>
+    </DialogActions>
+</MudDialog>
+@code {
+    [CascadingParameter]
+    private IMudDialogInstance? MudDialog { get; set; }
+
+    private void Submit() => MudDialog.Close(DialogResult.Ok(true));
+
+    private void Cancel() => MudDialog.Cancel();
+}

@@ -1,4 +1,8 @@
-<div class="activity">
+@using MudBlazor;
+@using FitAura.Components.Modals;
+@inject IDialogService DialogService;
+
+<div class="activity" @onclick='openDialog'>
     <img src="/images/@activityIcon" height="50" alt="@name"/>
 
     <div id="state">
@@ -8,14 +12,39 @@
         </div>
     </div>
 </div>
-
 @code {
     [Parameter]
-    public string name { get; set; }
+    public string name { get; set; } = "";
 
     [Parameter]
     public string activityIcon { get; set; } = "trening.svg";
 
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
+
+    string activityName { get; set; } = "";
+
+    protected override void OnInitialized()
+    {
+        if (name != null)
+        {
+            activityName = name.ToLower();
+        }
+    }
+
+    private async Task openDialog()
+    {
+        if ("pomiary".Equals(activityName))
+        {
+            await DialogService.ShowAsync<AddMeasurement>("Nowy pomiar " + DateTime.Now.ToString("dd.MM.yyyy HH:mm"), new DialogOptions { FullWidth = true, MaxWidth = MaxWidth.Small });
+        }
+        if ("trening".Equals(activityName))
+        {
+            await DialogService.ShowAsync<AddWorkout>("Trening", new DialogOptions { FullWidth = true, MaxWidth = MaxWidth.Small });
+        }
+        if ("sen".Equals(activityName))
+        {
+            await DialogService.ShowAsync<AddSleep>("Trening", new DialogOptions { FullWidth = true, MaxWidth = MaxWidth.Small });
+        }
+    }
 }

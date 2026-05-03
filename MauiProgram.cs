@@ -22,6 +22,9 @@ namespace FitAura
             builder.Services.AddBlazorWebViewDeveloperTools();
     		builder.Logging.AddDebug();
 #endif
+            var http = new HttpClient { BaseAddress = new Uri("https://world.openfoodfacts.org/") };
+            http.DefaultRequestHeaders.Add("User-Agent", "FitAuraApp");
+            builder.Services.AddSingleton(http);
 
             return builder.Build();
         }

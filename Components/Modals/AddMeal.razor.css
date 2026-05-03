@@ -31,9 +31,11 @@
 }
 
 #img-container img {
-    width: 200px;
-    height: 200px;
+    width: auto;
+    height: auto;
+    border-radius: 15px;
 }
+
 #content {
     display: flex;
     flex-direction: column;

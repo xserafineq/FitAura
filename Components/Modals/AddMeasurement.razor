@@ -1,0 +1,65 @@
+﻿@using MudBlazor
+
+<style>
+
+#measurement {
+    display: flex;
+    width: 90%;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#measurement span {
+    font-size: 16px;
+    font-weight: bold;
+    color: black;
+}
+
+#measurement div {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+#measurement input {
+    width: 150px;
+    background-color: #FEFEFEFE;
+    border: 2px solid lightgray;
+    padding: 8px;
+    font-size: 14px;
+    border-radius: 15px;
+}
+
+
+</style>
+
+<MudDialog>
+    <DialogContent>
+        <div id="measurement">
+            <div>
+                <span>Waga</span>
+                <input type="number" placeholder="kg" />
+            </div>
+            <div>
+                <span>Tętno</span>
+                <input type="number" placeholder="bpm" />
+            </div>
+            <div>
+                <span>Cukier</span>
+                <input type="number" placeholder="mg/dL" />
+            </div>
+        </div>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Anuluj</MudButton>
+        <MudButton Color="Color.Secondary" OnClick="Submit">Zapisz</MudButton>
+    </DialogActions>
+</MudDialog>
+@code {
+    [CascadingParameter]
+    private IMudDialogInstance? MudDialog { get; set; }
+
+    private void Submit() => MudDialog.Close(DialogResult.Ok(true));
+
+    private void Cancel() => MudDialog.Cancel();
+}
