@@ -1,0 +1,73 @@
+﻿@page "/"
+@using FitAura.Components.Cards
+@using FitAura.Components.Modals
+@using FitAura.Services
+@layout EmptyLayout
+
+@inject NavigationManager NavigationManager
+@inject UserService UserService
+@inject DayService DayService
+
+<main>
+    <div id="form-box">
+        <div id="form-header">
+            <img src="images/logo.png" alt="FitAura Logo" height="40"/>
+            <div>FitAura</div>
+        </div>
+        
+ 
+        <form @onsubmit="HandleLogin">
+            <input type="email" placeholder="email" @bind="email" @bind:event="oninput" />
+            <input type="password" placeholder="hasło" @bind="password" @bind:event="oninput" />
+            
+            <button type="submit">Zaloguj się</button>
+        </form>
+
+        @if (!string.IsNullOrEmpty(errorMessage))
+        {
+            <div class="error-message" style="color: red; margin-top: 10px;">
+                @errorMessage
+            </div>
+        }
+    </div>
+</main>
+
+@code {
+    private string? displayDate;
+    
+    // Zmienne powiązane z inputami
+    private string email = "";
+    private string password = "";
+    private string? errorMessage;
+
+    protected override void OnInitialized()
+    {
+        displayDate = DateTime.Now.ToString("dd.MM.yyyy");
+    }
+
+    private async Task HandleLogin()
+    {
+        errorMessage = null;
+
+        try
+        {
+            bool isAuthenticated = await UserService.LoginAsync(email, password);
+
+            if (isAuthenticated)
+            {
+
+                await DayService.createDay();
+                NavigationManager.NavigateTo("/home");
+            }
+            else
+            {
+                errorMessage = "Niepoprawny adres e-mail lub hasło.";
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "Wystąpił błąd podczas łączenia z serwerem.";
+            Console.WriteLine(ex.Message);
+        }
+    }
+}

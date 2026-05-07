@@ -29,6 +29,7 @@
                         @(Math.Round(myProduct.kcal)) kcal
                     </div>
                 </div>
+                <div id="markets">@(myProduct.market != "" ? "Kupisz w: " + myProduct.market: "")</div>
                 <div id="nutrients">
                     <div class="nutrient">@myProduct.protein g białka</div>
                     <div class="nutrient">@myProduct.carbs g węgli</div>
