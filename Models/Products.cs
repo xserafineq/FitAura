@@ -4,5 +4,7 @@ using System.Text;
 
 namespace FitAura.Models
 {
-    public record Product(string name,string grammage, string barCode, double kcal, int protein, int fats, int carbs, string? imageUrl, string market);
+    public record Product(int Id, string Barcode, string Name, int Kcal, int Protein, int Fats, string Unit, int Carbs, string? Store, string? ImageUrl)
+    {
+    }
 }

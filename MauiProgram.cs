@@ -26,10 +26,16 @@ namespace FitAura
             builder.Logging.AddDebug();
 #endif
 
-            builder.Services.AddHttpClient<FitAura.Services.ProductService>(client =>
+
+
+            builder.Services.AddHttpClient<FitAura.Services.ProductService>("FitAuraApi", client =>
+               {
+                   client.BaseAddress = new Uri("https://localhost:7017/");
+               });
+
+            builder.Services.AddHttpClient<FitAura.Services.MealService>("FitAuraApi", client =>
             {
-                client.BaseAddress = new Uri("https://world.openfoodfacts.org/");
-                client.DefaultRequestHeaders.Add("User-Agent", "FitAuraApp");
+                client.BaseAddress = new Uri("https://localhost:7017/");
             });
 
             builder.Services.AddHttpClient<FitAura.Services.UserService>("FitAuraApi", client =>
@@ -49,6 +55,14 @@ namespace FitAura
             {
                 client.BaseAddress = new Uri("https://localhost:7017/");
             });
+
+            builder.Services.AddHttpClient<FitAura.Services.MeasurementService>("FitAuraApi", client =>
+            {
+                client.BaseAddress = new Uri("https://localhost:7017/");
+            });
+
+            builder.Services.AddScoped<UserState>();
+            builder.Services.AddScoped<DayState>();
 
             return builder.Build();
         }

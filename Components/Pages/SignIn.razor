@@ -7,6 +7,7 @@
 @inject NavigationManager NavigationManager
 @inject UserService UserService
 @inject DayService DayService
+@inject UserState UserState
 
 <main>
     <div id="form-box">
@@ -35,7 +36,7 @@
 @code {
     private string? displayDate;
     
-    // Zmienne powiązane z inputami
+
     private string email = "";
     private string password = "";
     private string? errorMessage;
@@ -51,12 +52,12 @@
 
         try
         {
-            bool isAuthenticated = await UserService.LoginAsync(email, password);
+            var user = await UserService.LoginAsync(email, password);
 
-            if (isAuthenticated)
+            if (user != null)
             {
-
-                await DayService.createDay();
+                UserState.SetUser(user);
+                await DayService.createDay(user.Id);
                 NavigationManager.NavigateTo("/home");
             }
             else

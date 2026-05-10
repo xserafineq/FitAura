@@ -1,4 +1,8 @@
-﻿@using MudBlazor
+﻿@using FitAura.Services
+@using MudBlazor
+@inject DayState DayState
+@inject DayService DayService
+
 
 <style>
 
@@ -37,20 +41,43 @@
         <div id="workout">
             <div>
                 <span>Spalone kalorie</span>
-                <input type="number" placeholder="kcal" />
+                <input @bind="burnedKcals" type="number" placeholder="kcal" />
             </div>
         </div>
     </DialogContent>
     <DialogActions>
         <MudButton OnClick="Cancel">Anuluj</MudButton>
-        <MudButton Color="Color.Secondary" OnClick="Submit">Zapisz</MudButton>
+        <MudButton Color="Color.Secondary" OnClick="HandleSave">Zapisz</MudButton>
     </DialogActions>
 </MudDialog>
 @code {
     [CascadingParameter]
     private IMudDialogInstance? MudDialog { get; set; }
 
-    private void Submit() => MudDialog.Close(DialogResult.Ok(true));
+    private void Cancel() => MudDialog?.Cancel();
 
-    private void Cancel() => MudDialog.Cancel();
+    private decimal burnedKcals;
+
+    private async Task HandleSave()
+    {
+        if (DayState.CurrentDay == null)
+        {
+            return;
+        }
+
+        DayState.SetBurnedKcals(burnedKcals);
+
+        var editDto = new Models.Records.EditDay(
+            DayState.CurrentDay.Id,
+            DayState.CurrentDay.Steps,
+            DayState.CurrentDay.SleepLevel,
+            DayState.CurrentDay.KcalBurned,
+            DayState.CurrentDay.Measurements
+        );
+
+
+        await DayService.editDay(editDto);
+        MudDialog?.Close(DialogResult.Ok(true));
+
+    }
 }

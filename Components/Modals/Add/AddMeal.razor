@@ -1,8 +1,11 @@
 ﻿@using FitAura.Models
+@using FitAura.Models.Records
 @using FitAura.Services
 @using MudBlazor
 @inject FitAura.Services.ProductService ProductService
 @inject HttpClient Http
+@inject DayState DayState
+@inject MealService MealService
 
 <MudDialog>
     <DialogContent>
@@ -19,21 +22,23 @@
         @if (myProduct != null)
         {
             <div id="img-container">
-                <img id="meal-img" src="@(myProduct.imageUrl ?? "images/sushi.png")" alt="product" />
+                <img id="meal-img" src="@(myProduct.ImageUrl ?? "images/sushi.png")" alt="product" />
             </div>
             <div id="content">
                 <div>
-                    <div id="name">@myProduct.name (@myProduct.grammage)</div>
+                    <div id="name">@myProduct.Name 
+                            @myProduct.Unit
+                       </div>
                     <div id="kcal">
                         <img height="16" src="images/kcal.svg" alt="kcal" />
-                        @(Math.Round(myProduct.kcal)) kcal
+                        @myProduct.Kcal kcal
                     </div>
                 </div>
-                <div id="markets">@(myProduct.market != "" ? "Kupisz w: " + myProduct.market: "")</div>
+                <div id="markets">@(myProduct.Store != "" ? "Kupisz w: " + myProduct.Store: "")</div>
                 <div id="nutrients">
-                    <div class="nutrient">@myProduct.protein g białka</div>
-                    <div class="nutrient">@myProduct.carbs g węgli</div>
-                    <div class="nutrient">@myProduct.fats g tłuszczy</div>
+                    <div class="nutrient">@myProduct.Protein g białka</div>
+                    <div class="nutrient">@myProduct.Carbs g węgli</div>
+                    <div class="nutrient">@myProduct.Fats g tłuszczy</div>
                 </div>
             </div>
         }
@@ -59,10 +64,17 @@
     private string barcode = "";
     private FitAura.Models.Product? myProduct;
 
-    private void Submit()
+
+    private async Task Submit()
     {
         if (myProduct != null)
         {
+            var items = new List<MealItem>
+            {
+                new MealItem("product",myProduct.Id,null)
+            };
+            var meal = new AddMealRecord("sniadaniey",2000,DayState.CurrentDay.Id,items);
+            await MealService.AddMeal(meal);
             MudDialog.Close(DialogResult.Ok(myProduct));
         }
     }
@@ -72,8 +84,9 @@
     
     private async Task GetProduct(string barcode)
     {
-        myProduct = await ProductService.GetProductAsync(barcode);
-        StateHasChanged(); 
+       
+        myProduct = await ProductService.GetLocalProductAsync(barcode);
+
     }
 
     private async Task HandleKeyUp(KeyboardEventArgs e)

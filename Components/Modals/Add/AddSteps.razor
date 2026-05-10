@@ -1,0 +1,83 @@
+﻿@using FitAura.Services
+@using MudBlazor
+@inject DayState DayState
+@inject DayService DayService
+
+
+<style>
+
+    #steps {
+        display: flex;
+        width: 90%;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+        #steps span {
+            font-size: 16px;
+            font-weight: bold;
+            color: black;
+        }
+
+        #steps div {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        #steps input {
+            width: 150px;
+            background-color: #FEFEFEFE;
+            border: 2px solid lightgray;
+            padding: 8px;
+            font-size: 14px;
+            border-radius: 15px;
+        }
+
+</style>
+
+<MudDialog>
+    <DialogContent>
+        <div id="steps">
+            <div>
+                <span>Kroki</span>
+                <input @bind="steps" min="0" type="number" placeholder="liczba kroków" />
+            </div>
+        </div>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Anuluj</MudButton>
+        <MudButton Color="Color.Secondary" OnClick="HandleSave">Zapisz</MudButton>
+    </DialogActions>
+</MudDialog>
+@code {
+    [CascadingParameter]
+    private IMudDialogInstance? MudDialog { get; set; }
+
+    private void Cancel() => MudDialog?.Cancel();
+
+    private int steps;
+
+    private async Task HandleSave()
+    {
+        if (DayState.CurrentDay == null)
+        {
+            return;
+        }
+
+        DayState.SetSteps(steps);
+
+        var editDto = new Models.Records.EditDay(
+            DayState.CurrentDay.Id,
+            DayState.CurrentDay.Steps,
+            DayState.CurrentDay.SleepLevel,
+            DayState.CurrentDay.KcalBurned,
+            DayState.CurrentDay.Measurements
+        );
+
+
+        await DayService.editDay(editDto);
+        MudDialog?.Close(DialogResult.Ok(true));
+
+    }
+}

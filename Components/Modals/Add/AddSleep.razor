@@ -1,4 +1,7 @@
-﻿@using MudBlazor
+﻿@using FitAura.Services
+@using MudBlazor
+@inject DayState DayState
+@inject DayService DayService
 
 <style>
 
@@ -37,8 +40,8 @@
         <div id="sleep">
             <div>
                 <span>Poziom wyspania</span>
-                <select>
-                    <option value="3">Wyspany</option>
+                <select @bind="sleepLevel">
+                    <option value="3" selected>Wyspany</option>
                     <option value="2">Średnio wyspany</option>
                     <option value="1">Niewyspany</option>
                 </select>
@@ -47,7 +50,7 @@
     </DialogContent>
     <DialogActions>
         <MudButton OnClick="Cancel">Anuluj</MudButton>
-        <MudButton Color="Color.Secondary" OnClick="Submit">Zapisz</MudButton>
+        <MudButton Color="Color.Secondary" OnClick="HandleSave">Zapisz</MudButton>
     </DialogActions>
 </MudDialog>
 @code {
@@ -57,4 +60,30 @@
     private void Submit() => MudDialog.Close(DialogResult.Ok(true));
 
     private void Cancel() => MudDialog.Cancel();
+
+    private int sleepLevel;
+
+    private async Task HandleSave()
+    {
+        if (DayState.CurrentDay == null)
+        {
+            return;
+        }
+
+        DayState.SetSleepLevel(sleepLevel);
+
+        var editDto = new Models.Records.EditDay(
+            DayState.CurrentDay.Id,
+            DayState.CurrentDay.Steps,
+            DayState.CurrentDay.SleepLevel,
+            DayState.CurrentDay.KcalBurned,
+            DayState.CurrentDay.Measurements
+        );
+
+
+        await DayService.editDay(editDto);
+        MudDialog?.Close(DialogResult.Ok(true));
+
+    }
+
 }

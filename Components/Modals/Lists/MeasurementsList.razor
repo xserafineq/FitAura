@@ -1,0 +1,52 @@
+﻿@using FitAura.Models
+@using FitAura.Services
+@using MudBlazor
+@inject FitAura.Services.ProductService ProductService
+@inject HttpClient Http
+@inject DayState DayState
+
+<style>
+    #measurements-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    #measurements-list .measurement {
+        display: flex;
+        gap: 10px;
+        border-bottom: 2px solid var(--green);
+        font-size: 16px;
+    }
+</style>
+
+<MudDialog>
+    <DialogContent>
+        <div id="measurements-list">
+            @foreach (var measurement in DayState.CurrentDay.Measurements)
+            {
+                <div class="measurement">
+                  @measurement.Weight kg / @measurement.Pulse bmp / @measurement.Sugar mg/dl
+                </div>
+            }
+        </div>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Secondary" OnClick="Cancel">
+            Zamknij
+        </MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    private IMudDialogInstance MudDialog { get; set; }
+
+    private string barcode = "";
+    private FitAura.Models.Product? myProduct;
+
+
+
+    private void Cancel() => MudDialog.Cancel();
+
+    
+}

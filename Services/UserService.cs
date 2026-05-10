@@ -17,10 +17,8 @@ namespace FitAura.Services
             _httpClient = httpClient;
         }
 
-        public async Task<bool> LoginAsync(string email, string password)
+        public async Task<User> LoginAsync(string email, string password)
         {
-            Console.WriteLine($"Próbuję zalogować użytkownika: {email}");
-
             var requestData = new { Email = email, Password = password };
 
             try
@@ -29,8 +27,13 @@ namespace FitAura.Services
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var result = await response.Content.ReadFromJsonAsync<bool>();
-                    return result;
+                    var user = await response.Content.ReadFromJsonAsync<User>();
+                    return user;
+                }
+
+                if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                {
+                    Console.WriteLine("Błędne dane logowania.");
                 }
             }
             catch (Exception ex)
@@ -38,7 +41,7 @@ namespace FitAura.Services
                 Console.WriteLine($"Błąd podczas łączenia z API: {ex.Message}");
             }
 
-            return false;
+            return null;
         }
     }
 }

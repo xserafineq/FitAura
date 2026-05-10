@@ -1,0 +1,135 @@
+﻿@using FitAura.Services
+@using FitAura.Models
+@using FitAura.Models.Records
+@using FitAura.Components.Modals.Lists
+@using FitAuraApi.Models
+@using MudBlazor
+@inject DayState DayState
+@inject DayService DayService
+@inject MeasurementService MeasurementService
+@inject IDialogService DialogService;
+
+<style>
+
+#measurement {
+    display: flex;
+    width: 90%;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#measurement span {
+    font-size: 16px;
+    font-weight: bold;
+    color: black;
+}
+
+#measurement div {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+#measurement input {
+    width: 150px;
+    background-color: #FEFEFEFE;
+    border: 2px solid lightgray;
+    padding: 8px;
+    font-size: 14px;
+    border-radius: 15px;
+}
+
+#todays-measurements {
+    display: flex;
+    flex-direction: column;
+    font-size: 18px;
+    font-weight: bolder;
+    color: var(--green);
+    height: 70px;
+    justify-content: center;
+    gap: 5px;
+    padding: 10px 10px 0px 0px;
+}
+
+#measurements-btn {
+    display: flex;
+    background-color: var(--green);
+    font-size: 18px;
+    border-radius: 8px;
+    border: 0;
+    color: white;
+    font-weight: bold;
+    padding: 10px;
+}
+
+
+
+</style>
+
+<MudDialog>
+    <DialogContent>
+        <div id="measurement">
+            <div>
+                <span>Waga</span>
+                <input @bind="weight" min="0" type="number" placeholder="kg" />
+            </div>
+            <div>
+                <span>Tętno</span>
+                <input @bind="pulse" min="0" type="number" placeholder="bpm" />
+            </div>
+            <div>
+                <span>Cukier</span>
+                <input @bind="sugar" min="0" type="number" placeholder="mg/dL" />
+            </div>
+        </div>
+        <div id="todays-measurements">
+            <button @onclick='@(() => DialogService.ShowAsync<MeasurementsList>("Pomiary", new DialogOptions { FullWidth = true, MaxWidth = MaxWidth.Small }))' id="measurements-btn">Wyświetl pomiary</button>
+        </div>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Anuluj</MudButton>
+        <MudButton Color="Color.Secondary" OnClick="HandleSave">Zapisz</MudButton>
+    </DialogActions>
+</MudDialog>
+@code {
+    [CascadingParameter]
+    private IMudDialogInstance? MudDialog { get; set; }
+
+    private void Submit() => MudDialog.Close(DialogResult.Ok(true));
+
+    private void Cancel() => MudDialog.Cancel();
+
+    private decimal weight;
+
+    private decimal sugar;
+
+    private decimal pulse;
+
+
+    private async Task HandleSave()
+    {
+        if (DayState.CurrentDay == null)
+        {
+            return;
+        }
+
+        var measurement = new AddMeasurementRecord(weight, pulse, sugar, DayState.CurrentDay.Id);
+
+        DayState.SetMeasurement(measurement);
+
+        var editDto = new Models.Records.EditDay(
+            DayState.CurrentDay.Id,
+            DayState.CurrentDay.Steps,
+            DayState.CurrentDay.SleepLevel,
+            DayState.CurrentDay.KcalBurned,
+            DayState.CurrentDay.Measurements
+        );
+
+        await DayService.editDay(editDto);
+
+        MudDialog?.Close(DialogResult.Ok(true));
+
+    }
+
+
+}

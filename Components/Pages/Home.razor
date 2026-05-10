@@ -1,7 +1,8 @@
 ﻿@page "/home"
 @using FitAura.Components.Cards
 @using FitAura.Components.Modals
-
+@using FitAura.Models
+@inject DayState DayState
 
 
 <main>
@@ -17,16 +18,29 @@
         <p>Dziennik Aktywności</p>
         <div id="container">
             <Activity name="Trening" activityIcon="trening.svg">
-                <div>0 kcal</div>
+                @kcal
             </Activity>
             <Activity name="Sen" activityIcon="dream.svg">
-                <div>wyspany</div>
+                <div>@{
+                            if(sleep == 1)
+                            {
+                               <span>nie wyspany</span>
+                            }
+                            if(sleep == 2)
+                            {
+                               <span>śrenio wyspany</span>
+                            }
+                            if(sleep == 3)
+                            {
+                               <span>wyspany</span>
+                            }
+                     }</div>
             </Activity>
             <Activity name="Kroki" activityIcon="steps.svg">
-                <div>2500</div>
+                @steps
             </Activity>
             <Activity name="pomiary" activityIcon="measurements.svg">
-                <div>Dziś (0)</div>
+                @measurementsCount
             </Activity>
         </div>
     </section>
@@ -35,8 +49,33 @@
 @code {
     private string? displayDate;
 
+    private decimal kcal;
+    private int steps;
+    private int sleep;
+    private int measurementsCount;
+
     protected override void OnInitialized()
     {
-        displayDate = DateTime.Now.ToString("dd.MM.yyyy");
+        displayDate = DayState.CurrentDay.Date.ToString();
+
+        DayState.OnChange += HandleStateChange;
+        RefreshData();
+    }
+
+    private void RefreshData()
+    {
+        if (DayState.CurrentDay != null)
+        {
+            kcal = DayState.CurrentDay.KcalBurned;
+            steps = DayState.CurrentDay.Steps;
+            sleep = DayState.CurrentDay.SleepLevel;
+            measurementsCount = DayState.CurrentDay.Measurements.Count();
+        }
+    }
+
+    private void HandleStateChange()
+    {
+        RefreshData();
+        InvokeAsync(StateHasChanged);
     }
 }

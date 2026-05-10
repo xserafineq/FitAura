@@ -1,3 +1,4 @@
+@using FitAura.Components.Modals.Add
 @using MudBlazor;
 @using FitAura.Components.Modals;
 @inject IDialogService DialogService;
@@ -8,7 +9,24 @@
     <div id="state">
         <div id="name">@name</div>
         <div id="content">
-            @ChildContent
+            @{
+                if (name.ToLower()=="trening")
+                {
+                    <div>@ChildContent kcal</div>
+                }
+                if (name.ToLower() == "kroki")
+                {
+                    <div>@ChildContent</div>
+                }
+                if (name.ToLower() == "pomiary")
+                {
+                    <div>Dziś (@ChildContent)</div>
+                }
+                if (name.ToLower() == "sen")
+                {
+                    <div>@ChildContent</div>
+                }
+            }
         </div>
     </div>
 </div>
@@ -45,6 +63,10 @@
         if ("sen".Equals(activityName))
         {
             await DialogService.ShowAsync<AddSleep>("Sen", new DialogOptions { FullWidth = true, MaxWidth = MaxWidth.Small });
+        }
+        if ("kroki".Equals(activityName))
+        {
+            await DialogService.ShowAsync<AddSteps>("Kroki", new DialogOptions { FullWidth = true, MaxWidth = MaxWidth.Small });
         }
     }
 }
