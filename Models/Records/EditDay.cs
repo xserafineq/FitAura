@@ -9,5 +9,6 @@ namespace FitAura.Models.Records
         int Steps,
         int SleepLevel,
         decimal KcalBurned,
-        ICollection<AddMeasurementRecord> Measurements);
+        ICollection<AddMeasurementRecord> Measurements,
+        ICollection<AddMealRecord>? Meals);
 }

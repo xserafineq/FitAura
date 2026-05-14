@@ -2,17 +2,27 @@
 @using FitAura.Components.Cards
 @using FitAura.Components.Modals
 @using FitAura.Models
+@using FitAura.Models.Records
 @inject DayState DayState
 
 
 <main>
     <div id="today">
         <div id="date">@displayDate</div>
-        <div id="kcal">800 / 2000 kcal</div>
+        <div id="kcal">@consumedKcal / 2000 kcal</div>
     </div>
     <section id="meals">
-        <Meal name="Śniadanie" kcal="2000" isFilled=true />
-        <Meal name="Nowy posiłek"/>
+
+        @{
+            if (meals.Count>0)
+            {
+                foreach (var meal in meals)
+                {
+                    <Meal name="@meal.Name" kcal="@meal.Kcal" mealItems="@meal.MealItems" isFilled="true"></Meal>
+                }
+            }
+            <Meal name="Nowy posiłek" />
+        }
     </section>
     <section id="diary">
         <p>Dziennik Aktywności</p>
@@ -50,9 +60,11 @@
     private string? displayDate;
 
     private decimal kcal;
+    private decimal consumedKcal;
     private int steps;
     private int sleep;
     private int measurementsCount;
+    private List<AddMealRecord> meals;
 
     protected override void OnInitialized()
     {
@@ -70,6 +82,12 @@
             steps = DayState.CurrentDay.Steps;
             sleep = DayState.CurrentDay.SleepLevel;
             measurementsCount = DayState.CurrentDay.Measurements.Count();
+            meals = DayState.CurrentDay.Meals?.ToList() ?? new List<AddMealRecord>();
+            consumedKcal = 0;
+            foreach (var meal in DayState.CurrentDay.Meals)
+            {
+                consumedKcal += meal.Kcal;
+            }
         }
     }
 

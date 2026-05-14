@@ -47,5 +47,13 @@ public class DayState
             OnChange?.Invoke();
         }
     }
+    public void SetMeal(AddMealRecord meal)
+    {
+        if (CurrentDay != null)
+        {
+            CurrentDay.Meals.Add(meal);
+            OnChange?.Invoke();
+        }
+    }
 
 }

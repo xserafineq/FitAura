@@ -17,6 +17,7 @@ namespace FitAura.Models
         public int UserId { get; set; }
 
         public ICollection<AddMeasurementRecord> Measurements { get; set; } = new List<AddMeasurementRecord>();
+        public ICollection<AddMealRecord> Meals { get; set; } = new List<AddMealRecord>();
 
         public Day() { }
 

@@ -1,9 +1,10 @@
 @using FitAura.Components.Modals.Show
 @using FitAura.Components.Modals.Add
+@using FitAura.Models.Records
 @using MudBlazor
 @inject IDialogService DialogService
 
-<button @onclick='@(isFilled ? () => DialogService.ShowAsync<ShowMeal>("Podgląd", new DialogOptions { FullWidth = true, MaxWidth = MaxWidth.Small }) : () => DialogService.ShowAsync<AddMeal>("Wybór posiłku", new DialogOptions { FullWidth = true, MaxWidth = MaxWidth.Small }))' class="@(isFilled ? "meal-card filled" : "meal-card")">
+<button @onclick='HandleButtonClick' class="@(isFilled ? "meal-card filled" : "meal-card")">
     @(
         isFilled ? 
         @<svg width="40" height="40" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -24,7 +25,7 @@
     )
     <div id="state">
         <div id="name">@name</div>
-        <div id="kcal">@(isFilled ? "650 kcal" : "")</div>
+        <div id="kcal">@(isFilled ? kcal + " kcal": "")</div>
     </div>
 </button>
 
@@ -38,4 +39,22 @@
     [Parameter]
     public bool isFilled { get; set; } = false;
 
+    [Parameter]
+    public ICollection<MealItem> mealItems { get; set; } = new List<MealItem>();
+
+
+    private async Task HandleButtonClick()
+    {
+        var options = new DialogOptions { FullWidth = true, MaxWidth = MaxWidth.Small };
+
+        if (isFilled)
+        {
+            var parameters = new DialogParameters<ShowMeal> { { x => x.MealItems, mealItems } };
+            await DialogService.ShowAsync<ShowMeal>("Podgląd", parameters, options);
+        }
+        else
+        {
+            await DialogService.ShowAsync<AddMeal>("Wybór posiłku", options);
+        }
+    }
 }

@@ -1,0 +1,95 @@
+﻿@using FitAura.Models
+@using FitAura.Models.Records
+@using FitAura.Services
+@using MudBlazor
+@inject FitAura.Services.ProductService ProductService
+@inject HttpClient Http
+@inject DayState DayState
+@inject MealService MealService
+@inject DayService DayService
+
+<MudDialog>
+    <DialogContent>
+        <div id="search">
+            <div id="add-product-box">
+                <input class="meal-input" type="text"  placeholder="Wpisz kod kreskowy" @bind="barcode" />
+            
+                <button class="filter-icon" type="button" @onclick='() => GetProduct(barcode, "product")'>
+                    <img height="26" src="images/add_photo.svg" alt="Szukaj" />
+                </button>
+            
+                <button class="filter-icon" type="button" @onclick='() => GetProduct(barcode, "recipe")'>
+                    <img height="26" src="images/add_photo.svg" alt="Szukaj" />
+                </button>
+            </div>
+        </div>
+        @if (myProduct != null)
+        {
+            <div id="img-container">
+                <img id="meal-img" src="@(myProduct.ImageUrl ?? "images/sushi.png")" alt="product" />
+            </div>
+            <div id="content">
+                <div>
+                    <div id="name">
+                        @myProduct.Name
+                        @myProduct.Unit
+                    </div>
+                    <div id="kcal">
+                        <img height="16" src="images/kcal.svg" alt="kcal" />
+                        @myProduct.Kcal kcal
+                    </div>
+                </div>
+                <div id="markets">@(myProduct.Store != "" ? "Kupisz w: " + myProduct.Store : "")</div>
+                <div id="nutrients">
+                    <div class="nutrient">@myProduct.Protein g białka</div>
+                    <div class="nutrient">@myProduct.Carbs g węgli</div>
+                    <div class="nutrient">@myProduct.Fats g tłuszczy</div>
+                </div>
+                <div id="amount">
+                    <input class="meal-input" type="number" placeholder="zjedzona ilość w (g)" @bind="amount" />
+                </div>
+            </div>
+        }
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Anuluj</MudButton>
+        <MudButton Color="Color.Secondary" OnClick="Submit" Disabled="@(myProduct == null)">
+            Wybierz
+        </MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    private IMudDialogInstance MudDialog { get; set; }
+
+    private string barcode = "";
+    private FitAura.Models.Product? myProduct;
+    private string selectedType = "";
+    private int amount;
+
+    private void Cancel() => MudDialog.Cancel();
+
+
+    private async Task GetProduct(string barcode, string type)
+    {
+        selectedType = type;
+        if (type == "product")
+       
+        {
+            myProduct = await ProductService.GetLocalProductAsync(barcode);
+        }
+        else if (type == "recipe")
+        {
+            myProduct = await ProductService.GetLocalProductAsync(barcode);
+        }
+
+
+    }
+
+    private async Task Submit()
+    {
+        MudDialog.Close(DialogResult.Ok((Product: myProduct, Type: selectedType, Amount: amount)));
+    }
+
+}

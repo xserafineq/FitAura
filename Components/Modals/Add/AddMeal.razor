@@ -1,57 +1,36 @@
 ﻿@using FitAura.Models
 @using FitAura.Models.Records
+@using FitAura.Components.Modals
 @using FitAura.Services
 @using MudBlazor
+@using static MudBlazor.CategoryTypes
 @inject FitAura.Services.ProductService ProductService
 @inject HttpClient Http
 @inject DayState DayState
 @inject MealService MealService
+@inject DayService DayService
+@inject IDialogService DialogService
 
 <MudDialog>
     <DialogContent>
         <div id="search">
-            <input id="recipe-input" type="text" placeholder="Wpisz kod kreskowy" @bind="barcode" @onkeyup="HandleKeyUp" />
-            
-            <button class="filter-icon" type="button" @onclick="() => GetProduct(barcode)">
-                <img height="26" src="images/add_photo.svg" alt="Szukaj" />
-            </button>
-            
-            <div class="filter-icon"><img height="25" src="images/recipes.svg" alt="Przepisy" /></div>
-        </div>
-
-        @if (myProduct != null)
-        {
-            <div id="img-container">
-                <img id="meal-img" src="@(myProduct.ImageUrl ?? "images/sushi.png")" alt="product" />
-            </div>
-            <div id="content">
-                <div>
-                    <div id="name">@myProduct.Name 
-                            @myProduct.Unit
-                       </div>
-                    <div id="kcal">
-                        <img height="16" src="images/kcal.svg" alt="kcal" />
-                        @myProduct.Kcal kcal
+            <input class="meal-input" @bind="mealName" placeholder="nazwa posiłku" type="text"/>
+            <div id="items-list-box">
+                
+                @foreach (var name in itemNames)
+                {
+                
+                    <div class="meal-item-row">
+                        @name
                     </div>
-                </div>
-                <div id="markets">@(myProduct.Store != "" ? "Kupisz w: " + myProduct.Store: "")</div>
-                <div id="nutrients">
-                    <div class="nutrient">@myProduct.Protein g białka</div>
-                    <div class="nutrient">@myProduct.Carbs g węgli</div>
-                    <div class="nutrient">@myProduct.Fats g tłuszczy</div>
-                </div>
+                }
             </div>
-        }
-        else
-        {
-            <div style="text-align: center; margin: 20px 0; color: gray;">
-                Wpisz kod kreskowy i naciśnij Enter lub kliknij ikonę, aby pobrać produkt...
-            </div>
-        }
+            <button @onclick="addItem" id="add-product-item">Dodaj produkt</button>
+        </div>
     </DialogContent>
     <DialogActions>
         <MudButton OnClick="Cancel">Anuluj</MudButton>
-        <MudButton Color="Color.Secondary" OnClick="Submit" Disabled="@(myProduct == null)">
+        <MudButton Color="Color.Secondary" OnClick="Submit">
             Wybierz
         </MudButton>
     </DialogActions>
@@ -62,38 +41,68 @@
     private IMudDialogInstance MudDialog { get; set; }
 
     private string barcode = "";
-    private FitAura.Models.Product? myProduct;
+    private List<MealItem> items = new List<MealItem>();
+    private string mealName = "Posiłek";
+    private List<string> itemNames = new List<string>();
 
-
-    private async Task Submit()
-    {
-        if (myProduct != null)
-        {
-            var items = new List<MealItem>
-            {
-                new MealItem("product",myProduct.Id,null)
-            };
-            var meal = new AddMealRecord("sniadaniey",2000,DayState.CurrentDay.Id,items);
-            await MealService.AddMeal(meal);
-            MudDialog.Close(DialogResult.Ok(myProduct));
-        }
-    }
 
     private void Cancel() => MudDialog.Cancel();
 
-    
-    private async Task GetProduct(string barcode)
-    {
-       
-        myProduct = await ProductService.GetLocalProductAsync(barcode);
 
+    public async Task addItem()
+    {
+        var dialog = await DialogService.ShowAsync<AddMealItem>("Dodaj produkt do posiłku", options: new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small });
+
+        var result = await dialog.Result;
+        if (!result.Canceled && result.Data != null)
+        {
+
+            var (product, type, amount) = ((Product Product, string Type, int Amount))result.Data;
+
+            if (type == "recipe")
+            {
+                items.Add(new MealItem
+                 (   
+                     type,
+                     null,
+                     product.Id,
+                     amount
+                     
+                 ));
+            }
+            else
+            {
+                items.Add(new MealItem
+                (
+                    type,
+                    product.Id,
+                    null,
+                    amount
+                ));
+            }
+
+            itemNames.Add(product.Name);
+            StateHasChanged();
+        }
     }
 
-    private async Task HandleKeyUp(KeyboardEventArgs e)
+    public async Task Submit()
     {
-        if (e.Key == "Enter")
-        {
-            await GetProduct(barcode);
-        }
+        var totalKcal = await MealService.calculateTotalKcal(items);
+        var meal = new AddMealRecord(mealName, totalKcal, DayState.CurrentDay.Id, items);
+        DayState.SetMeal(meal);
+
+        var edit = new Models.Records.EditDay(
+            DayState.CurrentDay.Id,
+            DayState.CurrentDay.Steps,
+            DayState.CurrentDay.SleepLevel,
+            DayState.CurrentDay.KcalBurned, 
+            DayState.CurrentDay.Measurements,
+            DayState.CurrentDay.Meals
+        );
+
+        await DayService.editDay(edit);
+
+        MudDialog.Close(DialogResult.Ok(true));
     }
 }

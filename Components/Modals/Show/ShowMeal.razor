@@ -1,20 +1,16 @@
-﻿@using MudBlazor
+﻿@using FitAura.Models.Records
+@using FitAura.Services
+@using MudBlazor
+@inject MealService MealService
 
 <MudDialog>
     <DialogContent>
-        <div id="img-container">
-            <img id="meal-img" src="images/sushi.png" alt="product" />
-        </div>
-        <div id="content">
-            <div>
-                <div id="name">nazwa</div>
-                <div id="kcal"><img height="16" src="images/kcal.svg" alt="kcal" /> 0 kcal</div>
-            </div>
-            <div id="nutrients">
-                <div class="nutrient">0g białka</div>
-                <div class="nutrient">0g węgli</div>
-                <div class="nutrient">0g tłuszczy</div>
-            </div>
+        <div id="items-list-box">
+                
+            @foreach(var product in ProductNames)
+            {
+                <div>@product.Name</div>
+            }
         </div>
     </DialogContent>
     <DialogActions>
@@ -28,4 +24,34 @@
     private void Submit() => MudDialog.Close(DialogResult.Ok(true));
 
     private void Cancel() => MudDialog.Cancel();
+
+    [Parameter]
+    public ICollection<MealItem> MealItems { get; set; } = new List<MealItem>();
+    private ICollection<ProductName> ProductNames { get; set; } = new List<ProductName>();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        foreach (var item in MealItems)
+        {
+            if (item.Type == "product")
+            {
+                var product = await GetProductName(item.ProductId);
+                if (product != null)
+                {
+                    ProductNames.Add(product);
+                }
+            }
+        }
+    }
+
+    public async Task<ProductName> GetProductName(int? id)
+    {
+        var product = await MealService.GetProductName(id);
+        if(product != null)
+        {
+            return product;
+        }
+        return null;
+    }
 }

@@ -4,5 +4,6 @@ using System.Text;
 
 namespace FitAura.Models.Records
 {
-    public record MealItem(string Type, int? ProductId, int? RecipeId, int Amount);
+    public record ProductMakro(string Name, int Kcal, int Protein, int Fats, int Carbs);
+   
 }
