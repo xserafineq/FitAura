@@ -1,11 +1,53 @@
+@inject DayState DayState
+@implements IDisposable
+
 <footer>
     <div id="logo">
         <img src="images/logo.png" height="30" alt="logo" />
         <div id="name">Fit.aura</div>
     </div>
     <div id="nutrients">
-        <div>0g Białka</div>
-        <div>0g Tłuszczy</div>
-        <div>0g Węgli</div>
+        <div>@totalProtein g Białka</div>
+        <div>@totalFats g Tłuszczy</div>
+        <div>@totalCarbs g Węgli</div>
     </div>
 </footer>
+
+@code {
+    private int totalProtein;
+    private int totalFats;
+    private int totalCarbs;
+
+    protected override void OnInitialized()
+    {
+        DayState.OnChange += HandleStateChange;
+        CalculateTotals();
+    }
+
+    private void HandleStateChange()
+    {
+        CalculateTotals();
+        InvokeAsync(StateHasChanged);
+    }
+
+    private void CalculateTotals()
+    {
+        if (DayState.CurrentDay?.Meals != null)
+        {
+            totalProtein = DayState.CurrentDay.Meals.Sum(m => m.Protein);
+            totalFats = DayState.CurrentDay.Meals.Sum(m => m.Fats);
+            totalCarbs = DayState.CurrentDay.Meals.Sum(m => m.Carbs);
+        }
+        else
+        {
+            totalProtein = 0;
+            totalFats = 0;
+            totalCarbs = 0;
+        }
+    }
+
+    public void Dispose()
+    {
+        DayState.OnChange -= HandleStateChange;
+    }
+}

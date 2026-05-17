@@ -1,95 +1,649 @@
-﻿@using FitAura.Models
+@using FitAura.Models
 @using FitAura.Models.Records
 @using FitAura.Services
+@using FitAura.Components.Pages
 @using MudBlazor
+@using ZXing
+@using ZXing.SkiaSharp
+@using SkiaSharp
 @inject FitAura.Services.ProductService ProductService
+@inject FitAura.Services.RecipeService RecipeService
 @inject HttpClient Http
 @inject DayState DayState
 @inject MealService MealService
 @inject DayService DayService
+@inject IDialogService DialogService
+
+<style>
+    .section-title {
+        font-size: 14px;
+        font-weight: bold;
+        color: #666;
+        margin-bottom: 8px;
+        margin-top: 15px;
+    }
+
+    #barcode-search {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        background: #f5f5f5;
+        padding: 10px;
+        border-radius: 12px;
+    }
+
+    .search-wrapper {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .meal-input {
+        border: 2px solid #ddd;
+        border-radius: 10px;
+        padding: 10px;
+        font-size: 14px;
+        width: 100%;
+        outline: none;
+    }
+
+    .meal-input:focus {
+        border-color: var(--green);
+    }
+
+    .barcode-btn {
+        background-color: var(--green);
+        border: none;
+        border-radius: 10px;
+        padding: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    }
+
+    .recipe-list-btn {
+        width: 100%;
+        margin-top: 10px;
+        background: white;
+        border: 2px dashed var(--green);
+        color: var(--green);
+        padding: 10px;
+        border-radius: 10px;
+        font-weight: bold;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .autocomplete-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        max-height: 150px;
+        overflow-y: auto;
+        background-color: white;
+        position: absolute;
+        width: 100%;
+        z-index: 1000;
+        top: 100%;
+        margin-top: 5px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .autocomplete-list li {
+        padding: 10px;
+        border-bottom: 1px solid #eee;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    #content {
+        margin-top: 20px;
+        padding: 15px;
+        background: #fff;
+        border-radius: 15px;
+        border: 1px solid #eee;
+    }
+
+    #nutrients-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin: 15px 0;
+    }
+
+    .nutrient-box {
+        text-align: center;
+        background: #fcfcfc;
+        padding: 8px;
+        border-radius: 10px;
+    }
+
+    .nutrient-val {
+        font-weight: bold;
+        font-size: 14px;
+    }
+
+    .nutrient-label {
+        font-size: 10px;
+        color: #999;
+    }
+</style>
 
 <MudDialog>
     <DialogContent>
-        <div id="search">
-            <div id="add-product-box">
-                <input class="meal-input" type="text"  placeholder="Wpisz kod kreskowy" @bind="barcode" />
-            
-                <button class="filter-icon" type="button" @onclick='() => GetProduct(barcode, "product")'>
-                    <img height="26" src="images/add_photo.svg" alt="Szukaj" />
-                </button>
-            
-                <button class="filter-icon" type="button" @onclick='() => GetProduct(barcode, "recipe")'>
-                    <img height="26" src="images/add_photo.svg" alt="Szukaj" />
-                </button>
-            </div>
+
+        <div class="section-title">Wyszukaj produkt po kodzie</div>
+        <div id="barcode-search">
+            <input class="meal-input" style="border:none;" type="text" placeholder="Wpisz kod..." @bind="barcode"
+            @onkeyup="HandleBarcodeKeyUp" @onblur="SearchByBarcode" />
+
+            <InputFile id="barcode-file" OnChange="OnBarcodeFileChange" hidden accept="image/*" />
+            <button class="barcode-btn" type="button" onclick="document.getElementById('barcode-file').click()">
+                <img height="24" src="images/add_photo.svg" alt="Skanuj" />
+            </button>
         </div>
-        @if (myProduct != null)
+
+        @if (isScanningImage)
+
         {
-            <div id="img-container">
-                <img id="meal-img" src="@(myProduct.ImageUrl ?? "images/sushi.png")" alt="product" />
+            <div style="font-size: 11px; color: var(--green); margin-top: 4px; text-align: center;">
+                <MudProgressCircular Size="Size.Small" Indeterminate="true" /> Skanowanie zdjęcia...
             </div>
+        }
+
+
+        <div class="section-title">Lub wyszukaj produkt po nazwie</div>
+        <div class="search-wrapper">
+            <input class="meal-input" placeholder="Wpisz nazwę produktu..." type="text" @bind="searchQuery"
+            @bind:event="oninput" @onkeyup="HandleNameSearch" />
+            @if (isSearching)
+
+            {
+                <div style="position: absolute; right: 10px; top: 10px;">
+                    <MudProgressCircular Size="Size.Small" Indeterminate="true" />
+                </div>
+            }
+            @if (searchResults != null && searchResults.Any())
+
+            {
+                <ul class="autocomplete-list">
+                    @foreach (var res in searchResults)
+
+                    {
+                        <li @onclick="() => SelectSearchResult(res)">
+                            <span>@res.Name</span>
+                            <span style="font-size: 10px; color: #999;">PRODUKT</span>
+                        </li>
+                    }
+                </ul>
+            }
+        </div>
+
+
+        <div class="section-title">Chcesz dodać cały przepis?</div>
+        <button class="recipe-list-btn" @onclick="OpenRecipesBrowser">
+            <MudIcon Icon="@Icons.Material.Filled.RestaurantMenu" Size="Size.Small" />
+            WYBIERZ PRZEPIS Z LISTY
+        </button>
+
+
+        @if (selectedDisplayItem != null)
+
+        {
             <div id="content">
+                <div style="text-align: center; margin-bottom: 10px;">
+                    <img src="@ImageSource" style="max-height: 120px; border-radius: 10px;" />
+                    <div style="font-weight: bold; font-size: 16px; margin-top: 5px; color: var(--green);">
+                        @(selectedDisplayItem.IsRecipe ? "[PRZEPIS] " : "")@selectedDisplayItem.Name
+                    </div>
+                    <div style="font-weight: 800; font-size: 18px;">@calculatedNutrients.Kcal kcal</div>
+                </div>
+
+                <div id="nutrients-grid">
+                    <div class="nutrient-box">
+                        <div class="nutrient-val">@calculatedNutrients.Protein</div>
+                        <div class="nutrient-label">BIAŁKO (g)</div>
+                    </div>
+                    <div class="nutrient-box">
+                        <div class="nutrient-val">@calculatedNutrients.Carbs</div>
+                        <div class="nutrient-label">WĘGLE (g)</div>
+                    </div>
+                    <div class="nutrient-box">
+                        <div class="nutrient-val">@calculatedNutrients.Fats</div>
+                        <div class="nutrient-label">TŁUSZCZE (g)</div>
+                    </div>
+                </div>
+
                 <div>
-                    <div id="name">
-                        @myProduct.Name
-                        @myProduct.Unit
-                    </div>
-                    <div id="kcal">
-                        <img height="16" src="images/kcal.svg" alt="kcal" />
-                        @myProduct.Kcal kcal
-                    </div>
-                </div>
-                <div id="markets">@(myProduct.Store != "" ? "Kupisz w: " + myProduct.Store : "")</div>
-                <div id="nutrients">
-                    <div class="nutrient">@myProduct.Protein g białka</div>
-                    <div class="nutrient">@myProduct.Carbs g węgli</div>
-                    <div class="nutrient">@myProduct.Fats g tłuszczy</div>
-                </div>
-                <div id="amount">
-                    <input class="meal-input" type="number" placeholder="zjedzona ilość w (g)" @bind="amount" />
+                    <label style="font-size: 12px; font-weight: bold; color: #444;">
+                        @(selectedDisplayItem.IsRecipe ? "Ile porcji dodajesz?" : "Ilość (g/ml):")
+                    </label>
+                    <input class="meal-input" type="number" @bind="amount" @bind:event="oninput"
+                    @onchange="UpdateCalculation" />
+                    @if (selectedDisplayItem.IsRecipe)
+
+                    {
+                        <span style="font-size: 10px; color: #999;">(Przepis ma @selectedDisplayItem.OriginalPortions
+                            porcji)</span>
+                    }
                 </div>
             </div>
         }
     </DialogContent>
     <DialogActions>
         <MudButton OnClick="Cancel">Anuluj</MudButton>
-        <MudButton Color="Color.Secondary" OnClick="Submit" Disabled="@(myProduct == null)">
-            Wybierz
+        <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="Submit"
+            Disabled="@(selectedDisplayItem == null)">
+            POTWIERDŹ I DODAJ
         </MudButton>
     </DialogActions>
 </MudDialog>
 
 @code {
-    [CascadingParameter]
-    private IMudDialogInstance MudDialog { get; set; }
+    [CascadingParameter] private IMudDialogInstance MudDialog { get; set; }
+
+
 
     private string barcode = "";
-    private FitAura.Models.Product? myProduct;
-    private string selectedType = "";
-    private int amount;
+
+    private string searchQuery = "";
+
+    private bool isSearching = false;
+
+    private bool isScanningImage = false;
+
+    private List<SearchItem> searchResults = new();
+
+    private SearchItem? selectedDisplayItem;
+
+    private int amount = 100;
+
+    private Nutrients calculatedNutrients = new();
+
+
 
     private void Cancel() => MudDialog.Cancel();
 
 
-    private async Task GetProduct(string barcode, string type)
-    {
-        selectedType = type;
-        if (type == "product")
-       
-        {
-            myProduct = await ProductService.GetLocalProductAsync(barcode);
-        }
-        else if (type == "recipe")
-        {
-            myProduct = await ProductService.GetLocalProductAsync(barcode);
-        }
 
+    private async Task HandleBarcodeKeyUp(KeyboardEventArgs e)
+
+    {
+
+        if (e.Key == "Enter") await SearchByBarcode();
 
     }
 
-    private async Task Submit()
+
+
+    private async Task SearchByBarcode()
+
     {
-        MudDialog.Close(DialogResult.Ok((Product: myProduct, Type: selectedType, Amount: amount)));
+
+        if (string.IsNullOrWhiteSpace(barcode)) return;
+
+        var product = await ProductService.GetLocalProductAsync(barcode);
+
+        if (product != null) SelectProduct(product);
+
     }
 
+
+
+    private async Task OnBarcodeFileChange(InputFileChangeEventArgs e)
+
+    {
+
+        var file = e.File;
+
+        if (file == null) return;
+
+
+
+        isScanningImage = true;
+
+        StateHasChanged();
+
+
+
+        try
+
+        {
+
+            using var stream = file.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024);
+
+            using var ms = new MemoryStream();
+
+            await stream.CopyToAsync(ms);
+
+            ms.Seek(0, SeekOrigin.Begin);
+
+
+
+            using var bitmap = SKBitmap.Decode(ms);
+
+            if (bitmap != null)
+
+            {
+
+                var reader = new BarcodeReader();
+
+                var result = reader.Decode(bitmap);
+
+
+
+                if (result != null)
+
+                {
+
+                    barcode = result.Text;
+
+                    await SearchByBarcode();
+
+                }
+
+            }
+
+        }
+
+        catch (Exception ex)
+
+        {
+
+            Console.WriteLine($"Błąd skanowania zdjęcia: {ex.Message}");
+
+        }
+
+        finally
+
+        {
+
+            isScanningImage = false;
+
+            StateHasChanged();
+
+        }
+
+    }
+
+
+
+    private async Task HandleNameSearch(KeyboardEventArgs e)
+
+    {
+
+        if (searchQuery.Length < 3) { searchResults.Clear(); return; }
+
+        isSearching = true;
+
+        try
+
+        {
+
+            var products = await ProductService.SearchProductsAsync(searchQuery);
+
+            searchResults = products.Select(p => new SearchItem
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    IsRecipe = false,
+                    ImageUrl = p.ImageUrl,
+
+                    Kcal = p.Kcal,
+                    Protein = p.Protein,
+                    Carbs = p.Carbs,
+                    Fats = p.Fats,
+                    Unit = p.Unit
+
+                }).ToList();
+
+        }
+
+        finally { isSearching = false; }
+
+    }
+
+
+
+    private async Task OpenRecipesBrowser()
+
+    {
+
+        var options = new DialogOptions { FullWidth = true, MaxWidth = MaxWidth.Medium, CloseButton = true };
+
+        var parameters = new DialogParameters { ["IsSelectionMode"] = true };
+
+
+
+        var dialog = await DialogService.ShowAsync<Recipes>("Twoje Przepisy", parameters, options);
+
+        var result = await dialog.Result;
+
+
+
+        if (!result.Canceled && result.Data is FitAura.Services.RecipeSummaryDto recipe)
+
+        {
+
+            selectedDisplayItem = new SearchItem
+                {
+
+                    Id = recipe.Id,
+                    Name = recipe.Name,
+                    IsRecipe = true,
+                    ImageUrl = recipe.ImageUrl,
+
+                    Kcal = recipe.TotalKcal,
+                    Protein = recipe.TotalProtein,
+                    Carbs = recipe.TotalCarbs,
+                    Fats = recipe.TotalFats,
+
+                    OriginalPortions = recipe.Portions
+
+                };
+
+            amount = 1;
+
+            UpdateCalculation();
+
+        }
+
+    }
+
+
+
+    private void SelectSearchResult(SearchItem res)
+
+    {
+
+        selectedDisplayItem = res;
+
+        searchResults.Clear();
+
+        searchQuery = "";
+
+        amount = (int)GetBaseWeight(res.Unit);
+
+        UpdateCalculation();
+
+    }
+
+
+
+    private void SelectProduct(Product p)
+
+    {
+
+        selectedDisplayItem = new SearchItem
+            {
+                Id = p.Id,
+                Name = p.Name,
+                IsRecipe = false,
+                ImageUrl = p.ImageUrl,
+
+                Kcal = p.Kcal,
+                Protein = p.Protein,
+                Carbs = p.Carbs,
+                Fats = p.Fats,
+                Unit = p.Unit
+
+            };
+
+        amount = (int)GetBaseWeight(p.Unit);
+
+        UpdateCalculation();
+
+    }
+
+
+
+    private void UpdateCalculation()
+
+    {
+
+        if (selectedDisplayItem == null) return;
+
+
+
+        double multiplier = 0;
+
+        if (selectedDisplayItem.IsRecipe)
+
+        {
+
+            if (selectedDisplayItem.OriginalPortions > 0)
+
+                multiplier = (double)amount / selectedDisplayItem.OriginalPortions;
+
+        }
+
+        else
+
+        {
+
+            double baseWeight = GetBaseWeight(selectedDisplayItem.Unit);
+
+            if (baseWeight > 0)
+
+                multiplier = (double)amount / baseWeight;
+
+        }
+
+
+
+        calculatedNutrients.Kcal = (int)Math.Round(selectedDisplayItem.Kcal * multiplier);
+
+        calculatedNutrients.Protein = (int)Math.Round(selectedDisplayItem.Protein * multiplier);
+
+        calculatedNutrients.Carbs = (int)Math.Round(selectedDisplayItem.Carbs * multiplier);
+
+        calculatedNutrients.Fats = (int)Math.Round(selectedDisplayItem.Fats * multiplier);
+
+    }
+
+
+
+    private double GetBaseWeight(string unit)
+
+    {
+
+        if (string.IsNullOrWhiteSpace(unit)) return 100;
+
+        unit = unit.ToLower().Replace(" ", "");
+
+        string numberPart = new string(unit.Where(char.IsDigit).ToArray());
+
+        if (!double.TryParse(numberPart, out double value) || value == 0) return 100;
+
+        if (unit.Contains("kg") || (unit.Contains("l") && !unit.Contains("ml"))) return value * 1000;
+
+        return value;
+
+    }
+
+
+
+    private string ImageSource
+
+    {
+
+        get
+
+        {
+
+            if (string.IsNullOrEmpty(selectedDisplayItem?.ImageUrl)) return "images/sushi.png";
+
+            if (selectedDisplayItem.ImageUrl.StartsWith("http")) return selectedDisplayItem.ImageUrl;
+
+            if (selectedDisplayItem.ImageUrl.StartsWith("/")) return $"http://localhost:5096{selectedDisplayItem.ImageUrl}";
+
+            return $"images/{selectedDisplayItem.ImageUrl}";
+
+        }
+
+    }
+
+
+
+    private void Submit()
+
+    {
+
+        var fakeProduct = new Product(selectedDisplayItem.Id, "", selectedDisplayItem.Name, 0, 0, 0, "", 0, null,
+        selectedDisplayItem.ImageUrl);
+
+        MudDialog.Close(DialogResult.Ok((Product: fakeProduct, Type: selectedDisplayItem.IsRecipe ? "recipe" : "product",
+        Amount: amount)));
+
+    }
+
+
+
+    public class SearchItem
+    {
+
+        public int Id { get; set; }
+
+        public string Name { get; set; } = "";
+
+        public bool IsRecipe { get; set; }
+
+        public string? ImageUrl { get; set; }
+
+        public int Kcal { get; set; }
+
+        public int Protein { get; set; }
+
+        public int Carbs { get; set; }
+
+        public int Fats { get; set; }
+
+        public string Unit { get; set; } = "100g";
+
+        public int OriginalPortions { get; set; } = 1;
+
+    }
+
+
+
+    public class Nutrients
+    {
+
+        public int Kcal { get; set; }
+
+        public int Protein { get; set; }
+
+        public int Carbs { get; set; }
+
+        public int Fats { get; set; }
+
+    }
 }

@@ -1,4 +1,4 @@
-﻿@using FitAura.Models
+@using FitAura.Models
 @using FitAura.Models.Records
 @using FitAura.Components.Modals
 @using FitAura.Services
@@ -16,16 +16,15 @@
         <div id="search">
             <input class="meal-input" @bind="mealName" placeholder="nazwa posiłku" type="text"/>
             <div id="items-list-box">
-                
-                @foreach (var name in itemNames)
+                @for (int i = 0; i < itemNames.Count; i++)
                 {
-                
-                    <div class="meal-item-row">
-                        @name
+                    <div class="meal-item-row" style="display: flex; justify-content: space-between; padding: 5px; border-bottom: 1px solid #eee;">
+                        <span>@itemNames[i]</span>
+                        <span style="font-size: 10px; color: #999;">@(items[i].Type == "recipe" ? "Przepis" : "Produkt")</span>
                     </div>
                 }
             </div>
-            <button @onclick="addItem" id="add-product-item">Dodaj produkt</button>
+            <button @onclick="addItem" id="add-product-item">Dodaj produkt / przepis</button>
         </div>
     </DialogContent>
     <DialogActions>
@@ -88,8 +87,8 @@
 
     public async Task Submit()
     {
-        var totalKcal = await MealService.calculateTotalKcal(items);
-        var meal = new AddMealRecord(mealName, totalKcal, DayState.CurrentDay.Id, items);
+        var macros = await MealService.CalculateTotalMacros(items);
+        var meal = new AddMealRecord(mealName, macros.Kcal, macros.Protein, macros.Fats, macros.Carbs, DayState.CurrentDay.Id, items);
         DayState.SetMeal(meal);
 
         var edit = new Models.Records.EditDay(

@@ -1,0 +1,459 @@
+@using FitAura.Models
+@using FitAura.Models.Records
+@using FitAura.Components.Modals
+@using FitAura.Services
+@using MudBlazor
+@inject FitAura.Services.ProductService ProductService
+@inject FitAura.Services.RecipeService RecipeService
+@inject HttpClient Http
+@inject DayState DayState
+@inject MealService MealService
+@inject IDialogService DialogService
+@inject UserState UserState
+@inject FitAura.Services.CategoryService CategoryService
+
+<style>
+    #upload-img {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 250px;
+        gap: 15px;
+        background-color: lightgray;
+        color: white;
+    }
+
+    .upload-icon {
+        width: 100px;
+        height: 100px;
+        background-color: gray;
+        -webkit-mask: url('images/photo.svg') no-repeat center / contain;
+        mask: url('images/photo.svg') no-repeat center / contain;
+    }
+
+    #upload-text {
+        color: gray;
+        font-size: 16px;
+    }
+
+    #indegredients-container,
+    #steps-container {
+        display: flex;
+        flex-direction: column;
+        padding: 10px 10px 0px 0px;
+        font-size: 16px;
+        gap: 5px;
+    }
+
+    #indegredients-container #search,
+    #steps-container #step-input,
+    #recipe-summary #protion-count,
+    #recipe-summary #recipe-name {
+        display: flex;
+        border: 2px solid gray;
+        border-radius: 10px;
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    #add-step {
+        padding: 5px;
+        background-color: var(--green);
+        border: none;
+        border-radius: 10px;
+        font-size: 16px;
+        color: white;
+        font-weight: bold;
+    }
+
+    #recipe-summary {
+        display: flex;
+        flex-direction: column;
+        padding: 10px 10px 0px 0px;
+        font-size: 16px;
+        gap: 5px;
+    }
+
+    #steps-list {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    #step-item {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 5px;
+        justify-content: space-between;
+    }
+
+    #delete-step {
+        background-color: red;
+        color: white;
+        font-weight: bold;
+        border: none;
+        font-size: 14px;
+        border-radius: 5px;
+        padding: 5px;
+    }
+
+    #summary {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 10px;
+    }
+
+    #nutrition-summary,
+    #kcal-summary {
+        display: flex;
+        justify-content: center;
+        font-size: 16px;
+        color: black;
+        gap: 10px;
+        font-weight: bolder;
+    }
+
+    .autocomplete-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        border: 2px solid gray;
+        border-radius: 10px;
+        max-height: 150px;
+        overflow-y: auto;
+        background-color: white;
+        position: absolute;
+        width: 100%;
+        z-index: 10;
+        top: 100%;
+        margin-top: 5px;
+    }
+
+    .autocomplete-list li {
+        padding: 10px;
+        border-bottom: 1px solid #eee;
+        cursor: pointer;
+        color: black;
+    }
+
+    .autocomplete-list li:hover {
+        background-color: #f0f0f0;
+    }
+
+    .search-wrapper {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .category-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+        padding: 10px 0;
+    }
+
+    .category-chip {
+        background-color: #f0f0f0;
+        border: 1px solid #ccc;
+        border-radius: 15px;
+        padding: 2px 10px;
+        font-size: 12px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+    .category-chip.active {
+        background-color: var(--green);
+        color: white;
+        border-color: var(--green);
+    }
+</style>
+
+<MudDialog>
+    <DialogContent>
+        <div id="upload-img">
+            <label for="fileInput" style="cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%;">
+                @if (string.IsNullOrEmpty(previewImageUrl))
+                {
+                    <div class="upload-icon"></div>
+                    <div id="upload-text">Kliknij aby dodać zdjęcie</div>
+                }
+                else
+                {
+                    <img src="@previewImageUrl" style="max-height: 230px; max-width: 100%; border-radius: 10px; object-fit: cover;" />
+                }
+            </label>
+            <InputFile id="fileInput" OnChange="HandleFileSelected" accept="image/png, image/jpeg" style="display:none;" />
+        </div>
+
+        <div id="indegredients-container">
+            <span>Składniki</span>
+            <div class="search-wrapper">
+                <input id="search" placeholder="nazwa lub kod produktu" type="text" @bind="searchQuery" @bind:event="oninput" @onkeyup="HandleSearch" />
+                @if (searchResults != null && searchResults.Any())
+                {
+                    <ul class="autocomplete-list">
+                        @foreach (var prod in searchResults)
+                        {
+                            <li @onclick="() => SelectProduct(prod)">
+                                @prod.Name @prod.Kcal kcal (@(string.IsNullOrWhiteSpace(prod.Unit) ? "100g" : prod.Unit))
+                            </li>
+                        }
+                    </ul>
+                }
+            </div>
+            <div id="steps-list">
+                @for (int i = 0; i < items.Count; i++)
+                {
+                    int index = i;
+                    <div id="step-item">
+                        <span @key="index">@itemNames[index]</span>
+                        <div style="display: flex; gap: 5px; align-items: center;">
+                            <input type="number" style="width: 60px; text-align: center; border: 1px solid gray; border-radius: 5px; padding: 5px;"
+                                   value="@items[index].Amount" @onchange="@(e => UpdateIngredientAmount(index, e.Value))" min="1" /> g
+                            <button id="delete-step" @onclick="@(() => DeleteIngredient(index))">Usuń</button>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div id="steps-container">
+            <span>Kroki przygotowania</span>
+            <input @onkeyup="HandleKeyPress" type="text" @bind="step" id="step-input" placeholder="wpisz krok przygotowania" />
+            <button id="add-step" @onclick="AddStep">Dodaj</button>
+            <div id="steps-list">
+                @for (int i = 0; i < steps.Count; i++)
+                {
+                    int index = i;
+                    <div id="step-item">
+                        <span @key="index" id='step-@index'>Krok @(index + 1): @steps[index]</span>
+                        <button id="delete-step" @onclick="@(() => DeleteStep(index))">Usuń</button>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div id="recipe-summary">
+            <input type="text" id="recipe-name" @bind="recipeName" placeholder="nazwa przepisu" />
+            <input type="number" id="protion-count" placeholder="liczba porcji" @bind="portionCount" min="1" />
+            
+            <div style="margin-top: 10px;">
+                <span>Kategorie (kliknij aby wybrać):</span>
+                <div class="category-chips">
+                    @if (categories != null)
+                    {
+                        @foreach (var cat in categories)
+                        {
+                            <div class="category-chip @(selectedCategoryIds.Contains(cat.Id) ? "active" : "")" 
+                                 @onclick="() => ToggleCategory(cat.Id)">
+                                @cat.Name
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+
+            <div id="summary">
+                <div id="nutrition-summary">
+                    <span>Białko: @TotalProtein g</span>
+                    <span>Węglowodany: @TotalCarbs g</span>
+                    <span>Tłuszcze: @TotalFats g</span>
+                </div>
+                <div id="kcal-summary">
+                    <span>Kcal: @TotalKcal</span>
+                </div>
+            </div>
+        </div>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Anuluj</MudButton>
+        <MudButton Color="Color.Secondary" OnClick="SaveRecipe">Zapisz Przepis</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    private IMudDialogInstance MudDialog { get; set; }
+
+    private List<MealItem> items = new List<MealItem>();
+    private string recipeName = "";
+    private List<string> itemNames = new List<string>();
+    private List<string> steps = new List<string>();
+    private string step = "";
+    private string searchQuery = "";
+    private List<Product> searchResults = new();
+    private List<Product> selectedProductsList = new();
+    private string previewImageUrl = "";
+    private int portionCount = 1;
+    private List<FitAura.Models.CategoryModel> categories = new();
+    private HashSet<int> selectedCategoryIds = new HashSet<int>();
+    private Microsoft.AspNetCore.Components.Forms.IBrowserFile selectedImageFile;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try 
+        {
+            categories = await CategoryService.GetCategoriesAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Błąd pobierania kategorii: {ex.Message}");
+            categories = new();
+        }
+    }
+
+    private void ToggleCategory(int categoryId)
+    {
+        if (selectedCategoryIds.Contains(categoryId))
+            selectedCategoryIds.Remove(categoryId);
+        else
+            selectedCategoryIds.Add(categoryId);
+    }
+
+    private async Task HandleFileSelected(InputFileChangeEventArgs e)
+    {
+        var file = e.File;
+        if (file != null)
+        {
+            selectedImageFile = file;
+            try
+            {
+                var format = file.ContentType;
+                var resizedImageFile = await file.RequestImageFileAsync(format, 800, 800);
+                var buffer = new byte[resizedImageFile.Size];
+                await resizedImageFile.OpenReadStream(maxAllowedSize: 5120000).ReadAsync(buffer);
+                var base64 = Convert.ToBase64String(buffer);
+                previewImageUrl = $"data:{format};base64,{base64}";
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Błąd ładowania obrazu: {ex.Message}");
+            }
+        }
+    }
+
+    private double GetBaseWeight(string unit)
+    {
+        if (string.IsNullOrWhiteSpace(unit)) return 100;
+        unit = unit.ToLower().Replace(" ", "");
+        string numberPart = new string(unit.Where(char.IsDigit).ToArray());
+        if (!double.TryParse(numberPart, out double value)) return 100;
+        if (unit.Contains("kg")) return value * 1000;
+        if (unit.Contains("l") && !unit.Contains("ml")) return value * 1000;
+        return value == 0 ? 100 : value;
+    }
+
+    private int TotalKcal => items.Select((item, index) => {
+        if (index >= selectedProductsList.Count) return 0;
+        var prod = selectedProductsList[index];
+        return (int)Math.Round(prod.Kcal * (item.Amount / GetBaseWeight(prod.Unit)));
+    }).Sum();
+
+    private int TotalProtein => items.Select((item, index) => {
+        if (index >= selectedProductsList.Count) return 0;
+        var prod = selectedProductsList[index];
+        return (int)Math.Round(prod.Protein * (item.Amount / GetBaseWeight(prod.Unit)));
+    }).Sum();
+
+    private int TotalCarbs => items.Select((item, index) => {
+        if (index >= selectedProductsList.Count) return 0;
+        var prod = selectedProductsList[index];
+        return (int)Math.Round(prod.Carbs * (item.Amount / GetBaseWeight(prod.Unit)));
+    }).Sum();
+
+    private int TotalFats => items.Select((item, index) => {
+        if (index >= selectedProductsList.Count) return 0;
+        var prod = selectedProductsList[index];
+        return (int)Math.Round(prod.Fats * (item.Amount / GetBaseWeight(prod.Unit)));
+    }).Sum();
+
+    private void Cancel() => MudDialog.Cancel();
+
+    private async Task SaveRecipe()
+    {
+        if (string.IsNullOrWhiteSpace(recipeName) || items.Count == 0 || steps.Count == 0) return;
+
+        string? finalImageUrl = null;
+        if (selectedImageFile != null)
+        {
+            finalImageUrl = await RecipeService.UploadImageAsync(selectedImageFile);
+        }
+
+        var recipeDto = new FitAura.Services.CreateRecipeDto(
+            Name: recipeName,
+            ImageUrl: finalImageUrl,
+            Steps: steps,
+            Ingredients: items.Select((item, index) => new FitAura.Services.CreateRecipeIngredientDto(
+                ProductId: item.ProductId.Value,
+                Amount: item.Amount,
+                Unit: string.IsNullOrWhiteSpace(selectedProductsList[index].Unit) ? "g" : (selectedProductsList[index].Unit.ToLower().Contains("ml") ? "ml" : "g")
+            )).ToList(),
+            Portions: portionCount,
+            UserId: UserState.CurrentUser?.Id ?? 0,
+            CategoryIds: selectedCategoryIds.ToList()
+        );
+
+        var success = await RecipeService.CreateRecipeAsync(recipeDto);
+        if (success) MudDialog.Close(DialogResult.Ok(true));
+    }
+
+    private async Task HandleSearch(KeyboardEventArgs e)
+    {
+        if (string.IsNullOrWhiteSpace(searchQuery) || searchQuery.Length < 3)
+        {
+            searchResults.Clear();
+            return;
+        }
+        searchResults = await ProductService.SearchProductsAsync(searchQuery);
+        StateHasChanged();
+    }
+
+    private void SelectProduct(Product product)
+    {
+        int defaultAmount = 100;
+        if (!string.IsNullOrWhiteSpace(product.Unit))
+        {
+            var match = System.Text.RegularExpressions.Regex.Match(product.Unit, @"\d+");
+            if (match.Success && int.TryParse(match.Value, out int parsed)) defaultAmount = parsed;
+        }
+        items.Add(new FitAura.Models.Records.MealItem("product", product.Id, null, defaultAmount));
+        itemNames.Add(product.Name);
+        selectedProductsList.Add(product);
+        searchQuery = "";
+        searchResults.Clear();
+    }
+
+    private void DeleteIngredient(int index)
+    {
+        if (index < items.Count) items.RemoveAt(index);
+        if (index < itemNames.Count) itemNames.RemoveAt(index);
+        if (index < selectedProductsList.Count) selectedProductsList.RemoveAt(index);
+    }
+
+    private void UpdateIngredientAmount(int index, object value)
+    {
+        if (index < items.Count && int.TryParse(value?.ToString(), out int amount) && amount > 0)
+        {
+            items[index] = items[index] with { Amount = amount };
+        }
+    }
+
+    private void AddStep()
+    {
+        if (string.IsNullOrEmpty(step)) return;
+        steps.Add(step);
+        step = "";
+    }
+
+    private void HandleKeyPress(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter") AddStep();
+    }
+
+    private void DeleteStep(int i) => steps.RemoveAt(i);
+}

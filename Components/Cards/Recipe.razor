@@ -1,47 +1,62 @@
 @using MudBlazor
 @using FitAura.Components.Modals.Show
+@using System.Collections.Generic
 @inject IDialogService DialogService
-<button @onclick='() => DialogService.ShowAsync<ShowRecipe>("Podgląd", new DialogParameters { { "RecipeId", id } }, new DialogOptions { FullWidth = true, MaxWidth = MaxWidth.Small })' class="recipe-card">
-    <img src="@ImageSource" height="200" width="200" alt="recipe-picture"/>
-    <div id="name">@name</div>
-    <div id="kcal"><img src="images/kcal.svg" height="20" alt="kcal-icon"/> @kcal kcal</div>
-    <div id="nutrients">
-        <div class="nutrient">
-            <div>@(protein)g</div>
-            <div>białka</div>
+
+<button @onclick="HandleClick" class="recipe-card">
+    <img src="@ImageSource" height="200" width="200" alt="recipe-picture" />
+    <div id="recipe-summary">
+        <div id="name">@name</div>
+        <div id="kcal"><img height="16" src="images/kcal.svg" alt="kcal" /> @kcal kcal</div>
+        <div id="nutrients">
+            <div id="nutrient">Białko @protein g</div>
+            <div id="nutrient">Węgle @carbs g</div>
+            <div id="nutrient">Tłuszcze @fats g</div>
         </div>
-        <div class="nutrient">
-            <div>@(carbs)g</div>
-            <div>węgli</div>
+        <div id="categories">
+            @if (categories != null)
+            {
+                @foreach (var cat in categories)
+                {
+                    <span class="category">@cat</span>
+                }
+            }
         </div>
-        <div class="nutrient">
-            <div>@(fats)g</div>
-            <div>tłuszczy</div>
-        </div>
-    </div>
-    <div id="categories">
-        <div class="category">Vegan</div>
-        <div class="category">Keto</div>
-        <div class="category">Low fat</div>
     </div>
 </button>
 
-
 @code {
-    [Parameter]
-    public int id { get; set; }
-    [Parameter]
-    public string name { get; set; } = "";
-    [Parameter]
-    public int kcal { get; set; }
-    [Parameter]
-    public int protein { get; set; }
-    [Parameter]
-    public int carbs { get; set; }
-    [Parameter]
-    public int fats { get; set; }
-    [Parameter]
-    public string img { get; set; } = "";
+    [Parameter] public int id { get; set; }
+    [Parameter] public string name { get; set; } = "";
+    [Parameter] public int kcal { get; set; }
+    [Parameter] public int protein { get; set; }
+    [Parameter] public int carbs { get; set; }
+    [Parameter] public int fats { get; set; }
+    [Parameter] public string img { get; set; } = "";
+    [Parameter] public List<string> categories { get; set; } = new();
 
-    public string ImageSource => img.StartsWith("/") ? $"http://localhost:5096{img}" : $"images/{img}";
+    [Parameter] public EventCallback<FitAura.Services.RecipeSummaryDto> OnSelected { get; set; }
+
+    public string ImageSource => (img != null && img.StartsWith("/")) ? $"http://localhost:5096{img}" :
+    $"images/{(string.IsNullOrEmpty(img) ? "sushi.png" : img)}";
+
+    private async Task HandleClick()
+    {
+        if (OnSelected.HasDelegate)
+        {
+            var summary = new FitAura.Services.RecipeSummaryDto(id, name, img, kcal, protein, carbs, fats, 1, categories);
+            await OnSelected.InvokeAsync(summary);
+        }
+        else 
+        {
+            await OpenPreview();
+        }
+    }
+
+    private async Task OpenPreview()
+    {
+        var options = new DialogOptions { FullWidth = true, MaxWidth = MaxWidth.Small };
+        var parameters = new DialogParameters<ShowRecipe> { { x => x.RecipeId, id } };
+        await DialogService.ShowAsync<ShowRecipe>("Szczegóły przepisu", parameters, options);
+    }
 }

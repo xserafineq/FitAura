@@ -1,4 +1,4 @@
-﻿using FitAura.Models;
+using FitAura.Models;
 using System;
 using System.Linq;
 using System.Net.Http;
@@ -17,7 +17,7 @@ namespace FitAura.Services
             _httpClient = httpClient;
         }
 
-        
+
         public async Task<Product?> GetLocalProductAsync(string barcode)
         {
             try
@@ -42,6 +42,25 @@ namespace FitAura.Services
             {
                 Console.WriteLine($"Błąd połączenia z lokalnym API: {ex.Message}");
                 return null;
+            }
+        }
+
+        public async Task<List<Product>> SearchProductsAsync(string query)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(query)) return new List<Product>();
+                var response = await _httpClient.GetAsync($"/api/Products/search?q={query}");
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadFromJsonAsync<List<Product>>() ?? new List<Product>();
+                }
+                return new List<Product>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Błąd podczas wyszukiwania: {ex.Message}");
+                return new List<Product>();
             }
         }
 

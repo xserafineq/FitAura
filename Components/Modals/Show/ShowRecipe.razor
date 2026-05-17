@@ -1,47 +1,82 @@
-﻿@using MudBlazor
+@using MudBlazor
+@using FitAura.Services
+@using System.Collections.Generic
+@inject RecipeService RecipeService
 
 <MudDialog>
     <DialogContent>
-        <div id="img-container">
-            <img id="meal-img" src="images/sushi.png" alt="product" />
-        </div>
-        <div id="content">
-            <div>
-                <div id="name">nazwa</div>
-                <div id="kcal"><img height="16" src="images/kcal.svg" alt="kcal" /> 0 kcal</div>
+        @if (recipe == null)
+        {
+            <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+        }
+        else
+        {
+            <div id="img-container">
+                <img id="meal-img" src="@ImageSource" alt="product" />
             </div>
-            <div id="indegredients">
-                <p>Przepis</p>
-                <ol>
-                    <li>produkt 500g</li>
-                    <li>produkt 200g</li>
-                    <li>produkt 300g</li>
-                </ol>
+            <div id="content">
+                <div>
+                    <div id="name">@recipe.Name</div>
+                    <div id="recipe-categories" style="display: flex; gap: 5px; flex-wrap: wrap; margin-top: 5px; justify-content: center; margin-bottom: 10px;">
+                        @if (recipe.Categories != null)
+                        {
+                            @foreach (var cat in recipe.Categories)
+                            {
+                                <span style="background: var(--green); color: white; padding: 2px 10px; border-radius: 12px; font-size: 12px; font-weight: bold;">@cat</span>
+                            }
+                        }
+                    </div>
+                    <div id="portion">@recipe.Portions porcji</div>
+                    <div id="kcal"><img height="16" src="images/kcal.svg" alt="kcal" /> @recipe.TotalKcal kcal</div>
+                </div>
+                <div id="indegredients">
+                    <p>Składniki</p>
+                    <ul>
+                        @foreach (var ing in recipe.Ingredients)
+                        {
+                            <li>@ing.ProductName @ing.Amount @ing.Unit</li>
+                        }
+                    </ul>
+                </div>
+                <div id="steps">
+                    <p>Sposób wykonania</p>
+                    <ol>
+                        @foreach (var step in recipe.Steps)
+                        {
+                            <li>@step</li>
+                        }
+                    </ol>
+                </div>
+                <div id="nutrients">
+                    <div class="nutrient">@recipe.TotalProtein g białka</div>
+                    <div class="nutrient">@recipe.TotalCarbs g węgli</div>
+                    <div class="nutrient">@recipe.TotalFats g tłuszczy</div>
+                </div>
             </div>
-            <div id="steps">
-                <p>Sposób wykonania</p>
-                <ol>
-                    <li>krok 1</li>
-                    <li>krok 2</li>
-                    <li>krok 3</li>
-                </ol>
-            </div>
-            <div id="nutrients">
-                <div class="nutrient">0g białka</div>
-                <div class="nutrient">0g węgli</div>
-                <div class="nutrient">0g tłuszczy</div>
-            </div>
-        </div>
+        }
     </DialogContent>
     <DialogActions>
         <MudButton OnClick="Cancel">Zamknij</MudButton>
     </DialogActions>
 </MudDialog>
+
 @code {
     [CascadingParameter]
     private IMudDialogInstance MudDialog { get; set; }
 
-    private void Submit() => MudDialog.Close(DialogResult.Ok(true));
+    [Parameter]
+    public int RecipeId { get; set; }
+
+    private RecipeDetailDto? recipe;
+
+    protected override async Task OnInitializedAsync()
+    {
+        recipe = await RecipeService.GetRecipeAsync(RecipeId);
+    }
+
+    private string ImageSource => (recipe?.ImageUrl != null && recipe.ImageUrl.StartsWith("/"))
+    ? $"http://localhost:5096{recipe.ImageUrl}"
+    : (string.IsNullOrEmpty(recipe?.ImageUrl) ? "images/sushi.png" : $"images/{recipe.ImageUrl}");
 
     private void Cancel() => MudDialog.Cancel();
 }

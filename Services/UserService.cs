@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json.Nodes;
@@ -42,6 +42,20 @@ namespace FitAura.Services
             }
 
             return null;
+        }
+
+        public async Task<bool> UpdateUserAsync(User user)
+        {
+            try
+            {
+                var response = await _httpClient.PutAsJsonAsync($"api/Users/{user.Id}", user);
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Błąd podczas aktualizacji użytkownika: {ex.Message}");
+                return false;
+            }
         }
     }
 }
