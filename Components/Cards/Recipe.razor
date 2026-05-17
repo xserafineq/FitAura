@@ -1,21 +1,21 @@
 @using MudBlazor
 @using FitAura.Components.Modals.Show
 @inject IDialogService DialogService
-<button @onclick='() => DialogService.ShowAsync<ShowRecipe>("Podgląd", new DialogOptions { FullWidth = true, MaxWidth = MaxWidth.Small })' class="recipe-card">
-    <img src="images/@(img)" height="200" width="auto" alt="recipe-picture"/>
+<button @onclick='() => DialogService.ShowAsync<ShowRecipe>("Podgląd", new DialogParameters { { "RecipeId", id } }, new DialogOptions { FullWidth = true, MaxWidth = MaxWidth.Small })' class="recipe-card">
+    <img src="@ImageSource" height="200" width="200" alt="recipe-picture"/>
     <div id="name">@name</div>
     <div id="kcal"><img src="images/kcal.svg" height="20" alt="kcal-icon"/> @kcal kcal</div>
     <div id="nutrients">
         <div class="nutrient">
-            <div>20g</div>
+            <div>@(protein)g</div>
             <div>białka</div>
         </div>
         <div class="nutrient">
-            <div>20g</div>
+            <div>@(carbs)g</div>
             <div>węgli</div>
         </div>
         <div class="nutrient">
-            <div>20g</div>
+            <div>@(fats)g</div>
             <div>tłuszczy</div>
         </div>
     </div>
@@ -29,9 +29,19 @@
 
 @code {
     [Parameter]
-    public string name { get; set; }
+    public int id { get; set; }
+    [Parameter]
+    public string name { get; set; } = "";
     [Parameter]
     public int kcal { get; set; }
     [Parameter]
-    public string img { get; set; }
+    public int protein { get; set; }
+    [Parameter]
+    public int carbs { get; set; }
+    [Parameter]
+    public int fats { get; set; }
+    [Parameter]
+    public string img { get; set; } = "";
+
+    public string ImageSource => img.StartsWith("/") ? $"http://localhost:5096{img}" : $"images/{img}";
 }
