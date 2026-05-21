@@ -17,12 +17,12 @@
             <div id="content">
                 <div>
                     <div id="name">@recipe.Name</div>
-                    <div id="recipe-categories" style="display: flex; gap: 5px; flex-wrap: wrap; margin-top: 5px; justify-content: center; margin-bottom: 10px;">
+                    <div id="recipe-categories">
                         @if (recipe.Categories != null)
                         {
                             @foreach (var cat in recipe.Categories)
                             {
-                                <span style="background: var(--green); color: white; padding: 2px 10px; border-radius: 12px; font-size: 12px; font-weight: bold;">@cat</span>
+                                <span class="category-tag">@cat</span>
                             }
                         }
                     </div>
@@ -75,7 +75,7 @@
     }
 
     private string ImageSource => (recipe?.ImageUrl != null && recipe.ImageUrl.StartsWith("/"))
-    ? $"http://localhost:5096{recipe.ImageUrl}"
+    ? $"{FitAura.Config.ImageBaseUrl}{recipe.ImageUrl}"
     : (string.IsNullOrEmpty(recipe?.ImageUrl) ? "images/sushi.png" : $"images/{recipe.ImageUrl}");
 
     private void Cancel() => MudDialog.Cancel();

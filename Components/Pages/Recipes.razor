@@ -5,41 +5,7 @@
 @inject IDialogService DialogService
 @inject FitAura.Services.RecipeService RecipeService
 @inject FitAura.Services.CategoryService CategoryService
-
-<style>
-    #search-filters {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        margin-bottom: 20px;
-    }
-
-    .category-filters {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 8px;
-        padding: 5px 0;
-    }
-
-    .filter-chip {
-        background-color: #f0f0f0;
-        border: 1px solid #ccc;
-        border-radius: 15px;
-        padding: 4px 12px;
-        font-size: 12px;
-        cursor: pointer;
-        transition: all 0.2s;
-        color: #666;
-    }
-
-    .filter-chip.active {
-        background-color: var(--green);
-        color: white;
-        border-color: var(--green);
-        font-weight: bold;
-    }
-</style>
+@inject UserState UserState
 
 <main>
     <section id="recipes">
@@ -48,8 +14,8 @@
 
 
         {
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                <h3 style="font-weight: bold; color: var(--green);">Wybierz przepis do posiłku</h3>
+            <div class="selection-header">
+                <h3 class="selection-title">Wybierz przepis do posiłku</h3>
                 <MudIconButton Icon="@Icons.Material.Filled.Close" OnClick="() => MudDialog.Cancel()" />
             </div>
         }
@@ -66,7 +32,7 @@
                 @onkeyup="HandleSearchEnter" />
                 <input type="number" id="max-kcal" placeholder="max kcal" @bind="maxKcal"
                 @onkeyup="HandleSearchEnter" />
-                <div @onclick="LoadRecipes" class="filter-icon"><img height="15" src="images/filter.svg" /></div>
+                @*<div @onclick="LoadRecipes" class="filter-icon"><img height="15" src="images/filter.svg" /></div>*@
                 @if (!IsSelectionMode)
 
 
@@ -88,12 +54,16 @@
                 {
                     @foreach (var cat in categories)
                     {
-                        <div class="filter-chip @(selectedCategoryId == cat.Id ? "active" : "")"
+                        <div class="filter-chip @(selectedCategoryId == cat.Id && !isMyRecipes ? "active" : "")"
                         @onclick="() => SelectCategory(cat.Id)">
                             @cat.Name
                         </div>
                     }
                 }
+                <div class="filter-chip @(isMyRecipes ? "active" : "")"
+                     @onclick="SelectMyRecipes">
+                    Moje
+                </div>
             </div>
         </div>
 
@@ -112,7 +82,8 @@
                     {
                         <Recipe id="@r.Id" name="@r.Name" kcal="@r.TotalKcal" protein="@r.TotalProtein" carbs="@r.TotalCarbs"
                             fats="@r.TotalFats" img="@(string.IsNullOrEmpty(r.ImageUrl) ? "sushi.png" : r.ImageUrl)"
-                            categories="@(r.Categories ?? new List<string>())" OnSelected="HandleRecipeSelected" />
+                            categories="@(r.Categories ?? new List<string>())" OnSelected="HandleRecipeSelected"
+                            IsEditable="@isMyRecipes" />
                     }
                 }
 
@@ -123,7 +94,7 @@
 
 
                 {
-                    <p style="grid-column: 1/-1; text-align: center; margin-top: 20px;">Nie znaleziono przepisów.</p>
+                    <p class="no-recipes-found">Nie znaleziono przepisów.</p>
                 }
             }
             else
@@ -157,6 +128,8 @@
 
     private int? selectedCategoryId = null;
 
+    private bool isMyRecipes = false;
+
 
 
     private List<FitAura.Services.RecipeSummaryDto> recipes;
@@ -174,50 +147,21 @@
     protected override async Task OnInitializedAsync()
 
 
-
     {
 
-
-
         try
-
-
-
         {
-
-
-
             categories = await CategoryService.GetCategoriesAsync();
-
-
-
         }
-
-
 
         catch (Exception ex)
 
-
-
         {
-
-
-
             Console.WriteLine($"Błąd pobierania kategorii: {ex.Message}");
-
-
-
             categories = new();
-
-
-
         }
 
-
-
         await LoadRecipes();
-
-
 
     }
 
@@ -229,48 +173,29 @@
 
     private async Task LoadRecipes()
 
-
-
     {
-
-
 
         try
 
-
-
         {
-
-
-
-            recipes = await RecipeService.GetRecipesAsync(searchQuery, maxKcal, selectedCategoryId);
-
-
+        recipes = await RecipeService.GetRecipesAsync(
+            searchQuery, 
+            maxKcal, 
+            isMyRecipes ? null : selectedCategoryId,
+            isMyRecipes ? UserState.CurrentUser?.Id : null
+        );
 
         }
-
-
 
         catch (Exception ex)
 
-
-
         {
-
-
 
             Console.WriteLine($"Błąd pobierania przepisów: {ex.Message}");
 
-
-
             recipes = new();
 
-
-
         }
-
-
-
     }
 
 
@@ -281,52 +206,27 @@
 
     private async Task SelectCategory(int? categoryId)
 
-
-
     {
 
-
-
         selectedCategoryId = categoryId;
-
-
-
+        isMyRecipes = false;
         await LoadRecipes();
 
 
 
     }
 
-
-
-
-
-
-
     private async Task HandleSearchEnter(KeyboardEventArgs e)
-
-
 
     {
 
-
-
         if (e.Key == "Enter")
-
-
 
         {
 
-
-
             await LoadRecipes();
 
-
-
         }
-
-
-
     }
 
 
@@ -340,6 +240,10 @@
         if (IsSelectionMode && MudDialog != null)
         {
             MudDialog.Close(DialogResult.Ok(selectedRecipe));
+        }
+        else if (isMyRecipes)
+        {
+            await EditRecipe(selectedRecipe);
         }
         else
         {
@@ -396,5 +300,27 @@
 
 
 
+    }
+
+    private async Task SelectMyRecipes()
+    {
+        isMyRecipes = true;
+        selectedCategoryId = null;
+        await LoadRecipes();
+    }
+
+    private async Task EditRecipe(FitAura.Services.RecipeSummaryDto selectedRecipe)
+    {
+        var options = new DialogOptions { FullWidth = true, MaxWidth = MaxWidth.Small };
+        var parameters = new DialogParameters<FitAura.Components.Modals.Add.AddRecipe>
+        {
+            { x => x.EditRecipeId, selectedRecipe.Id }
+        };
+        var dialog = await DialogService.ShowAsync<FitAura.Components.Modals.Add.AddRecipe>("Edytuj przepis", parameters, options);
+        var result = await dialog.Result;
+        if (!result.Canceled)
+        {
+            await LoadRecipes();
+        }
     }
 }

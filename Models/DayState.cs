@@ -1,4 +1,4 @@
-﻿using FitAura.Models;
+using FitAura.Models;
 using FitAura.Models.Records;
 using FitAuraApi.Models;
 
@@ -56,4 +56,8 @@ public class DayState
         }
     }
 
+    public void NotifyChange()
+    {
+        OnChange?.Invoke();
+    }
 }

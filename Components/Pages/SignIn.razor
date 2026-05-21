@@ -1,4 +1,4 @@
-﻿@page "/"
+@page "/"
 @using FitAura.Components.Cards
 @using FitAura.Components.Modals
 @using FitAura.Services
@@ -24,9 +24,13 @@
             <button type="submit">Zaloguj się</button>
         </form>
 
+        <div class="signup-link">
+            Nie masz konta? <a href="/signup">Zarejestruj się</a>
+        </div>
+
         @if (!string.IsNullOrEmpty(errorMessage))
         {
-            <div class="error-message" style="color: red; margin-top: 10px;">
+            <div class="error-message">
                 @errorMessage
             </div>
         }

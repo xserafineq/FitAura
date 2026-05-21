@@ -1,15 +1,16 @@
-﻿@page "/home"
+@page "/home"
 @using FitAura.Components.Cards
 @using FitAura.Components.Modals
 @using FitAura.Models
 @using FitAura.Models.Records
 @inject DayState DayState
+@inject UserState UserState
 
 
 <main>
     <div id="today">
         <div id="date">@displayDate</div>
-        <div id="kcal">@consumedKcal / 2000 kcal</div>
+        <div id="kcal">@consumedKcal / @dailyCaloricDemand kcal</div>
     </div>
     <section id="meals">
 
@@ -65,13 +66,46 @@
     private int sleep;
     private int measurementsCount;
     private List<AddMealRecord> meals;
+    private int dailyCaloricDemand = 2000;
 
     protected override void OnInitialized()
     {
         displayDate = DayState.CurrentDay.Date.ToString();
 
         DayState.OnChange += HandleStateChange;
+        CalculateCaloricDemand();
         RefreshData();
+    }
+
+    private void CalculateCaloricDemand()
+    {
+        var user = UserState.CurrentUser;
+        if (user != null)
+        {
+            var today = DateOnly.FromDateTime(DateTime.Today);
+            int age = today.Year - user.BirthDate.Year;
+            if (user.BirthDate > today.AddYears(-age))
+            {
+                age--;
+            }
+
+            double bmr = 0;
+            if (user.Sex != null && user.Sex.Equals("Male", StringComparison.OrdinalIgnoreCase))
+            {
+                bmr = 10 * (double)user.Weight + 6.25 * (double)user.Height - 5 * age + 5;
+            }
+            else
+            {
+                bmr = 10 * (double)user.Weight + 6.25 * (double)user.Height - 5 * age - 161;
+            }
+
+           
+            dailyCaloricDemand = (int)Math.Round(bmr * 1.4);
+        }
+        else
+        {
+            dailyCaloricDemand = 2000;
+        }
     }
 
     private void RefreshData()
@@ -93,6 +127,7 @@
 
     private void HandleStateChange()
     {
+        CalculateCaloricDemand();
         RefreshData();
         InvokeAsync(StateHasChanged);
     }

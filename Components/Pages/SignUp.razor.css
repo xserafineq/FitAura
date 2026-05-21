@@ -5,19 +5,20 @@ main {
     justify-content: center;
     background-color: white !important;
     color: black;
-    gap: 40px;
+    gap: 20px;
     padding: 20px;
-    height: 100vh !important;
+    min-height: 100vh !important;
 }
-
 
 #form-box {
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 20px;
     box-shadow: 0px 0px 35px -4px rgba(199,199,199,0.81);
     border-radius: 15px;
-    padding: 20px;
+    padding: 25px;
+    width: 380px;
+    background-color: white;
 }
 
 #form-header {
@@ -25,34 +26,55 @@ main {
     color: black;
     font-family: 'Comic Sans MS';
     font-weight: bold;
-    font-size: 28px;
+    font-size: 24px;
     text-align: center;
     justify-content: center;
-    background-color: white;
     height: 50px;
-    width: 280px;
     align-items: center;
-    justify-content: center;
     gap: 10px;
 }
 
 form {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 15px;
-    background-color: #FEFEFEFE;
-    width: 280px;
-    height: 150px;
+    gap: 12px;
 }
 
-input {
-    width: 90%;
+input, select {
+    width: 100%;
     display: flex;
     padding: 10px;
     border: 3px solid var(--green);
     border-radius: 10px;
+    font-size: 14px;
+    box-sizing: border-box;
+    outline: none;
+}
+
+.row {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+}
+
+.col {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+}
+
+.input-label {
+    font-size: 11px;
+    color: #777;
+    margin-bottom: 2px;
+    padding-left: 5px;
+    font-weight: bold;
+}
+
+.sex-select {
+    background-color: white;
+    cursor: pointer;
 }
 
 button {
@@ -61,31 +83,48 @@ button {
     font-weight: bold;
     color: white;
     font-size: 18px;
-    width: 90%;
-    padding: 10px;
+    width: 100%;
+    padding: 12px;
     font-family: 'Comic Sans MS';
     border-radius: 8px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.2s;
 }
 
-.signup-link {
+button:hover {
+    background-color: #388e3c;
+}
+
+.signin-link {
     text-align: center;
     font-size: 14px;
-    margin-top: 15px;
+    margin-top: 10px;
     color: #666;
 }
 
-.signup-link a {
+.signin-link a {
     color: var(--green);
     font-weight: bold;
     text-decoration: none;
 }
 
-.signup-link a:hover {
+.signin-link a:hover {
     text-decoration: underline;
 }
 
 .error-message {
     color: red;
-    margin-top: 10px;
+    margin-top: 5px;
     text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.success-message {
+    color: var(--green);
+    margin-top: 5px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
 }

@@ -1,4 +1,4 @@
-﻿#search {
+#search {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -86,4 +86,180 @@
     font-size: 16px;
     color: var(--green);
     font-weight: bold;
+}
+
+.section-title {
+    font-size: 14px;
+    font-weight: bold;
+    color: #666;
+    margin-bottom: 8px;
+    margin-top: 15px;
+}
+
+#barcode-search {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    background: #f5f5f5;
+    padding: 10px;
+    border-radius: 12px;
+}
+
+.search-wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.meal-input {
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 14px;
+    width: 100%;
+    outline: none;
+}
+
+.meal-input:focus {
+    border-color: var(--green);
+}
+
+.barcode-btn {
+    background-color: var(--green);
+    border: none;
+    border-radius: 10px;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.recipe-list-btn {
+    width: 100%;
+    margin-top: 10px;
+    background: white;
+    border: 2px dashed var(--green);
+    color: var(--green);
+    padding: 10px;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.autocomplete-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    max-height: 150px;
+    overflow-y: auto;
+    background-color: white;
+    position: absolute;
+    width: 100%;
+    z-index: 1000;
+    top: 100%;
+    margin-top: 5px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.autocomplete-list li {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#content {
+    margin-top: 20px;
+    padding: 15px;
+    background: #fff;
+    border-radius: 15px;
+    border: 1px solid #eee;
+}
+
+#nutrients-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin: 15px 0;
+}
+
+.nutrient-box {
+    text-align: center;
+    background: #fcfcfc;
+    padding: 8px;
+    border-radius: 10px;
+}
+
+.nutrient-val {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.nutrient-label {
+    font-size: 10px;
+    color: #999;
+}
+
+.meal-input-noborder {
+    border: none !important;
+}
+
+.scan-status {
+    font-size: 11px;
+    color: var(--green);
+    margin-top: 4px;
+    text-align: center;
+}
+
+.spinner-wrapper {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+
+.search-item-type {
+    font-size: 10px;
+    color: #999;
+}
+
+.selected-item-header {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.selected-item-img {
+    max-height: 120px;
+    border-radius: 10px;
+}
+
+.selected-item-name {
+    font-weight: bold;
+    font-size: 16px;
+    margin-top: 5px;
+    color: var(--green);
+}
+
+.selected-item-kcal {
+    font-weight: 800;
+    font-size: 18px;
+}
+
+.amount-label {
+    font-size: 12px;
+    font-weight: bold;
+    color: #444;
+}
+
+.recipe-portions-info {
+    font-size: 10px;
+    color: #999;
 }

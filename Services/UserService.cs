@@ -57,5 +57,22 @@ namespace FitAura.Services
                 return false;
             }
         }
+
+        public async Task<User?> RegisterAsync(User user)
+        {
+            try
+            {
+                var response = await _httpClient.PostAsJsonAsync("api/Users", user);
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadFromJsonAsync<User>();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Błąd podczas rejestracji użytkownika: {ex.Message}");
+            }
+            return null;
+        }
     }
 }

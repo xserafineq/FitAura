@@ -1,9 +1,11 @@
-﻿@using FitAura.Models
+@using FitAura.Models
+@using FitAura.Models.Records
 @using FitAura.Services
 @using MudBlazor
 @inject FitAura.Services.ProductService ProductService
 @inject HttpClient Http
 @inject DayState DayState
+@inject DayService DayService
 
 <style>
     #measurements-list {
@@ -13,20 +15,154 @@
     }
     #measurements-list .measurement {
         display: flex;
+        align-items: center;
         gap: 10px;
         border-bottom: 2px solid var(--green);
         font-size: 16px;
+        padding: 8px 4px;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+        border-radius: 6px;
+    }
+    #measurements-list .measurement:hover {
+        background-color: rgba(76, 175, 80, 0.08);
+    }
+    .measurement-text {
+        flex: 1;
+    }
+    .measurement-actions {
+        display: flex;
+        gap: 6px;
+    }
+    .edit-btn, .delete-btn {
+        border: none;
+        border-radius: 6px;
+        padding: 4px 10px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+        transition: opacity 0.2s;
+    }
+    .edit-btn {
+        background-color: var(--green);
+        color: white;
+    }
+    .delete-btn {
+        background-color: #e74c3c;
+        color: white;
+    }
+    .edit-btn:hover, .delete-btn:hover {
+        opacity: 0.85;
+    }
+    .edit-form {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding: 10px;
+        background: #f9f9f9;
+        border-radius: 10px;
+        border: 2px solid var(--green);
+    }
+    .edit-form .edit-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .edit-form .edit-row label {
+        font-weight: bold;
+        min-width: 60px;
+        font-size: 14px;
+    }
+    .edit-form .edit-row input {
+        width: 120px;
+        padding: 6px 8px;
+        border: 2px solid lightgray;
+        border-radius: 10px;
+        font-size: 14px;
+        background: white;
+    }
+    .edit-form-actions {
+        display: flex;
+        gap: 8px;
+        justify-content: flex-end;
+        margin-top: 4px;
+    }
+    .save-edit-btn, .cancel-edit-btn {
+        border: none;
+        border-radius: 6px;
+        padding: 6px 16px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+    }
+    .save-edit-btn {
+        background-color: var(--green);
+        color: white;
+    }
+    .cancel-edit-btn {
+        background-color: #ccc;
+        color: #333;
+    }
+    .no-measurements {
+        text-align: center;
+        color: #999;
+        padding: 20px;
+        font-size: 15px;
     }
 </style>
 
 <MudDialog>
     <DialogContent>
         <div id="measurements-list">
-            @foreach (var measurement in DayState.CurrentDay.Measurements)
+            @if (!DayState.CurrentDay.Measurements.Any())
             {
-                <div class="measurement">
-                  @measurement.Weight kg / @measurement.Pulse bmp / @measurement.Sugar mg/dl
-                </div>
+                <div class="no-measurements">Brak pomiarów na dzisiaj.</div>
+            }
+            else
+            {
+                @for (int i = 0; i < DayState.CurrentDay.Measurements.Count; i++)
+                {
+                    var index = i;
+                    var measurement = DayState.CurrentDay.Measurements.ElementAt(index);
+
+                    @if (editingIndex == index)
+                    {
+                        <div class="edit-form">
+                            <div class="edit-row">
+                                <label>Waga:</label>
+                                <input type="number" @bind="editWeight" placeholder="kg" />
+                            </div>
+                            <div class="edit-row">
+                                <label>Tętno:</label>
+                                <input type="number" @bind="editPulse" placeholder="bpm" />
+                            </div>
+                            <div class="edit-row">
+                                <label>Cukier:</label>
+                                <input type="number" @bind="editSugar" placeholder="mg/dL" />
+                            </div>
+                            <div class="edit-form-actions">
+                                <button class="cancel-edit-btn" @onclick="CancelEdit">Anuluj</button>
+                                <button class="save-edit-btn" @onclick="() => SaveEdit(index)">Zapisz</button>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="measurement">
+                            <span class="measurement-text">
+                                @measurement.Weight kg / @measurement.Pulse bpm / @measurement.Sugar mg/dl
+                            </span>
+                            <div class="measurement-actions">
+                                <button class="edit-btn" @onclick="() => StartEdit(index, measurement)" @onclick:stopPropagation="true">
+                                    edytuj
+                                </button>
+                                <button class="delete-btn" @onclick="() => DeleteMeasurement(index)" @onclick:stopPropagation="true">
+                                    usuń
+                                </button>
+                            </div>
+                        </div>
+                    }
+                }
             }
         </div>
     </DialogContent>
@@ -41,12 +177,62 @@
     [CascadingParameter]
     private IMudDialogInstance MudDialog { get; set; }
 
-    private string barcode = "";
-    private FitAura.Models.Product? myProduct;
-
-
+    private int editingIndex = -1;
+    private decimal editWeight;
+    private decimal editPulse;
+    private decimal editSugar;
 
     private void Cancel() => MudDialog.Cancel();
 
-    
+    private void StartEdit(int index, AddMeasurementRecord measurement)
+    {
+        editingIndex = index;
+        editWeight = measurement.Weight;
+        editPulse = measurement.Pulse;
+        editSugar = measurement.Sugar;
+    }
+
+    private void CancelEdit()
+    {
+        editingIndex = -1;
+    }
+
+    private async Task SaveEdit(int index)
+    {
+        var measurements = DayState.CurrentDay.Measurements.ToList();
+        var old = measurements[index];
+        measurements[index] = new AddMeasurementRecord(editWeight, editPulse, editSugar, old.DayId);
+        DayState.CurrentDay.Measurements = measurements;
+
+        await PersistChanges();
+        editingIndex = -1;
+        StateHasChanged();
+    }
+
+    private async Task DeleteMeasurement(int index)
+    {
+        var measurements = DayState.CurrentDay.Measurements.ToList();
+        measurements.RemoveAt(index);
+        DayState.CurrentDay.Measurements = measurements;
+
+        if (editingIndex == index) editingIndex = -1;
+        else if (editingIndex > index) editingIndex--;
+
+        await PersistChanges();
+        StateHasChanged();
+    }
+
+    private async Task PersistChanges()
+    {
+        var editDto = new EditDay(
+            DayState.CurrentDay.Id,
+            DayState.CurrentDay.Steps,
+            DayState.CurrentDay.SleepLevel,
+            DayState.CurrentDay.KcalBurned,
+            DayState.CurrentDay.Measurements,
+            null
+        );
+        await DayService.editDay(editDto);
+        DayState.NotifyChange();
+    }
 }

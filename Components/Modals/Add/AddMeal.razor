@@ -18,9 +18,13 @@
             <div id="items-list-box">
                 @for (int i = 0; i < itemNames.Count; i++)
                 {
-                    <div class="meal-item-row" style="display: flex; justify-content: space-between; padding: 5px; border-bottom: 1px solid #eee;">
-                        <span>@itemNames[i]</span>
-                        <span style="font-size: 10px; color: #999;">@(items[i].Type == "recipe" ? "Przepis" : "Produkt")</span>
+                    var index = i;
+                    <div class="meal-item-row">
+                        <span>@itemNames[index]</span>
+                        <div class="meal-item-right">
+                            <span class="meal-item-type">@(items[index].Type == "recipe" ? "Przepis" : "Produkt")</span>
+                            <button class="remove-item-btn" @onclick="() => RemoveItem(index)" type="button" title="Usuń">usuń</button>
+                        </div>
                     </div>
                 }
             </div>
@@ -81,6 +85,16 @@
             }
 
             itemNames.Add(product.Name);
+            StateHasChanged();
+        }
+    }
+
+    public void RemoveItem(int index)
+    {
+        if (index >= 0 && index < items.Count)
+        {
+            items.RemoveAt(index);
+            itemNames.RemoveAt(index);
             StateHasChanged();
         }
     }

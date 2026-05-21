@@ -54,7 +54,7 @@ namespace FitAura.Services
             }
         }
 
-        public async Task<List<RecipeSummaryDto>> GetRecipesAsync(string? search = null, int? maxKcal = null, int? categoryId = null)
+        public async Task<List<RecipeSummaryDto>> GetRecipesAsync(string? search = null, int? maxKcal = null, int? categoryId = null, int? userId = null)
         {
             try
             {
@@ -71,6 +71,10 @@ namespace FitAura.Services
                 if (categoryId.HasValue)
                 {
                     queryParams.Add($"categoryId={categoryId.Value}");
+                }
+                if (userId.HasValue)
+                {
+                    queryParams.Add($"userId={userId.Value}");
                 }
 
                 if (queryParams.Any())
@@ -102,6 +106,19 @@ namespace FitAura.Services
         {
             public string ImageUrl { get; set; } = "";
         }
+
+        public async Task<bool> UpdateRecipeAsync(int id, CreateRecipeDto recipeDto)
+        {
+            try
+            {
+                var response = await _httpClient.PutAsJsonAsync($"/api/Recipes/{id}", recipeDto);
+                return response.IsSuccessStatusCode;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 
     public record CreateRecipeDto(string Name, string? ImageUrl, List<string> Steps, List<CreateRecipeIngredientDto> Ingredients, int Portions, int UserId, List<int> CategoryIds);
@@ -123,6 +140,7 @@ namespace FitAura.Services
     );
 
     public record RecipeIngredientDetailDto(
+        int ProductId,
         string ProductName, 
         int Amount, 
         string Unit, 

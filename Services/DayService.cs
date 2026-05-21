@@ -1,4 +1,4 @@
-﻿using FitAura.Models;
+using FitAura.Models;
 using FitAura.Models.Records;
 using System;
 using System.Net.Http;
@@ -65,6 +65,23 @@ namespace FitAura.Services
             {
                 Console.WriteLine($"Błąd podczas łączenia z API: {ex.Message}");
             }
+        }
+
+        public async Task<List<Day>> GetUserDaysAsync(int userId)
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync($"/api/Days/user/{userId}");
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadFromJsonAsync<List<Day>>() ?? new List<Day>();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Błąd podczas pobierania historii dni użytkownika: {ex.Message}");
+            }
+            return new List<Day>();
         }
     }
 }

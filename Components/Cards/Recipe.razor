@@ -3,8 +3,14 @@
 @using System.Collections.Generic
 @inject IDialogService DialogService
 
-<button @onclick="HandleClick" class="recipe-card">
-    <img src="@ImageSource" height="200" width="200" alt="recipe-picture" />
+<button @onclick="HandleClick" class="recipe-card @(IsEditable ? "editable" : "")">
+    <div class="recipe-img-wrapper">
+        <img src="@ImageSource" height="200" width="200" alt="recipe-picture" />
+        @if (IsEditable)
+        {
+            <div class="edit-badge">✏️ Edytuj</div>
+        }
+    </div>
     <div id="recipe-summary">
         <div id="name">@name</div>
         <div id="kcal"><img height="16" src="images/kcal.svg" alt="kcal" /> @kcal kcal</div>
@@ -36,8 +42,9 @@
     [Parameter] public List<string> categories { get; set; } = new();
 
     [Parameter] public EventCallback<FitAura.Services.RecipeSummaryDto> OnSelected { get; set; }
+    [Parameter] public bool IsEditable { get; set; } = false;
 
-    public string ImageSource => (img != null && img.StartsWith("/")) ? $"http://localhost:5096{img}" :
+    public string ImageSource => (img != null && img.StartsWith("/")) ? $"{FitAura.Config.ImageBaseUrl}{img}" :
     $"images/{(string.IsNullOrEmpty(img) ? "sushi.png" : img)}";
 
     private async Task HandleClick()

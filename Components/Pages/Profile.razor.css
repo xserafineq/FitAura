@@ -76,3 +76,7 @@ select {
     background-color: red;
 
 }
+
+#username span {
+    font-weight: normal;
+}

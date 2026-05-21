@@ -73,7 +73,7 @@ namespace FitAura.Services
         {
             try
             {
-                // Tworzymy listę zadań do wykonania równolegle
+           
                 var tasks = mealItems
                     .Where(item => (item.Type == "product" && item.ProductId.HasValue) || (item.Type == "recipe" && item.RecipeId.HasValue))
                     .Select(async item =>
@@ -91,7 +91,7 @@ namespace FitAura.Services
                         return new FullMakro(0, 0, 0, 0);
                     });
 
-                // Czekamy, aż wszystkie zapytania się zakończą
+                
                 var results = await Task.WhenAll(tasks);
 
                 return new FullMakro(
@@ -104,7 +104,7 @@ namespace FitAura.Services
             catch (Exception ex)
             {
                 Console.WriteLine($"Błąd podczas obliczeń: {ex.Message}");
-                return new FullMakro(0, 0, 0, 0); // W razie błędu zwracamy 0, żeby nie "zamrozić" UI
+                return new FullMakro(0, 0, 0, 0); 
             }
         }
         public async Task<FullMakro?> CalculateProductMacros(int id, int amount)

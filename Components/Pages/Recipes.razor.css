@@ -63,20 +63,53 @@
     width: 100%;
 }
 
-.filter-chip {
+#search-filters {
     display: flex;
-    background-color: var(--light-gray);
-    border-radius: 15px;
-    padding: 10px;
-    border: 3px solid var(--green);
-    width: auto;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.category-filters {
+    display: flex;
+    flex-wrap: wrap;
     justify-content: center;
-    align-items: center;
+    gap: 8px;
+    padding: 5px 0;
+}
+
+.filter-chip {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    padding: 4px 12px;
+    font-size: 12px;
     cursor: pointer;
-    font-weight: bold;
+    transition: all 0.2s;
+    color: #666;
 }
 
 .filter-chip.active {
     background-color: var(--green);
     color: white;
+    border-color: var(--green);
+    font-weight: bold;
+}
+
+.selection-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.selection-title {
+    font-weight: bold;
+    color: var(--green);
+}
+
+.no-recipes-found {
+    grid-column: 1/-1;
+    text-align: center;
+    margin-top: 20px;
 }

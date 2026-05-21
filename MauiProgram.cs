@@ -27,7 +27,7 @@ namespace FitAura
             builder.Logging.AddDebug();
 #endif
 
-            var baseUri = new Uri("https://localhost:7017/");
+            var baseUri = new Uri(Config.ApiUrl);
 
             static HttpClientHandler GetInsecureHandler()
             {
