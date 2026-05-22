@@ -146,6 +146,6 @@ Użytkownik w ciągu dnia może wprowadzić wiele pomiarów, może również je 
 
 
 
-Każde zdjęcie powinno mieć opis, który wyjaśnia, co jest na zdjęciu.## Plany rozbudowy
+## Dalszy rozwój aplikacji
+Jako dalszy rozwój aplikacji planowane jest wsparcie urządzeń mobilnych oraz wprowadzenie bardziej zaawansowanej filtracji przepisów, oraz dodanie możliwości zbierania większej ilości informacji, które użytkowników będzie mógł podsumować w statystykach.
 
-- Czego zabrakło w pierwszej wersji projektu?- Jakie funkcjonalności mogłyby powstać w "v2.0" (np. integracja z płatnościami, system powiadomień mailowych)?- Gdzie dostrzegacie potencjał na optymalizację (np. dodanie cache'owania, zmiana bazy danych)?
