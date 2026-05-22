@@ -3,7 +3,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 250px;
+    min-height: 250px;
     gap: 15px;
     background-color: lightgray;
     color: white;

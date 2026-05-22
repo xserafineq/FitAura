@@ -30,41 +30,45 @@
             <div id="search">
                 <input id="recipe-input" type="text" placeholder="wyszukaj przepis" @bind="searchQuery"
                 @onkeyup="HandleSearchEnter" />
-                <input type="number" id="max-kcal" placeholder="max kcal" @bind="maxKcal"
-                @onkeyup="HandleSearchEnter" />
-                @*<div @onclick="LoadRecipes" class="filter-icon"><img height="15" src="images/filter.svg" /></div>*@
+                
+                <div @onclick="ToggleAdvancedFilters" class="filter-icon" style="cursor:pointer;" title="Filtry">
+                    <img height="18" src="images/filter.svg" />
+                </div>
+
                 @if (!IsSelectionMode)
-
-
-
                 {
-                    <div @onclick="openAddDialog" class="filter-icon"><img height="18" src="images/add.svg" /> </div>
+                    <div @onclick="openAddDialog" class="filter-icon" style="cursor:pointer;" title="Dodaj przepis">
+                        <img height="18" src="images/add.svg" />
+                    </div>
                 }
             </div>
 
-            <div class="category-filters">
-                <div class="filter-chip @(selectedCategoryId == null ? "active" : "")"
-                @onclick="() => SelectCategory(null)">
-                    Wszystkie
+            @if (showAdvancedFilters)
+            {
+                <div class="advanced-filters-container" style="background-color: #f9f9f9; padding: 15px; border-radius: 12px; border: 1px solid #eee; display: flex; flex-direction: column; gap: 15px;">
+                    <div class="advanced-filters" style="padding: 0; border: none; background: transparent;">
+                        <input type="number" placeholder="min kcal" @bind="minKcal" @onkeyup="HandleSearchEnter" />
+                        <input type="number" placeholder="max kcal" @bind="maxKcal" @onkeyup="HandleSearchEnter" />
+                        <input type="email" placeholder="email autora" @bind="authorEmail" @onkeyup="HandleSearchEnter" />
+                        <select @bind="sortMode" @bind:after="LoadRecipes">
+                            <option value="">Domyślne sortowanie</option>
+                            <option value="kcal_asc">Kcal: rosnąco</option>
+                            <option value="kcal_desc">Kcal: malejąco</option>
+                        </select>
+                        <select value="@categoryFilterValue" @onchange="OnCategoryFilterChanged">
+                            <option value="all">Wszystkie kategorie</option>
+                            <option value="mine">Moje przepisy</option>
+                            @if (categories != null)
+                            {
+                                @foreach (var cat in categories)
+                                {
+                                    <option value="@cat.Id.ToString()">@cat.Name</option>
+                                }
+                            }
+                        </select>
+                    </div>
                 </div>
-                @if (categories != null)
-
-
-
-                {
-                    @foreach (var cat in categories)
-                    {
-                        <div class="filter-chip @(selectedCategoryId == cat.Id && !isMyRecipes ? "active" : "")"
-                        @onclick="() => SelectCategory(cat.Id)">
-                            @cat.Name
-                        </div>
-                    }
-                }
-                <div class="filter-chip @(isMyRecipes ? "active" : "")"
-                     @onclick="SelectMyRecipes">
-                    Moje
-                </div>
-            </div>
+            }
         </div>
 
         <div id="container">
@@ -81,7 +85,7 @@
 
                     {
                         <Recipe id="@r.Id" name="@r.Name" kcal="@r.TotalKcal" protein="@r.TotalProtein" carbs="@r.TotalCarbs"
-                            fats="@r.TotalFats" img="@(string.IsNullOrEmpty(r.ImageUrl) ? "sushi.png" : r.ImageUrl)"
+                            fats="@r.TotalFats" img="@(string.IsNullOrEmpty(r.ImageUrl) ? "img-not-found.png" : r.ImageUrl)"
                             categories="@(r.Categories ?? new List<string>())" OnSelected="HandleRecipeSelected"
                             IsEditable="@isMyRecipes" />
                     }
@@ -106,7 +110,7 @@
 </main>
 
 @code {
-    [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; } = null!;
 
 
 
@@ -119,20 +123,46 @@
 
 
     private string searchQuery = "";
-
-
-
+    private int? minKcal = null;
     private int? maxKcal = null;
+    private string? authorEmail = null;
+    private string? sortMode = null;
+    private bool showAdvancedFilters = false;
 
-
+    private void ToggleAdvancedFilters()
+    {
+        showAdvancedFilters = !showAdvancedFilters;
+    }
 
     private int? selectedCategoryId = null;
-
     private bool isMyRecipes = false;
 
+    private string categoryFilterValue => isMyRecipes ? "mine" : (selectedCategoryId?.ToString() ?? "all");
+
+    private async Task OnCategoryFilterChanged(ChangeEventArgs e)
+    {
+        var val = e.Value?.ToString();
+        if (val == "mine")
+        {
+            isMyRecipes = true;
+            selectedCategoryId = null;
+        }
+        else if (val == "all")
+        {
+            isMyRecipes = false;
+            selectedCategoryId = null;
+        }
+        else if (int.TryParse(val, out int id))
+        {
+            isMyRecipes = false;
+            selectedCategoryId = id;
+        }
+        await LoadRecipes();
+    }
 
 
-    private List<FitAura.Services.RecipeSummaryDto> recipes;
+
+    private List<FitAura.Services.RecipeSummaryDto> recipes = new();
 
 
 
@@ -176,15 +206,16 @@
     {
 
         try
-
         {
-        recipes = await RecipeService.GetRecipesAsync(
-            searchQuery, 
-            maxKcal, 
-            isMyRecipes ? null : selectedCategoryId,
-            isMyRecipes ? UserState.CurrentUser?.Id : null
-        );
-
+            recipes = await RecipeService.GetRecipesAsync(
+                searchQuery, 
+                minKcal,
+                maxKcal, 
+                isMyRecipes ? null : selectedCategoryId,
+                isMyRecipes ? UserState.CurrentUser?.Id : null,
+                authorEmail,
+                sortMode
+            );
         }
 
         catch (Exception ex)
@@ -284,7 +315,7 @@
 
 
 
-        if (!result.Canceled)
+        if (result != null && !result.Canceled)
 
 
 
@@ -318,7 +349,7 @@
         };
         var dialog = await DialogService.ShowAsync<FitAura.Components.Modals.Add.AddRecipe>("Edytuj przepis", parameters, options);
         var result = await dialog.Result;
-        if (!result.Canceled)
+        if (result != null && !result.Canceled)
         {
             await LoadRecipes();
         }

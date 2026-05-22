@@ -135,21 +135,13 @@
     background: #e74c3c;
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 3px;
     width: auto;
-    padding: 8px;
+    padding: 5px;
     font-size: 12px;
     font-weight: bold;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0;
-    line-height: 1;
-    transition: background-color 0.2s, transform 0.15s;
-}
-
-.remove-item-btn:hover {
-    background: #c0392b;
-    transform: scale(1.1);
 }

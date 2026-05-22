@@ -8,7 +8,7 @@
         <img src="@ImageSource" height="200" width="200" alt="recipe-picture" />
         @if (IsEditable)
         {
-            <div class="edit-badge">✏️ Edytuj</div>
+            <div class="edit-badge">Edytuj</div>
         }
     </div>
     <div id="recipe-summary">
@@ -45,7 +45,7 @@
     [Parameter] public bool IsEditable { get; set; } = false;
 
     public string ImageSource => (img != null && img.StartsWith("/")) ? $"{FitAura.Config.ImageBaseUrl}{img}" :
-    $"images/{(string.IsNullOrEmpty(img) ? "sushi.png" : img)}";
+    $"images/{(string.IsNullOrEmpty(img) ? "img-not-found.png" : img)}";
 
     private async Task HandleClick()
     {
@@ -54,7 +54,7 @@
             var summary = new FitAura.Services.RecipeSummaryDto(id, name, img, kcal, protein, carbs, fats, 1, categories);
             await OnSelected.InvokeAsync(summary);
         }
-        else 
+        else
         {
             await OpenPreview();
         }

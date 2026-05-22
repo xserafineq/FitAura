@@ -1,11 +1,10 @@
-﻿@using FitAura.Services
+@using FitAura.Services
 @using MudBlazor
 @inject DayState DayState
 @inject DayService DayService
 
 
 <style>
-
     #steps {
         display: flex;
         width: 90%;
@@ -13,27 +12,26 @@
         gap: 10px;
     }
 
-        #steps span {
-            font-size: 16px;
-            font-weight: bold;
-            color: black;
-        }
+    #steps span {
+        font-size: 16px;
+        font-weight: bold;
+        color: black;
+    }
 
-        #steps div {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
+    #steps div {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
 
-        #steps input {
-            width: 150px;
-            background-color: #FEFEFEFE;
-            border: 2px solid lightgray;
-            padding: 8px;
-            font-size: 14px;
-            border-radius: 15px;
-        }
-
+    #steps input {
+        width: 150px;
+        background-color: #FEFEFEFE;
+        border: 2px solid lightgray;
+        padding: 8px;
+        font-size: 14px;
+        border-radius: 15px;
+    }
 </style>
 
 <MudDialog>
@@ -65,19 +63,22 @@
             return;
         }
 
-        DayState.SetSteps(steps);
+        if (steps > 0)
+        {
+            DayState.SetSteps(steps);
+        }
 
         var editDto = new Models.Records.EditDay(
-            DayState.CurrentDay.Id,
-            DayState.CurrentDay.Steps,
-            DayState.CurrentDay.SleepLevel,
-            DayState.CurrentDay.KcalBurned,
-            DayState.CurrentDay.Measurements,
-            null
+        DayState.CurrentDay.Id,
+        DayState.CurrentDay.Steps,
+        DayState.CurrentDay.SleepLevel,
+        DayState.CurrentDay.KcalBurned,
+        DayState.CurrentDay.Measurements,
+        null
         );
 
 
-        await DayService.editDay(editDto);
+        await DayService.EditDay(editDto);
         MudDialog?.Close(DialogResult.Ok(true));
 
     }

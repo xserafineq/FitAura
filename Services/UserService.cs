@@ -17,7 +17,7 @@ namespace FitAura.Services
             _httpClient = httpClient;
         }
 
-        public async Task<User> LoginAsync(string email, string password)
+        public async Task<User?> LoginAsync(string email, string password)
         {
             var requestData = new { Email = email, Password = password };
 

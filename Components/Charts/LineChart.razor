@@ -1,0 +1,135 @@
+@using FitAura.Components.Pages
+
+<div class="svg-wrapper">
+    <svg viewBox="0 0 500 250" class="bmi-chart">
+        <line x1="50" y1="20" x2="450" y2="20" class="grid-line" />
+        <line x1="50" y1="110" x2="450" y2="110" class="grid-line" />
+        <line x1="50" y1="200" x2="450" y2="200" class="grid-line" />
+
+        <text x="15" y="25" class="chart-text">@MaxYLabel</text>
+        <text x="15" y="115" class="chart-text">@MidYLabel</text>
+        <text x="15" y="205" class="chart-text">@MinYLabel</text>
+
+        @if (Data.Count == 1)
+        {
+            <g>
+                @{
+                    var xVal = "250";
+                    var yVal = GetY(Data[0].Value).ToString("F1", System.Globalization.CultureInfo.InvariantCulture);
+                    var yTextVal = (GetY(Data[0].Value) - 10).ToString("F1", System.Globalization.CultureInfo.InvariantCulture);
+                    var valStr = Data[0].Value.ToString("F1");
+                }
+                <circle cx="@xVal" cy="@yVal" r="6" class="chart-dot">
+                    <title>Data: @Data[0].Date.ToString("dd.MM.yyyy")&#10;@Data[0].TooltipData: @Data[0].Value.ToString("F1")</title>
+                </circle>
+                @((MarkupString)$"<text x='{xVal}' y='{yTextVal}' class='dot-label' text-anchor='middle'>{valStr}</text>")
+                
+                <text x="250" y="235" class="chart-text" text-anchor="middle">@Data[0].Date.ToString("dd.MM")</text>
+            </g>
+        }
+        else if (Data.Count >= 2)
+        {
+            <g>
+                <path d="@GetAreaPath()" class="chart-area" />
+                <path d="@GetSvgPath()" class="chart-line" />
+
+                @for (int i = 0; i < Data.Count; i++)
+                {
+                    int idx = i;
+                    var xVal = GetX(idx).ToString("F1", System.Globalization.CultureInfo.InvariantCulture);
+                    var yVal = GetY(Data[idx].Value).ToString("F1", System.Globalization.CultureInfo.InvariantCulture);
+                    var yTextVal = (GetY(Data[idx].Value) - 10).ToString("F1", System.Globalization.CultureInfo.InvariantCulture);
+                    var valStr = Data[idx].Value.ToString("F1");
+
+                    <circle cx="@xVal" cy="@yVal" r="6" class="chart-dot">
+                        <title>Data: @Data[idx].Date.ToString("dd.MM.yyyy")&#10;@Data[idx].TooltipData: @Data[idx].Value.ToString("F1")</title>
+                    </circle>
+                    @((MarkupString)$"<text x='{xVal}' y='{yTextVal}' class='dot-label'>{valStr}</text>")
+                }
+
+                <text x="50" y="235" class="chart-text">@Data[0].Date.ToString("dd.MM")</text>
+                <text x="450" y="235" class="chart-text" text-anchor="end">@Data[^1].Date.ToString("dd.MM")</text>
+            </g>
+        }
+    </svg>
+</div>
+
+@code {
+    [Parameter]
+    public List<Stats.ChartPoint> Data { get; set; } = new();
+
+    [Parameter]
+    public double MinYVal { get; set; } = 15;
+
+    [Parameter]
+    public double MaxYVal { get; set; } = 35;
+
+    [Parameter]
+    public string MinYLabel { get; set; } = "15";
+
+    [Parameter]
+    public string MidYLabel { get; set; } = "25";
+
+    [Parameter]
+    public string MaxYLabel { get; set; } = "35";
+
+    private string GetSvgPath()
+    {
+        if (Data == null || Data.Count < 2)
+            return "";
+
+        var sb = new System.Text.StringBuilder();
+        sb.Append($"M {GetX(0).ToString("F1", System.Globalization.CultureInfo.InvariantCulture)} {GetY(Data[0].Value).ToString("F1", System.Globalization.CultureInfo.InvariantCulture)}");
+
+        for (int i = 1; i < Data.Count; i++)
+        {
+            sb.Append($" L {GetX(i).ToString("F1", System.Globalization.CultureInfo.InvariantCulture)} {GetY(Data[i].Value).ToString("F1", System.Globalization.CultureInfo.InvariantCulture)}");
+        }
+
+        return sb.ToString();
+    }
+
+    private string GetAreaPath()
+    {
+        if (Data == null || Data.Count < 2)
+            return "";
+
+        var sb = new System.Text.StringBuilder();
+        double firstX = GetX(0);
+        double lastX = GetX(Data.Count - 1);
+
+        sb.Append($"M {firstX.ToString("F1", System.Globalization.CultureInfo.InvariantCulture)} 200"); 
+        sb.Append($" L {firstX.ToString("F1", System.Globalization.CultureInfo.InvariantCulture)} {GetY(Data[0].Value).ToString("F1", System.Globalization.CultureInfo.InvariantCulture)}"); 
+
+        for (int i = 1; i < Data.Count; i++)
+        {
+            sb.Append($" L {GetX(i).ToString("F1", System.Globalization.CultureInfo.InvariantCulture)} {GetY(Data[i].Value).ToString("F1", System.Globalization.CultureInfo.InvariantCulture)}");
+        }
+
+        sb.Append($" L {lastX.ToString("F1", System.Globalization.CultureInfo.InvariantCulture)} 200"); 
+        sb.Append(" Z"); 
+
+        return sb.ToString();
+    }
+
+    private double GetX(int index)
+    {
+        if (Data.Count <= 1) return 250;
+        double width = 400; 
+        double step = width / (Data.Count - 1);
+        return 50 + index * step;
+    }
+
+    private double GetY(double value)
+    {
+        double height = 180; 
+        double range = MaxYVal - MinYVal;
+        if (range <= 0) range = 1;
+
+        double ratio = (value - MinYVal) / range;
+        if (ratio < 0) ratio = 0;
+        if (ratio > 1) ratio = 1;
+
+        return 200 - ratio * height;
+    }
+}

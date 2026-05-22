@@ -62,7 +62,7 @@
 
 @code {
     [CascadingParameter]
-    private IMudDialogInstance MudDialog { get; set; }
+    private IMudDialogInstance MudDialog { get; set; } = null!;
 
     [Parameter]
     public int RecipeId { get; set; }
@@ -76,7 +76,7 @@
 
     private string ImageSource => (recipe?.ImageUrl != null && recipe.ImageUrl.StartsWith("/"))
     ? $"{FitAura.Config.ImageBaseUrl}{recipe.ImageUrl}"
-    : (string.IsNullOrEmpty(recipe?.ImageUrl) ? "images/sushi.png" : $"images/{recipe.ImageUrl}");
+    : (string.IsNullOrEmpty(recipe?.ImageUrl) ? "images/img-not-found.png" : $"images/{recipe.ImageUrl}");
 
     private void Cancel() => MudDialog.Cancel();
 }

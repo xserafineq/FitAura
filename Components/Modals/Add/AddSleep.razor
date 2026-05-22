@@ -1,4 +1,4 @@
-﻿@using FitAura.Services
+@using FitAura.Services
 @using MudBlazor
 @inject DayState DayState
 @inject DayService DayService
@@ -82,7 +82,7 @@
         );
 
 
-        await DayService.editDay(editDto);
+        await DayService.EditDay(editDto);
         MudDialog?.Close(DialogResult.Ok(true));
 
     }

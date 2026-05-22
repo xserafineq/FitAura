@@ -65,7 +65,7 @@
     private int steps;
     private int sleep;
     private int measurementsCount;
-    private List<AddMealRecord> meals;
+    private List<AddMealRecord> meals = new();
     private int dailyCaloricDemand = 2000;
 
     protected override void OnInitialized()
@@ -115,12 +115,15 @@
             kcal = DayState.CurrentDay.KcalBurned;
             steps = DayState.CurrentDay.Steps;
             sleep = DayState.CurrentDay.SleepLevel;
-            measurementsCount = DayState.CurrentDay.Measurements.Count();
+            measurementsCount = DayState.CurrentDay.Measurements?.Count() ?? 0;
             meals = DayState.CurrentDay.Meals?.ToList() ?? new List<AddMealRecord>();
             consumedKcal = 0;
-            foreach (var meal in DayState.CurrentDay.Meals)
+            if (DayState.CurrentDay.Meals != null)
             {
-                consumedKcal += meal.Kcal;
+                foreach (var meal in DayState.CurrentDay.Meals)
+                {
+                    consumedKcal += meal.Kcal;
+                }
             }
         }
     }

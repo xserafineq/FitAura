@@ -61,7 +61,7 @@
             if (user != null)
             {
                 UserState.SetUser(user);
-                await DayService.createDay(user.Id);
+                await DayService.CreateDay(user.Id);
                 NavigationManager.NavigateTo("/home");
             }
             else

@@ -41,9 +41,9 @@
 
 @code {
     [CascadingParameter]
-    private IMudDialogInstance MudDialog { get; set; }
+    private IMudDialogInstance MudDialog { get; set; } = null!;
 
-    private string barcode = "";
+
     private List<MealItem> items = new List<MealItem>();
     private string mealName = "Posiłek";
     private List<string> itemNames = new List<string>();
@@ -114,7 +114,7 @@
             DayState.CurrentDay.Meals
         );
 
-        await DayService.editDay(edit);
+        await DayService.EditDay(edit);
 
         MudDialog.Close(DialogResult.Ok(true));
     }

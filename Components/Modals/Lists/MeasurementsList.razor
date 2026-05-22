@@ -175,7 +175,7 @@
 
 @code {
     [CascadingParameter]
-    private IMudDialogInstance MudDialog { get; set; }
+    private IMudDialogInstance MudDialog { get; set; } = null!;
 
     private int editingIndex = -1;
     private decimal editWeight;
@@ -232,7 +232,7 @@
             DayState.CurrentDay.Measurements,
             null
         );
-        await DayService.editDay(editDto);
+        await DayService.EditDay(editDto);
         DayState.NotifyChange();
     }
 }

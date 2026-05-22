@@ -1,0 +1,53 @@
+.svg-wrapper {
+    width: 100%;
+    overflow: visible;
+}
+
+.bmi-chart {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+}
+
+.grid-line {
+    stroke: #eee;
+    stroke-width: 1.5;
+    stroke-dasharray: 4, 4;
+}
+
+.chart-text {
+    font-size: 10px;
+    fill: #888;
+    font-weight: bold;
+}
+
+.chart-area {
+    fill: rgba(76, 175, 80, 0.08);
+}
+
+.chart-line {
+    fill: none;
+    stroke: var(--green);
+    stroke-width: 4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.chart-dot {
+    fill: white;
+    stroke: var(--green);
+    stroke-width: 3;
+    cursor: pointer;
+    transition: r 0.2s;
+}
+
+.chart-dot:hover {
+    r: 7;
+}
+
+.dot-label {
+    font-size: 10px;
+    fill: #333;
+    font-weight: bold;
+    text-anchor: middle;
+}

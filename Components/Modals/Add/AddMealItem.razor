@@ -100,16 +100,40 @@
                 </div>
 
                 <div>
-                    <label class="amount-label">
-                        @(selectedDisplayItem.IsRecipe ? "Ile porcji dodajesz?" : "Ilość (g/ml):")
-                    </label>
-                    <input class="meal-input" type="number" @bind="amount" @bind:event="oninput"
-                    @onchange="UpdateCalculation" />
                     @if (selectedDisplayItem.IsRecipe)
-
                     {
-                        <span class="recipe-portions-info">(Przepis ma @selectedDisplayItem.OriginalPortions
-                            porcji)</span>
+                        <div class="recipe-inputs-container">
+                            <div class="input-group">
+                                <label class="amount-label">Ilość (g):</label>
+                                <input class="meal-input" type="number" @bind="Amount" @bind:event="oninput" />
+                            </div>
+                            <div class="input-group">
+                                <label class="amount-label">Kalorie (kcal):</label>
+                                <input class="meal-input" type="number" @bind="RecipeKcalInput" @bind:event="oninput" />
+                            </div>
+                        </div>
+                        <span class="recipe-portions-info">(Przepis ma @selectedDisplayItem.OriginalPortions porcji, łącznie @selectedDisplayItem.TotalWeight g)</span>
+                        
+                        @if (recipeIngredients.Any())
+                        {
+                            <div class="recipe-ingredients-list">
+                                <div class="section-title" style="margin-top: 10px; margin-bottom: 5px;">Składniki przepisu:</div>
+                                @foreach(var ing in recipeIngredients)
+                                {
+                                    double itemMultiplier = selectedDisplayItem.TotalWeight > 0 ? (double)Amount / selectedDisplayItem.TotalWeight : 1;
+                                    int calcAmount = (int)Math.Round(ing.Amount * itemMultiplier);
+                                    <div class="recipe-ingredient-row">
+                                        <span>@ing.ProductName</span>
+                                        <span class="recipe-ingredient-amount">@calcAmount @ing.Unit</span>
+                                    </div>
+                                }
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <label class="amount-label">Ilość (g/ml):</label>
+                        <input class="meal-input" type="number" @bind="Amount" @bind:event="oninput" />
                     }
                 </div>
             </div>
@@ -141,7 +165,54 @@
 
     private SearchItem? selectedDisplayItem;
 
-    private int amount = 100;
+    private List<FitAura.Services.RecipeIngredientDetailDto> recipeIngredients = new();
+
+
+
+    private int _amount = 100;
+    private int Amount
+    {
+        get => _amount;
+        set
+        {
+            _amount = value;
+            if (selectedDisplayItem?.IsRecipe == true)
+            {
+                if (selectedDisplayItem.TotalWeight > 0 && !_isUpdatingFromKcal)
+                {
+                    _isUpdatingFromGrams = true;
+                    double multiplier = (double)_amount / selectedDisplayItem.TotalWeight;
+                    _recipeKcalInput = (int)Math.Round(selectedDisplayItem.Kcal * multiplier);
+                    _isUpdatingFromGrams = false;
+                }
+            }
+            UpdateCalculation();
+        }
+    }
+
+    private int _recipeKcalInput = 0;
+    private int RecipeKcalInput
+    {
+        get => _recipeKcalInput;
+        set
+        {
+            _recipeKcalInput = value;
+            if (selectedDisplayItem?.IsRecipe == true)
+            {
+                if (selectedDisplayItem.Kcal > 0 && !_isUpdatingFromGrams)
+                {
+                    _isUpdatingFromKcal = true;
+                    double multiplier = (double)_recipeKcalInput / selectedDisplayItem.Kcal;
+                    _amount = (int)Math.Round(selectedDisplayItem.TotalWeight * multiplier);
+                    _isUpdatingFromKcal = false;
+                }
+            }
+            UpdateCalculation();
+        }
+    }
+
+    private bool _isUpdatingFromGrams = false;
+    private bool _isUpdatingFromKcal = false;
 
     private Nutrients calculatedNutrients = new();
 
@@ -309,6 +380,16 @@
         if (!result.Canceled && result.Data is FitAura.Services.RecipeSummaryDto recipe)
 
         {
+            var details = await RecipeService.GetRecipeAsync(recipe.Id);
+            
+            recipeIngredients = details?.Ingredients ?? new();
+            
+            int totalWeight = recipe.TotalWeight;
+            if (totalWeight <= 0 && details != null)
+            {
+                totalWeight = details.Ingredients.Sum(i => i.Amount);
+            }
+            if (totalWeight <= 0) totalWeight = 100; // Ostateczny fallback na wypadek pustego przepisu
 
             selectedDisplayItem = new SearchItem
                 {
@@ -323,12 +404,13 @@
                     Carbs = recipe.TotalCarbs,
                     Fats = recipe.TotalFats,
 
-                    OriginalPortions = recipe.Portions
+                    OriginalPortions = recipe.Portions,
+                    TotalWeight = totalWeight
 
                 };
 
-            amount = 1;
-
+            _amount = totalWeight;
+            _recipeKcalInput = recipe.TotalKcal;
             UpdateCalculation();
 
         }
@@ -347,9 +429,7 @@
 
         searchQuery = "";
 
-        amount = (int)GetBaseWeight(res.Unit);
-
-        UpdateCalculation();
+        Amount = (int)GetBaseWeight(res.Unit);
 
     }
 
@@ -374,9 +454,7 @@
 
             };
 
-        amount = (int)GetBaseWeight(p.Unit);
-
-        UpdateCalculation();
+        Amount = (int)GetBaseWeight(p.Unit);
 
     }
 
@@ -396,9 +474,9 @@
 
         {
 
-            if (selectedDisplayItem.OriginalPortions > 0)
+            if (selectedDisplayItem.TotalWeight > 0)
 
-                multiplier = (double)amount / selectedDisplayItem.OriginalPortions;
+                multiplier = (double)Amount / selectedDisplayItem.TotalWeight;
 
         }
 
@@ -410,7 +488,7 @@
 
             if (baseWeight > 0)
 
-                multiplier = (double)amount / baseWeight;
+                multiplier = (double)Amount / baseWeight;
 
         }
 
@@ -456,7 +534,7 @@
 
         {
 
-            if (string.IsNullOrEmpty(selectedDisplayItem?.ImageUrl)) return "images/sushi.png";
+            if (string.IsNullOrEmpty(selectedDisplayItem?.ImageUrl)) return "images/img-not-found.png";
 
             if (selectedDisplayItem.ImageUrl.StartsWith("http")) return selectedDisplayItem.ImageUrl;
 
@@ -478,7 +556,7 @@
         selectedDisplayItem.ImageUrl);
 
         MudDialog.Close(DialogResult.Ok((Product: fakeProduct, Type: selectedDisplayItem.IsRecipe ? "recipe" : "product",
-        Amount: amount)));
+        Amount: Amount)));
 
     }
 
@@ -506,6 +584,8 @@
         public string Unit { get; set; } = "100g";
 
         public int OriginalPortions { get; set; } = 1;
+
+        public int TotalWeight { get; set; } = 0;
 
     }
 

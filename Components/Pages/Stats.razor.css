@@ -133,8 +133,9 @@ main {
 }
 
 .metrics-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 15px;
 }
 
@@ -144,26 +145,28 @@ main {
     background: linear-gradient(135deg, #ffffff 0%, #f9f9f9 100%);
     border: 1px solid #eee;
     border-radius: 12px;
-    padding: 15px;
+    padding: 10px;
+    min-width: 130px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
     align-items: center;
     text-align: center;
+    flex: 0 1 auto;
 }
 
 .metric-icon {
-    font-size: 28px;
+    font-size: 24px;
     margin-bottom: 5px;
 }
 
 .metric-title {
-    font-size: 13px;
+    font-size: 11px;
     color: #777;
     font-weight: bold;
     margin-bottom: 5px;
 }
 
 .metric-value {
-    font-size: 18px;
+    font-size: 15px;
     font-weight: bold;
     color: black;
     font-family: 'Comic Sans MS';
@@ -219,60 +222,7 @@ main {
     background-color: #F44336;
 }
 
-.svg-wrapper {
-    width: 100%;
-    overflow: visible;
-}
 
-.bmi-chart {
-    width: 100%;
-    height: auto;
-    overflow: visible;
-}
-
-.grid-line {
-    stroke: #eee;
-    stroke-width: 1.5;
-    stroke-dasharray: 4, 4;
-}
-
-.chart-text {
-    font-size: 10px;
-    fill: #888;
-    font-weight: bold;
-}
-
-.chart-area {
-    fill: rgba(76, 175, 80, 0.08);
-    /* light green fade */
-}
-
-.chart-line {
-    fill: none;
-    stroke: var(--green);
-    stroke-width: 4;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-}
-
-.chart-dot {
-    fill: white;
-    stroke: var(--green);
-    stroke-width: 3;
-    cursor: pointer;
-    transition: r 0.2s;
-}
-
-.chart-dot:hover {
-    r: 7;
-}
-
-.dot-label {
-    font-size: 10px;
-    fill: #333;
-    font-weight: bold;
-    text-anchor: middle;
-}
 
 .no-chart-data {
     text-align: center;

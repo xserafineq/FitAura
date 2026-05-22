@@ -26,7 +26,7 @@
                                 <span class="item-type-tag @(item.IsRecipe ? "tag-recipe" : "tag-product")">
                                     @(item.IsRecipe ? "PRZEPIS" : "PRODUKT")
                                 </span>
-                                <span>Ilość: <span class="item-amount">@item.Amount @(item.IsRecipe ? "porcji" : "g")</span></span>
+                                <span>Ilość: <span class="item-amount">@item.Amount g</span></span>
                             </div>
                             <div class="macros-row">
                                 <span>B: <span class="macro-val">@item.Protein</span>g</span>
@@ -56,7 +56,7 @@
 </MudDialog>
 
 @code {
-    [CascadingParameter] private IMudDialogInstance MudDialog { get; set; }
+    [CascadingParameter] private IMudDialogInstance MudDialog { get; set; } = null!;
     [Parameter] public ICollection<MealItem> MealItems { get; set; } = new List<MealItem>();
 
     private List<MealItemDisplay> displayItems = new();
@@ -123,7 +123,7 @@
 
     private string GetImageSource(MealItemDisplay item)
     {
-        if (string.IsNullOrEmpty(item.ImageUrl)) return "images/sushi.png";
+        if (string.IsNullOrEmpty(item.ImageUrl)) return "images/img-not-found.png";
         if (item.ImageUrl.StartsWith("http")) return item.ImageUrl;
         if (item.ImageUrl.StartsWith("/")) return $"{FitAura.Config.ImageBaseUrl}{item.ImageUrl}";
         return $"images/{item.ImageUrl}";

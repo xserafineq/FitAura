@@ -53,7 +53,8 @@
                         <span @key="index">@itemNames[index]</span>
                         <div class="ingredient-actions">
                             <input type="number" class="ingredient-amount-input"
-                                   value="@items[index].Amount" @onchange="@(e => UpdateIngredientAmount(index, e.Value))" min="1" /> g
+                                   value="@items[index].Amount" @onchange="@(e => UpdateIngredientAmount(index, e.Value))" min="1" /> 
+                            @(selectedProductsList[index].Unit?.ToLower().Contains("l") == true ? "ml" : "g")
                             <button id="delete-step" @onclick="@(() => DeleteIngredient(index))">Usuń</button>
                         </div>
                     </div>
@@ -317,12 +318,7 @@
 
     private void SelectProduct(Product product)
     {
-        int defaultAmount = 100;
-        if (!string.IsNullOrWhiteSpace(product.Unit))
-        {
-            var match = System.Text.RegularExpressions.Regex.Match(product.Unit, @"\d+");
-            if (match.Success && int.TryParse(match.Value, out int parsed)) defaultAmount = parsed;
-        }
+        int defaultAmount = (int)GetBaseWeight(product.Unit);
         items.Add(new FitAura.Models.Records.MealItem("product", product.Id, null, defaultAmount));
         itemNames.Add(product.Name);
         selectedProductsList.Add(product);

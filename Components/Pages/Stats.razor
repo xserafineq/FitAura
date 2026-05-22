@@ -47,10 +47,28 @@
                 </div>
 
                 <div class="metric-box">
+                    <div class="metric-icon"><img src="images/steps.svg" width="25" height="25" /></div>
+                    <div class="metric-title">Średnia ilość kroków</div>
+                    <div class="metric-value">@avgSteps.ToString("N0")</div>
+                </div>
+
+                <div class="metric-box">
                     <div class="metric-icon"><img src="images/dream.svg" width="25" height="25" /></div>
                     <div class="metric-title">Średni poziom snu</div>
                     <div class="metric-value">@avgSleepLabel</div>
                     <div class="metric-sub">Średnia ocena: @avgSleepScore.ToString("F1") / 3.0</div>
+                </div>
+
+                <div class="metric-box">
+                    <div class="metric-icon"><img src="images/fi-bs-hamburger.svg" width="25" height="25" /></div>
+                    <div class="metric-title">Średni cukier</div>
+                    <div class="metric-value">@(avgSugar > 0 ? avgSugar.ToString("F1") : "-")</div>
+                </div>
+
+                <div class="metric-box">
+                    <div class="metric-icon"><img src="images/trening.svg" width="25" height="25" /></div>
+                    <div class="metric-title">Średnie tętno</div>
+                    <div class="metric-value">@(avgPulse > 0 ? avgPulse.ToString("F1") : "-")</div>
                 </div>
             </div>
 
@@ -60,52 +78,19 @@
                     Aktualne BMI w tym okresie: @latestBmi.ToString("F1") (@bmiCategoryLabel)
                 </div>
 
-                @if (bmiData.Count >= 2)
+                @if (bmiData.Count >= 1)
                 {
-                    <div class="svg-wrapper">
-                        <svg viewBox="0 0 500 250" class="bmi-chart">
-                        
-                            <line x1="50" y1="20" x2="450" y2="20" class="grid-line" />
-                            <line x1="50" y1="110" x2="450" y2="110" class="grid-line" />
-                            <line x1="50" y1="200" x2="450" y2="200" class="grid-line" />
-
-                       
-                            <text x="15" y="25" class="chart-text">@maxYLabel</text>
-                            <text x="15" y="115" class="chart-text">@midYLabel</text>
-                            <text x="15" y="205" class="chart-text">@minYLabel</text>
-
-                          
-                            <path d="@GetAreaPath()" class="chart-area" />
-
-                         
-                            <path d="@GetSvgPath()" class="chart-line" />
-
-                       
-                            @for (int i = 0; i < bmiData.Count; i++)
-                            {
-                                int idx = i;
-                                var xVal = GetX(idx).ToString("F1");
-                                var yVal = GetY(bmiData[idx].Bmi).ToString("F1");
-                                var yTextVal = (GetY(bmiData[idx].Bmi) - 10).ToString("F1");
-                                var bmiVal = bmiData[idx].Bmi.ToString("F1");
-
-                                <circle cx="@xVal" cy="@yVal" r="5" class="chart-dot" />
-                                @((MarkupString)$"<text x='{xVal}' y='{yTextVal}' class='dot-label'>{bmiVal}</text>")
-                            }
-
-                         
-                            <text x="50" y="235" class="chart-text">@bmiData[0].Date.ToString("dd.MM")</text>
-                            <text x="450" y="235" class="chart-text" text-anchor="end">@bmiData[^1].Date.ToString("dd.MM")</text>
-                        </svg>
-                    </div>
+                    <FitAura.Components.Charts.BmiChart Data="bmiData" MinYVal="minYVal" MaxYVal="maxYVal"
+                        MinYLabel="@minYLabel" MidYLabel="@midYLabel" MaxYLabel="@maxYLabel" />
                 }
                 else
                 {
                     <div class="no-chart-data">
-                        Potrzeba przynajmniej 2 dni z danymi, aby wykreślić zmiany BMI.
+                        Brak danych do wykreślenia zmian BMI. Dodaj pomiary!
                     </div>
                 }
             </div>
+
         }
     </div>
 </main>
@@ -120,12 +105,16 @@
     private List<BmiPoint> bmiData = new();
 
     private double avgBurnedKcal = 0;
+    private double avgSteps = 0;
     private double avgSleepScore = 0;
     private string avgSleepLabel = "Brak danych";
 
     private double latestBmi = 0;
     private string bmiCategoryLabel = "Brak danych";
     private string bmiCategoryClass = "bmi-normal";
+
+    private double avgSugar = 0;
+    private double avgPulse = 0;
 
     private double minYVal = 15;
     private double maxYVal = 35;
@@ -138,6 +127,13 @@
         public DateOnly Date { get; set; }
         public double Bmi { get; set; }
         public double Weight { get; set; }
+    }
+
+    public class ChartPoint
+    {
+        public DateOnly Date { get; set; }
+        public double Value { get; set; }
+        public string TooltipData { get; set; }
     }
 
     protected override async Task OnInitializedAsync()
@@ -160,21 +156,22 @@
         var startOnly = DateOnly.FromDateTime(startDate);
         var endOnly = DateOnly.FromDateTime(endDate);
 
-     
+
         var allDays = await DayService.GetUserDaysAsync(user.Id);
 
-       
+
         daysList = allDays
-            .Where(d => d.Date >= startOnly && d.Date <= endOnly)
-            .OrderBy(d => d.Date)
-            .ToList();
+        .Where(d => d.Date >= startOnly && d.Date <= endOnly)
+        .OrderBy(d => d.Date)
+        .ToList();
 
         if (daysList.Count > 0)
         {
-           
-            avgBurnedKcal = daysList.Average(d => (double)d.KcalBurned);
 
-        
+            avgBurnedKcal = daysList.Average(d => (double)d.KcalBurned);
+            avgSteps = daysList.Average(d => (double)d.Steps);
+
+
             avgSleepScore = daysList.Average(d => d.SleepLevel);
 
             if (avgSleepScore < 1.5)
@@ -190,37 +187,53 @@
                 avgSleepLabel = "Wyspany!";
             }
 
-          
             bmiData.Clear();
-            double lastKnownWeight = (double)user.Weight; 
-
-           
+            avgSugar = 0;
+            avgPulse = 0;
+            int sugarCount = 0;
+            int pulseCount = 0;
             double heightM = (double)user.Height;
-            if (heightM > 3) heightM /= 100.0; 
+            if (heightM > 3) heightM /= 100.0;
 
             foreach (var day in daysList)
             {
                 if (day.Measurements != null && day.Measurements.Any())
                 {
-              
-                    lastKnownWeight = (double)day.Measurements.Last().Weight;
-                }
+                    var measurement = day.Measurements.Last();
+                    double dayWeight = (double)measurement.Weight;
+                    double bmi = dayWeight / (heightM * heightM);
+                    bmiData.Add(new BmiPoint
+                        {
+                            Date = day.Date,
+                            Bmi = bmi,
+                            Weight = dayWeight
+                        });
 
-                double bmi = lastKnownWeight / (heightM * heightM);
-                bmiData.Add(new BmiPoint
-                {
-                    Date = day.Date,
-                    Bmi = bmi,
-                    Weight = lastKnownWeight
-                });
+                    double sugar = (double)measurement.Sugar;
+                    if (sugar > 0)
+                    {
+                        avgSugar += sugar;
+                        sugarCount++;
+                    }
+
+                    double pulse = (double)measurement.Pulse;
+                    if (pulse > 0)
+                    {
+                        avgPulse += pulse;
+                        pulseCount++;
+                    }
+                }
             }
+
+            if (sugarCount > 0) avgSugar /= sugarCount;
+            if (pulseCount > 0) avgPulse /= pulseCount;
 
             if (bmiData.Count > 0)
             {
                 latestBmi = bmiData.Last().Bmi;
                 DetermineBmiCategory(latestBmi);
 
-             
+
                 double minB = bmiData.Min(d => d.Bmi);
                 double maxB = bmiData.Max(d => d.Bmi);
                 minYVal = Math.Max(10, Math.Min(minB - 2, 18));
@@ -234,7 +247,10 @@
         else
         {
             avgBurnedKcal = 0;
+            avgSteps = 0;
             avgSleepScore = 0;
+            avgSugar = 0;
+            avgPulse = 0;
             avgSleepLabel = "Brak danych";
             bmiData.Clear();
             latestBmi = 0;
@@ -268,63 +284,5 @@
         }
     }
 
-    private string GetSvgPath()
-    {
-        if (bmiData == null || bmiData.Count < 2)
-            return "";
 
-        var sb = new System.Text.StringBuilder();
-        sb.Append($"M {GetX(0).ToString("F1")} {GetY(bmiData[0].Bmi).ToString("F1")}");
-
-        for (int i = 1; i < bmiData.Count; i++)
-        {
-            sb.Append($" L {GetX(i).ToString("F1")} {GetY(bmiData[i].Bmi).ToString("F1")}");
-        }
-
-        return sb.ToString();
-    }
-
-    private string GetAreaPath()
-    {
-        if (bmiData == null || bmiData.Count < 2)
-            return "";
-
-        var sb = new System.Text.StringBuilder();
-        double firstX = GetX(0);
-        double lastX = GetX(bmiData.Count - 1);
-
-        sb.Append($"M {firstX.ToString("F1")} 200"); 
-        sb.Append($" L {firstX.ToString("F1")} {GetY(bmiData[0].Bmi).ToString("F1")}"); 
-
-        for (int i = 1; i < bmiData.Count; i++)
-        {
-            sb.Append($" L {GetX(i).ToString("F1")} {GetY(bmiData[i].Bmi).ToString("F1")}");
-        }
-
-        sb.Append($" L {lastX.ToString("F1")} 200"); 
-        sb.Append(" Z"); 
-
-        return sb.ToString();
-    }
-
-    private double GetX(int index)
-    {
-        if (bmiData.Count <= 1) return 250;
-        double width = 400; 
-        double step = width / (bmiData.Count - 1);
-        return 50 + index * step;
-    }
-
-    private double GetY(double bmiValue)
-    {
-        double height = 180; 
-        double range = maxYVal - minYVal;
-        if (range <= 0) range = 1;
-
-        double ratio = (bmiValue - minYVal) / range;
-        if (ratio < 0) ratio = 0;
-        if (ratio > 1) ratio = 1;
-
-        return 200 - ratio * height;
-    }
 }
