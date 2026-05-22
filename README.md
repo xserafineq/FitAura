@@ -34,12 +34,12 @@ dnia tj. spalone kalorie, liczba kroków, jakość snu oraz pomiary medyczne.
 ## Instrukcja uruchomienia
 
 1. Sklonowanie obu repozytoriów
--> git clone https://github.com/xserafineq/FitAura
--> git clone https://github.com/xserafineq/FitAuraApi
+- git clone https://github.com/xserafineq/FitAura
+- git clone https://github.com/xserafineq/FitAuraApi
 
 2. Uruchomienie obu programów za pomocą komend
-(FitAura) -> dotnet run --framework net10.0-windows10.0.19041.0 
-(FitAuraApi) -> dotnet run --launch-profile https                     
+- (FitAura) dotnet run --framework net10.0-windows10.0.19041.0 
+- (FitAuraApi) dotnet run --launch-profile https                     
       
 
    
