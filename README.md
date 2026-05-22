@@ -72,9 +72,17 @@ dnia tj. spalone kalorie, liczba kroków, jakość snu oraz pomiary medyczne.
 
 ### Funkcjonalności
 
-1. Rejestracja
+1. Rejestracja - każdy użytkownik na samym początku musi utworzyć konto, podając najważniejsze dane: imie, nazwisko, email, date urodzenia, wzrost oraz wagę.
    
 ![Opis zdjęcia](assets/rejestracja.png)
+
+2. Logowanie - po utworzeniu konta, możemy się zalogować podając hasło i login.
+
+![Opis zdjęcia](assets/logowanie.png)
+
+3. Dashboard - po podaniu poprawnych danych logowania, możemy przejść do dashboardu, które jest głównym centrum działania aplikacji. W nim użytkownik może dodawać nowo zdjedzone posiłki oraz zapisywać dzienne aktywności oraz pomiary medyczne.
+
+![Opis zdjęcia](assets/dashboard.png)
 
 
 
