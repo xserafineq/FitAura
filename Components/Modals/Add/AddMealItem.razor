@@ -162,7 +162,7 @@
 </MudDialog>
 
 @code {
-    [CascadingParameter] private IMudDialogInstance MudDialog { get; set; }
+    [CascadingParameter] private IMudDialogInstance? MudDialog { get; set; }
 
 
 
@@ -233,7 +233,7 @@
 
 
 
-    private void Cancel() => MudDialog.Cancel();
+    private void Cancel() => MudDialog?.Cancel();
 
 
 
@@ -291,28 +291,71 @@
 
 
 
-            using var bitmap = SKBitmap.Decode(ms);
+            using var originalBitmap = SKBitmap.Decode(ms);
 
-            if (bitmap != null)
+            if (originalBitmap == null) return;
+
+            // Skaluj do max 1500px (szybsze dekodowanie, lepsze dla ZXing)
+            using var bitmap = ResizeBitmapIfNeeded(originalBitmap, 1500);
+
+            var hints = new System.Collections.Generic.Dictionary<ZXing.DecodeHintType, object>
+            {
+                [ZXing.DecodeHintType.POSSIBLE_FORMATS] = new System.Collections.Generic.List<ZXing.BarcodeFormat>
+                {
+                    ZXing.BarcodeFormat.EAN_13,
+                    ZXing.BarcodeFormat.EAN_8,
+                    ZXing.BarcodeFormat.UPC_A,
+                    ZXing.BarcodeFormat.UPC_E,
+                    ZXing.BarcodeFormat.CODE_128,
+                    ZXing.BarcodeFormat.CODE_39,
+                    ZXing.BarcodeFormat.QR_CODE,
+                    ZXing.BarcodeFormat.DATA_MATRIX,
+                },
+                [ZXing.DecodeHintType.TRY_HARDER] = true,
+            };
+
+            var reader = new BarcodeReader
+            {
+                AutoRotate = true,
+                TryInverted = true,
+                Options = new ZXing.Common.DecodingOptions
+                {
+                    TryHarder = true,
+                    PossibleFormats = new System.Collections.Generic.List<ZXing.BarcodeFormat>
+                    {
+                        ZXing.BarcodeFormat.EAN_13,
+                        ZXing.BarcodeFormat.EAN_8,
+                        ZXing.BarcodeFormat.UPC_A,
+                        ZXing.BarcodeFormat.UPC_E,
+                        ZXing.BarcodeFormat.CODE_128,
+                        ZXing.BarcodeFormat.CODE_39,
+                        ZXing.BarcodeFormat.QR_CODE,
+                        ZXing.BarcodeFormat.DATA_MATRIX,
+                    }
+                }
+            };
+
+            var result = reader.Decode(bitmap);
+
+            // Fallback: jeśli nie wykryto, spróbuj z "pure barcode" hint (lepsza jakość na czystych foto)
+            if (result == null)
+            {
+                reader.Options.PureBarcode = false;
+                result = reader.Decode(bitmap);
+            }
+
+            if (result != null)
 
             {
 
-                var reader = new BarcodeReader();
+                barcode = result.Text;
 
-                var result = reader.Decode(bitmap);
+                await SearchByBarcode();
 
-
-
-                if (result != null)
-
-                {
-
-                    barcode = result.Text;
-
-                    await SearchByBarcode();
-
-                }
-
+            }
+            else
+            {
+                Console.WriteLine("Nie udało się odczytać kodu kreskowego ze zdjęcia.");
             }
 
         }
@@ -337,7 +380,20 @@
 
     }
 
+    private static SKBitmap ResizeBitmapIfNeeded(SKBitmap source, int maxDimension)
+    {
+        if (source.Width <= maxDimension && source.Height <= maxDimension)
+            return source.Copy();
 
+        float ratio = Math.Min((float)maxDimension / source.Width, (float)maxDimension / source.Height);
+        int newW = (int)(source.Width * ratio);
+        int newH = (int)(source.Height * ratio);
+
+        var resized = new SKBitmap(newW, newH);
+        using var canvas = new SKCanvas(resized);
+        canvas.DrawBitmap(source, new SKRect(0, 0, newW, newH));
+        return resized;
+    }
 
     private async Task HandleNameSearch(KeyboardEventArgs e)
 
@@ -388,11 +444,9 @@
 
         var dialog = await DialogService.ShowAsync<Recipes>("Twoje Przepisy", parameters, options);
 
-        var result = await dialog.Result;
+        var result = await dialog?.Result;
 
-
-
-        if (!result.Canceled && result.Data is FitAura.Services.RecipeSummaryDto recipe)
+        if (result != null && !result.Canceled && result.Data is FitAura.Services.RecipeSummaryDto recipe)
 
         {
             var details = await RecipeService.GetRecipeAsync(recipe.Id);
@@ -567,11 +621,12 @@
     private void Submit()
 
     {
+        if (selectedDisplayItem == null) return;
 
         var fakeProduct = new Product(selectedDisplayItem.Id, "", selectedDisplayItem.Name, 0, 0, 0, "", 0, null,
         selectedDisplayItem.ImageUrl);
 
-        MudDialog.Close(DialogResult.Ok((Product: fakeProduct, Type: selectedDisplayItem.IsRecipe ? "recipe" : "product",
+        MudDialog?.Close(DialogResult.Ok((Product: fakeProduct, Type: selectedDisplayItem.IsRecipe ? "recipe" : "product",
         Amount: Amount)));
 
     }

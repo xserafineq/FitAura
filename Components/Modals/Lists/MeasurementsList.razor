@@ -114,7 +114,7 @@
 <MudDialog>
     <DialogContent>
         <div id="measurements-list">
-            @if (!DayState.CurrentDay.Measurements.Any())
+            @if (DayState.CurrentDay == null || !DayState.CurrentDay.Measurements.Any())
             {
                 <div class="no-measurements">Brak pomiarów na dzisiaj.</div>
             }
@@ -199,6 +199,7 @@
 
     private async Task SaveEdit(int index)
     {
+        if (DayState.CurrentDay == null) return;
         var measurements = DayState.CurrentDay.Measurements.ToList();
         var old = measurements[index];
         measurements[index] = new AddMeasurementRecord(editWeight, editPulse, editSugar, old.DayId);
@@ -211,6 +212,7 @@
 
     private async Task DeleteMeasurement(int index)
     {
+        if (DayState.CurrentDay == null) return;
         var measurements = DayState.CurrentDay.Measurements.ToList();
         measurements.RemoveAt(index);
         DayState.CurrentDay.Measurements = measurements;
@@ -224,6 +226,7 @@
 
     private async Task PersistChanges()
     {
+        if (DayState.CurrentDay == null) return;
         var editDto = new EditDay(
             DayState.CurrentDay.Id,
             DayState.CurrentDay.Steps,

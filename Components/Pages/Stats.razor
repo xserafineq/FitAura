@@ -133,7 +133,7 @@
     {
         public DateOnly Date { get; set; }
         public double Value { get; set; }
-        public string TooltipData { get; set; }
+        public string TooltipData { get; set; } = string.Empty;
     }
 
     protected override async Task OnInitializedAsync()

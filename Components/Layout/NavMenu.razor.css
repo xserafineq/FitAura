@@ -6,10 +6,9 @@
     padding-right: 20px;
     align-items: center;
     display: flex;
-    align-items: center;
+    justify-content: space-between;
+    text-align: center;
     font-family: 'Comic Sans MS' !important;
-    flex-wrap: wrap;
-    flex-direction: row;
 }
 
 .navbar * {
@@ -20,7 +19,8 @@
 #logo {
     display: flex;
     justify-content: center;
-    align-items:center;
+    align-items: center;
+    text-align: center;
 }
 
 #logo * {
@@ -41,4 +41,10 @@
     list-style: none;
     display: flex;
     gap: 15px;
+}
+
+@media screen and (max-width: 450px) {
+    .navbar {
+        justify-content: center;
+    }
 }

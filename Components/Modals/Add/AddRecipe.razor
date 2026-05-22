@@ -118,7 +118,7 @@
 
 @code {
     [CascadingParameter]
-    private IMudDialogInstance MudDialog { get; set; }
+    private IMudDialogInstance? MudDialog { get; set; }
 
     [Parameter] public int? EditRecipeId { get; set; }
 
@@ -137,7 +137,7 @@
     private int portionCount = 1;
     private List<FitAura.Models.CategoryModel> categories = new();
     private HashSet<int> selectedCategoryIds = new HashSet<int>();
-    private Microsoft.AspNetCore.Components.Forms.IBrowserFile selectedImageFile;
+    private Microsoft.AspNetCore.Components.Forms.IBrowserFile? selectedImageFile;
 
     protected override async Task OnInitializedAsync()
     {
@@ -266,7 +266,7 @@
         return (int)Math.Round(prod.Fats * (item.Amount / GetBaseWeight(prod.Unit)));
     }).Sum();
 
-    private void Cancel() => MudDialog.Cancel();
+    private void Cancel() => MudDialog?.Cancel();
 
     private async Task SaveRecipe()
     {
@@ -283,7 +283,7 @@
             ImageUrl: finalImageUrl,
             Steps: steps,
             Ingredients: items.Select((item, index) => new FitAura.Services.CreateRecipeIngredientDto(
-                ProductId: item.ProductId.Value,
+                ProductId: item.ProductId ?? 0,
                 Amount: item.Amount,
                 Unit: string.IsNullOrWhiteSpace(selectedProductsList[index].Unit) ? "g" : (selectedProductsList[index].Unit.ToLower().Contains("ml") ? "ml" : "g")
             )).ToList(),
@@ -296,12 +296,12 @@
         if (IsEditMode)
         {
             success = await RecipeService.UpdateRecipeAsync(EditRecipeId!.Value, recipeDto);
-            MudDialog.Close(DialogResult.Ok(true));
+            MudDialog?.Close(DialogResult.Ok(true));
         }
         else
         {
             success = await RecipeService.CreateRecipeAsync(recipeDto);
-            MudDialog.Close(DialogResult.Ok(true));
+            MudDialog?.Close(DialogResult.Ok(true));
         }
     }
 
@@ -333,7 +333,7 @@
         if (index < selectedProductsList.Count) selectedProductsList.RemoveAt(index);
     }
 
-    private void UpdateIngredientAmount(int index, object value)
+    private void UpdateIngredientAmount(int index, object? value)
     {
         if (index < items.Count && int.TryParse(value?.ToString(), out int amount) && amount > 0)
         {

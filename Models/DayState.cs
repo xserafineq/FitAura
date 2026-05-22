@@ -104,12 +104,10 @@ public class DayState
     {
         if (CurrentDay != null)
         {
-            var toRemove = CurrentDay.Meals.FirstOrDefault(m => m == meal);
-            if (toRemove != null)
-            {
-                CurrentDay.Meals.Remove(toRemove);
-                OnChange?.Invoke();
-            }
+            // Filtrujemy listę posiłków usuwając ten o wskazanym ID,
+            // po czym przypisujemy nową kolekcję i powiadamiamy UI.
+            CurrentDay.Meals = CurrentDay.Meals.Where(m => m.Id != meal.Id).ToList();
+            OnChange?.Invoke();
         }
     }
 

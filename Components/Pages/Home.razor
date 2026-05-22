@@ -5,6 +5,7 @@
 @using FitAura.Models.Records
 @inject DayState DayState
 @inject UserState UserState
+@inject FitAura.Services.DayService DayService
 
 
 <main>
@@ -70,7 +71,7 @@
 
     protected override void OnInitialized()
     {
-        displayDate = DayState.CurrentDay.Date.ToString();
+        displayDate = DayState.CurrentDay?.Date.ToString();
 
         DayState.OnChange += HandleStateChange;
         CalculateCaloricDemand();
@@ -135,8 +136,20 @@
         InvokeAsync(StateHasChanged);
     }
 
-    private void HandleMealDeleted(AddMealRecord meal)
+    private async Task HandleMealDeleted(AddMealRecord meal)
     {
         DayState.RemoveMeal(meal);
+        if (DayState.CurrentDay != null)
+        {
+            var edit = new Models.Records.EditDay(
+                DayState.CurrentDay.Id,
+                DayState.CurrentDay.Steps,
+                DayState.CurrentDay.SleepLevel,
+                DayState.CurrentDay.KcalBurned, 
+                DayState.CurrentDay.Measurements,
+                DayState.CurrentDay.Meals
+            );
+            await DayService.EditDay(edit);
+        }
     }
 }

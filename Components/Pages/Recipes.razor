@@ -47,9 +47,9 @@
             {
                 <div class="advanced-filters-container" style="background-color: #f9f9f9; padding: 15px; border-radius: 12px; border: 1px solid #eee; display: flex; flex-direction: column; gap: 15px;">
                     <div class="advanced-filters" style="padding: 0; border: none; background: transparent;">
-                        <input type="number" placeholder="min kcal" @bind="minKcal" @onkeyup="HandleSearchEnter" />
-                        <input type="number" placeholder="max kcal" @bind="maxKcal" @onkeyup="HandleSearchEnter" />
-                        <input type="email" placeholder="email autora" @bind="authorEmail" @onkeyup="HandleSearchEnter" />
+                        <input type="number" placeholder="min kcal" @bind="minKcal" @bind:event="oninput" @onkeyup="HandleSearchEnter" @onblur="LoadRecipes" />
+                        <input type="number" placeholder="max kcal" @bind="maxKcal" @bind:event="oninput" @onkeyup="HandleSearchEnter" @onblur="LoadRecipes" />
+                        <input type="email" placeholder="email autora" @bind="authorEmail" @bind:event="oninput" @onkeyup="HandleSearchEnter" @onblur="LoadRecipes" />
                         <select @bind="sortMode" @bind:after="LoadRecipes">
                             <option value="">Domyślne sortowanie</option>
                             <option value="kcal_asc">Kcal: rosnąco</option>

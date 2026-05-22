@@ -42,7 +42,7 @@
 
 @code {
     [CascadingParameter]
-    private IMudDialogInstance MudDialog { get; set; } = null!;
+    private IMudDialogInstance? MudDialog { get; set; }
 
 
     private List<MealItem> items = new List<MealItem>();
@@ -50,15 +50,16 @@
     private List<string> itemNames = new List<string>();
 
 
-    private void Cancel() => MudDialog.Cancel();
+    private void Cancel() => MudDialog?.Cancel();
 
 
     public async Task addItem()
     {
         var dialog = await DialogService.ShowAsync<AddMealItem>("Dodaj produkt do posiłku", options: new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small });
+        if (dialog == null) return;
 
         var result = await dialog.Result;
-        if (!result.Canceled && result.Data != null)
+        if (result != null && !result.Canceled && result.Data != null)
         {
 
             var (product, type, amount) = ((Product Product, string Type, int Amount))result.Data;
@@ -102,6 +103,8 @@
 
     public async Task Submit()
     {
+        if (DayState.CurrentDay == null) return;
+
         var macros = await MealService.CalculateTotalMacros(items);
         if (macros.Kcal == 0)
         {
@@ -109,7 +112,8 @@
             return;
         }
 
-        var meal = new AddMealRecord(mealName, macros.Kcal, macros.Protein, macros.Fats, macros.Carbs, DayState.CurrentDay.Id, items);
+        int dayId = DayState.CurrentDay?.Id ?? 0;
+        var meal = new AddMealRecord(mealName, macros.Kcal, macros.Protein, macros.Fats, macros.Carbs, dayId, items);
         DayState.SetMeal(meal);
 
         var edit = new Models.Records.EditDay(
@@ -123,6 +127,6 @@
 
         await DayService.EditDay(edit);
 
-        MudDialog.Close(DialogResult.Ok(true));
+        MudDialog?.Close(DialogResult.Ok(true));
     }
 }

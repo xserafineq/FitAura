@@ -1,9 +1,0 @@
-var searchData=
-[
-  ['getlocalproductasync_0',['GetLocalProductAsync',['../class_fit_aura_1_1_services_1_1_product_service.html#a98abcab84e1ea67f6b178da62656d3ea',1,'FitAura::Services::ProductService']]],
-  ['getrecipeasync_1',['GetRecipeAsync',['../class_fit_aura_1_1_services_1_1_recipe_service.html#ac4c6c1b0e6581c2509cb27d02e42c541',1,'FitAura::Services::RecipeService']]],
-  ['getrecipesasync_2',['GetRecipesAsync',['../class_fit_aura_1_1_services_1_1_recipe_service.html#a7ca45edb4fe7e2b705ad9a88763eefc7',1,'FitAura::Services::RecipeService']]],
-  ['getuserdaysasync_3',['GetUserDaysAsync',['../class_fit_aura_1_1_services_1_1_day_service.html#aeff0cc063f877d69d99804c0b7299844',1,'FitAura::Services::DayService']]],
-  ['getxamltype_4',['GetXamlType',['../class_fit_aura_1_1_win_u_i_1_1_app.html#a062d99c45db17d52ef79e01490c112eb',1,'FitAura.WinUI.App.GetXamlType(global::System.Type type)'],['../class_fit_aura_1_1_win_u_i_1_1_app.html#a28b4020e8c341fef669b14c1a4524490',1,'FitAura.WinUI.App.GetXamlType(string fullName)'],['../class_fit_aura_1_1_fit_aura___xaml_type_info_1_1_xaml_meta_data_provider.html#aa93dd206e51c0268707a9dfb0a9b553d',1,'FitAura.FitAura_XamlTypeInfo.XamlMetaDataProvider.GetXamlType(global::System.Type type)'],['../class_fit_aura_1_1_fit_aura___xaml_type_info_1_1_xaml_meta_data_provider.html#a177cd33c7ef11fa371f3a13757afd650',1,'FitAura.FitAura_XamlTypeInfo.XamlMetaDataProvider.GetXamlType(string fullName)']]],
-  ['getxmlnsdefinitions_5',['GetXmlnsDefinitions',['../class_fit_aura_1_1_win_u_i_1_1_app.html#a435b98432e2ef528aecbe33749e597b1',1,'FitAura.WinUI.App.GetXmlnsDefinitions()'],['../class_fit_aura_1_1_fit_aura___xaml_type_info_1_1_xaml_meta_data_provider.html#ade528f52dc26066026feff0149d42269',1,'FitAura.FitAura_XamlTypeInfo.XamlMetaDataProvider.GetXmlnsDefinitions()']]]
-];

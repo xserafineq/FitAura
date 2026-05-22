@@ -63,16 +63,13 @@
         </div>
     </DialogContent>
     <DialogActions>
-        @if (MealId > 0)
-        {
-            <MudButton OnClick="HandleDelete"
-                       Color="Color.Error"
-                       Variant="Variant.Filled"
-                       StartIcon="@Icons.Material.Filled.Delete"
-                       Disabled="isDeleting">
-                @(isDeleting ? "Usuwanie..." : "Usuń posiłek")
-            </MudButton>
-        }
+        <MudButton OnClick="HandleDelete"
+                   Color="Color.Error"
+                   Variant="Variant.Filled"
+                   StartIcon="@Icons.Material.Filled.Delete"
+                   Disabled="isDeleting">
+            @(isDeleting ? "Usuwanie..." : "Usuń posiłek")
+        </MudButton>
         <MudButton OnClick="Cancel" Color="Color.Default" Variant="Variant.Text">Zamknij</MudButton>
     </DialogActions>
 </MudDialog>
@@ -150,7 +147,13 @@
     private async Task HandleDelete()
     {
         isDeleting = true;
-        var success = await MealService.DeleteMealAsync(MealId);
+        bool success = true;
+
+        if (MealId > 0)
+        {
+            success = await MealService.DeleteMealAsync(MealId);
+        }
+
         isDeleting = false;
 
         if (success)
