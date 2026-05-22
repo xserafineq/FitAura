@@ -38,7 +38,8 @@ dnia tj. spalone kalorie, liczba kroków, jakość snu oraz pomiary medyczne.
 | :--- | :--- | :--- |
 | **.NET MAUI** | 10.0.20 | [dotnet.microsoft.com](https://dotnet.microsoft.com/apps/maui) |
 | **Entity Framework Core** | 10.0.7 | [learn.microsoft.com](https://learn.microsoft.com/ef/core/) |
-| **.ASP NET CORE** | 10.0.20 | [dotnet.microsoft.com](https://dotnet.microsoft.com/en-us/apps/aspnet) |
+| **.ASP NET CORE** | 10.0.6 | [dotnet.microsoft.com](https://dotnet.microsoft.com/en-us/apps/aspnet) |
+| **SWASHBUCKLE.ASP NET CORE** | 10.0.6 | [dotnet.microsoft.com](https://learn.microsoft.com/pl-pl/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-8.0&tabs=visual-studio) |
 | **MudBlazor** | 9.4.0 | [mudblazor.com](https://mudblazor.com/) |
 | **Npgsql** | 10.0.1 | [npgsql.org](https://www.npgsql.org/efcore/) |
 | **SkiaSharp** | 3.119.2 | [skiasharp.com](https://github.com/mono/SkiaSharp) |
@@ -145,8 +146,12 @@ Użytkownik w ciągu dnia może wprowadzić wiele pomiarów, może również je 
 
 ![Opis zdjęcia](assets/statystyki.png)
 
-
+## Responsywność
+Na poniższych zrzutach ekranu zaprezentowana jest responsywność aplikacji.
+![Opis zdjęcia](assets/responsywnosc1.png)
+![Opis zdjęcia](assets/responsywnosc2.png)
+![Opis zdjęcia](assets/responsywnosc3.png)
 
 ## Dalszy rozwój aplikacji
-Jako dalszy rozwój aplikacji planowane jest wsparcie urządzeń mobilnych oraz wprowadzenie bardziej zaawansowanej filtracji przepisów, oraz dodanie możliwości zbierania większej ilości informacji, które użytkowników będzie mógł podsumować w statystykach.
+Jako dalszy rozwój aplikacji planowane jest wsparcie urządzeń mobilnych oraz wprowadzenie bardziej zaawansowanej filtracji przepisów, oraz dodanie możliwości zbierania większej ilości informacji, które użytkowników będzie mógł podsumować w statystykach. Również planowane jest poprawienie algorytmu odczytywania kodów kreskowych, by mógł obsługiwać również gorzej wykonane zdjęcia kodu kreskowego.
 
