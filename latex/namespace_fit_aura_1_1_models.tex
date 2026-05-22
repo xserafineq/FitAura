@@ -1,0 +1,54 @@
+\doxysection{Fit\+Aura.\+Models Namespace Reference}
+\hypertarget{namespace_fit_aura_1_1_models}{}\label{namespace_fit_aura_1_1_models}\index{FitAura.Models@{FitAura.Models}}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \doxymbox{\hyperlink{class_fit_aura_1_1_models_1_1_day}{Day}}
+\begin{DoxyCompactList}\small\item\em Reprezentuje dzienny zapis aktywności, odżywiania i pomiarów użytkownika. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{namespace_fit_aura_1_1_models_a5fb3dea636350703d820abc651eb2094}\label{namespace_fit_aura_1_1_models_a5fb3dea636350703d820abc651eb2094} 
+record {\bfseries Category\+Model} (int Id, string Name)
+\item 
+\Hypertarget{namespace_fit_aura_1_1_models_a94aa4d91e9126a04aa653ff1f7f6b9a4}\label{namespace_fit_aura_1_1_models_a94aa4d91e9126a04aa653ff1f7f6b9a4} 
+record {\bfseries Product} (int Id, string Barcode, string Name, int Kcal, int Protein, int Fats, string Unit, int Carbs, string? Store, string? Image\+Url)
+\item 
+record \doxymbox{\hyperlink{namespace_fit_aura_1_1_models_a97b5e30497459f66bb49f689e623b95f}{User}} (int Id, string Email, string Firstname, string Lastname, Date\+Only Birth\+Date, decimal Weight, decimal Height, string Password, string Sex)
+\begin{DoxyCompactList}\small\item\em Reprezentuje dane użytkownika. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\label{namespace_fit_aura_1_1_models_doc-func-members}
+\Hypertarget{namespace_fit_aura_1_1_models_doc-func-members}
+\doxysubsection{Function Documentation}
+\Hypertarget{namespace_fit_aura_1_1_models_a97b5e30497459f66bb49f689e623b95f}\index{FitAura.Models@{FitAura.Models}!User@{User}}
+\index{User@{User}!FitAura.Models@{FitAura.Models}}
+\doxysubsubsection{\texorpdfstring{User()}{User()}}
+{\footnotesize\ttfamily \label{namespace_fit_aura_1_1_models_a97b5e30497459f66bb49f689e623b95f} 
+record Fit\+Aura.\+Models.\+User (\begin{DoxyParamCaption}\item[{int}]{Id}{, }\item[{string}]{Email}{, }\item[{string}]{Firstname}{, }\item[{string}]{Lastname}{, }\item[{Date\+Only}]{Birth\+Date}{, }\item[{decimal}]{Weight}{, }\item[{decimal}]{Height}{, }\item[{string}]{Password}{, }\item[{string}]{Sex}{}\end{DoxyParamCaption})}
+
+
+
+Reprezentuje dane użytkownika. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Id} & Unikalny identyfikator użytkownika.\\
+\hline
+{\em Email} & Adres e-\/mail użytkownika.\\
+\hline
+{\em Firstname} & Imię użytkownika.\\
+\hline
+{\em Lastname} & Nazwisko użytkownika.\\
+\hline
+{\em Birth\+Date} & Data urodzenia użytkownika.\\
+\hline
+{\em Weight} & Aktualna masa ciała użytkownika.\\
+\hline
+{\em Height} & Wzrost użytkownika.\\
+\hline
+{\em Password} & Zaszyfrowane hasło użytkownika.\\
+\hline
+{\em Sex} & Płeć użytkownika.\\
+\hline
+\end{DoxyParams}

@@ -1,0 +1,140 @@
+\doxysection{Fit\+Aura.\+Services.\+Recipe\+Service Class Reference}
+\hypertarget{class_fit_aura_1_1_services_1_1_recipe_service}{}\label{class_fit_aura_1_1_services_1_1_recipe_service}\index{FitAura.Services.RecipeService@{FitAura.Services.RecipeService}}
+
+
+Serwis zarządzający przepisami kulinarnymi, obsługujący przesyłanie plików graficznych oraz operacje CRUD na przepisach.  
+
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_fit_aura_1_1_services_1_1_recipe_service_a07d2e9c91cfa47c289444adb11ea14f8}\label{class_fit_aura_1_1_services_1_1_recipe_service_a07d2e9c91cfa47c289444adb11ea14f8} 
+{\bfseries Recipe\+Service} (Http\+Client http\+Client)
+\begin{DoxyCompactList}\small\item\em Inicjalizuje nową instancję serwisu Recipe\+Service. \end{DoxyCompactList}\item 
+async Task$<$ string?$>$ \doxymbox{\hyperlink{class_fit_aura_1_1_services_1_1_recipe_service_a84094ac1002d9abc86bf53d8485ca660}{Upload\+Image\+Async}} (IBrowser\+File file)
+\begin{DoxyCompactList}\small\item\em Przesyła plik graficzny przepisu na serwer. \end{DoxyCompactList}\item 
+async Task$<$ bool $>$ \doxymbox{\hyperlink{class_fit_aura_1_1_services_1_1_recipe_service_a40bdda5d3b43ae408e787af7d1cfed9a}{Create\+Recipe\+Async}} (Create\+Recipe\+Dto recipe\+Dto)
+\begin{DoxyCompactList}\small\item\em Tworzy nowy przepis w systemie. \end{DoxyCompactList}\item 
+async Task$<$ List$<$ Recipe\+Summary\+Dto $>$ $>$ \doxymbox{\hyperlink{class_fit_aura_1_1_services_1_1_recipe_service_a7ca45edb4fe7e2b705ad9a88763eefc7}{Get\+Recipes\+Async}} (string? search=null, int? min\+Kcal=null, int? max\+Kcal=null, int? category\+Id=null, int? user\+Id=null, string? author\+Email=null, string? sort=null)
+\begin{DoxyCompactList}\small\item\em Pobiera listę przepisów z możliwością filtrowania i sortowania. \end{DoxyCompactList}\item 
+async Task$<$ Recipe\+Detail\+Dto?$>$ \doxymbox{\hyperlink{class_fit_aura_1_1_services_1_1_recipe_service_ac4c6c1b0e6581c2509cb27d02e42c541}{Get\+Recipe\+Async}} (int id)
+\begin{DoxyCompactList}\small\item\em Pobiera szczegółowe informacje o wybranym przepisie. \end{DoxyCompactList}\item 
+async Task$<$ bool $>$ \doxymbox{\hyperlink{class_fit_aura_1_1_services_1_1_recipe_service_a899c389c1f1c27f54dba17f65ca178d8}{Update\+Recipe\+Async}} (int id, Create\+Recipe\+Dto recipe\+Dto)
+\begin{DoxyCompactList}\small\item\em Aktualizuje istniejący przepis na podstawie danych Create\+Recipe\+Dto. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Serwis zarządzający przepisami kulinarnymi, obsługujący przesyłanie plików graficznych oraz operacje CRUD na przepisach. 
+
+\label{class_fit_aura_1_1_services_1_1_recipe_service_doc-func-members}
+\Hypertarget{class_fit_aura_1_1_services_1_1_recipe_service_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_fit_aura_1_1_services_1_1_recipe_service_a40bdda5d3b43ae408e787af7d1cfed9a}\index{FitAura.Services.RecipeService@{FitAura.Services.RecipeService}!CreateRecipeAsync@{CreateRecipeAsync}}
+\index{CreateRecipeAsync@{CreateRecipeAsync}!FitAura.Services.RecipeService@{FitAura.Services.RecipeService}}
+\doxysubsubsection{\texorpdfstring{CreateRecipeAsync()}{CreateRecipeAsync()}}
+{\footnotesize\ttfamily \label{class_fit_aura_1_1_services_1_1_recipe_service_a40bdda5d3b43ae408e787af7d1cfed9a} 
+async Task$<$ bool $>$ Fit\+Aura.\+Services.\+Recipe\+Service.\+Create\+Recipe\+Async (\begin{DoxyParamCaption}\item[{Create\+Recipe\+Dto}]{recipe\+Dto}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Tworzy nowy przepis w systemie. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em recipe\+Dto} & Obiekt danych zawierający szczegóły przepisu.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} jeśli operacja się powiodła, w przeciwnym razie {\ttfamily false}.
+\end{DoxyReturn}
+\Hypertarget{class_fit_aura_1_1_services_1_1_recipe_service_ac4c6c1b0e6581c2509cb27d02e42c541}\index{FitAura.Services.RecipeService@{FitAura.Services.RecipeService}!GetRecipeAsync@{GetRecipeAsync}}
+\index{GetRecipeAsync@{GetRecipeAsync}!FitAura.Services.RecipeService@{FitAura.Services.RecipeService}}
+\doxysubsubsection{\texorpdfstring{GetRecipeAsync()}{GetRecipeAsync()}}
+{\footnotesize\ttfamily \label{class_fit_aura_1_1_services_1_1_recipe_service_ac4c6c1b0e6581c2509cb27d02e42c541} 
+async Task$<$ Recipe\+Detail\+Dto?$>$ Fit\+Aura.\+Services.\+Recipe\+Service.\+Get\+Recipe\+Async (\begin{DoxyParamCaption}\item[{int}]{id}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Pobiera szczegółowe informacje o wybranym przepisie. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em id} & Identyfikator przepisu.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Obiekt Recipe\+Detail\+Dto ze szczegółami przepisu lub {\ttfamily null}.
+\end{DoxyReturn}
+\Hypertarget{class_fit_aura_1_1_services_1_1_recipe_service_a7ca45edb4fe7e2b705ad9a88763eefc7}\index{FitAura.Services.RecipeService@{FitAura.Services.RecipeService}!GetRecipesAsync@{GetRecipesAsync}}
+\index{GetRecipesAsync@{GetRecipesAsync}!FitAura.Services.RecipeService@{FitAura.Services.RecipeService}}
+\doxysubsubsection{\texorpdfstring{GetRecipesAsync()}{GetRecipesAsync()}}
+{\footnotesize\ttfamily \label{class_fit_aura_1_1_services_1_1_recipe_service_a7ca45edb4fe7e2b705ad9a88763eefc7} 
+async Task$<$ List$<$ Recipe\+Summary\+Dto $>$ $>$ Fit\+Aura.\+Services.\+Recipe\+Service.\+Get\+Recipes\+Async (\begin{DoxyParamCaption}\item[{string?}]{search}{ = {\ttfamily null}, }\item[{int?}]{min\+Kcal}{ = {\ttfamily null}, }\item[{int?}]{max\+Kcal}{ = {\ttfamily null}, }\item[{int?}]{category\+Id}{ = {\ttfamily null}, }\item[{int?}]{user\+Id}{ = {\ttfamily null}, }\item[{string?}]{author\+Email}{ = {\ttfamily null}, }\item[{string?}]{sort}{ = {\ttfamily null}}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Pobiera listę przepisów z możliwością filtrowania i sortowania. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em search} & Fraza wyszukiwania.\\
+\hline
+{\em min\+Kcal} & Minimalna wartość kaloryczna.\\
+\hline
+{\em max\+Kcal} & Maksymalna wartość kaloryczna.\\
+\hline
+{\em category\+Id} & Filtr kategorii.\\
+\hline
+{\em user\+Id} & Filtr po autorze (ID użytkownika).\\
+\hline
+{\em author\+Email} & Filtr po e-\/mailu autora.\\
+\hline
+{\em sort} & Parametr sortowania.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Lista podsumowań przepisów w postaci obiektów Recipe\+Summary\+Dto.
+\end{DoxyReturn}
+\Hypertarget{class_fit_aura_1_1_services_1_1_recipe_service_a899c389c1f1c27f54dba17f65ca178d8}\index{FitAura.Services.RecipeService@{FitAura.Services.RecipeService}!UpdateRecipeAsync@{UpdateRecipeAsync}}
+\index{UpdateRecipeAsync@{UpdateRecipeAsync}!FitAura.Services.RecipeService@{FitAura.Services.RecipeService}}
+\doxysubsubsection{\texorpdfstring{UpdateRecipeAsync()}{UpdateRecipeAsync()}}
+{\footnotesize\ttfamily \label{class_fit_aura_1_1_services_1_1_recipe_service_a899c389c1f1c27f54dba17f65ca178d8} 
+async Task$<$ bool $>$ Fit\+Aura.\+Services.\+Recipe\+Service.\+Update\+Recipe\+Async (\begin{DoxyParamCaption}\item[{int}]{id}{, }\item[{Create\+Recipe\+Dto}]{recipe\+Dto}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Aktualizuje istniejący przepis na podstawie danych Create\+Recipe\+Dto. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em id} & Identyfikator przepisu do aktualizacji.\\
+\hline
+{\em recipe\+Dto} & Nowe dane przepisu.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} jeśli operacja się powiodła, w przeciwnym razie {\ttfamily false}.
+\end{DoxyReturn}
+\Hypertarget{class_fit_aura_1_1_services_1_1_recipe_service_a84094ac1002d9abc86bf53d8485ca660}\index{FitAura.Services.RecipeService@{FitAura.Services.RecipeService}!UploadImageAsync@{UploadImageAsync}}
+\index{UploadImageAsync@{UploadImageAsync}!FitAura.Services.RecipeService@{FitAura.Services.RecipeService}}
+\doxysubsubsection{\texorpdfstring{UploadImageAsync()}{UploadImageAsync()}}
+{\footnotesize\ttfamily \label{class_fit_aura_1_1_services_1_1_recipe_service_a84094ac1002d9abc86bf53d8485ca660} 
+async Task$<$ string?$>$ Fit\+Aura.\+Services.\+Recipe\+Service.\+Upload\+Image\+Async (\begin{DoxyParamCaption}\item[{IBrowser\+File}]{file}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Przesyła plik graficzny przepisu na serwer. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em file} & Plik wybrany przez użytkownika (z komponentu Input\+File).\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+URL do przesłanego obrazu lub {\ttfamily null} w przypadku błędu.
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file:\+\begin{DoxyCompactItemize}
+\item 
+Services/\+Recipe\+Service.\+cs\end{DoxyCompactItemize}

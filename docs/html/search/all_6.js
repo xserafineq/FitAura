@@ -1,0 +1,23 @@
+var searchData=
+[
+  ['fileprovider_0',['fileProvider',['../classmicrosoft_1_1maui_1_1essentials_1_1file_provider.html',1,'microsoft::maui::essentials']]],
+  ['fitaura_1',['FitAura',['../namespace_fit_aura.html',1,'FitAura'],['../md__r_e_a_d_m_e.html',1,'FitAura']]],
+  ['fitaura_3a_3afitaura_5fxamltypeinfo_2',['FitAura_XamlTypeInfo',['../namespace_fit_aura_1_1_fit_aura___xaml_type_info.html',1,'FitAura']]],
+  ['fitaura_3a_3amodels_3',['Models',['../namespace_fit_aura_1_1_models.html',1,'FitAura']]],
+  ['fitaura_3a_3amodels_3a_3arecords_4',['Records',['../namespace_fit_aura_1_1_models_1_1_records.html',1,'FitAura::Models']]],
+  ['fitaura_3a_3aservices_5',['Services',['../namespace_fit_aura_1_1_services.html',1,'FitAura']]],
+  ['fitaura_3a_3awinui_6',['WinUI',['../namespace_fit_aura_1_1_win_u_i.html',1,'FitAura']]],
+  ['fitauraapi_7',['FitAuraApi',['../namespace_fit_aura_api.html',1,'']]],
+  ['fitauraapi_3a_3amodels_8',['Models',['../namespace_fit_aura_api_1_1_models.html',1,'FitAuraApi']]],
+  ['fitwindowsviewgroup_5fonfitsystemwindowslistenerimplementor_9',['FitWindowsViewGroup_OnFitSystemWindowsListenerImplementor',['../classmono_1_1androidx_1_1appcompat_1_1widget_1_1_fit_windows_view_group___on_fit_system_windows_listener_implementor.html',1,'mono::androidx::appcompat::widget']]],
+  ['floatarrayevaluator_10',['FloatArrayEvaluator',['../classcrc64a25b61d9f8ee364f_1_1_float_array_evaluator.html',1,'crc64a25b61d9f8ee364f']]],
+  ['fragmentcontainer_11',['FragmentContainer',['../classcrc64338477404e88479c_1_1_fragment_container.html',1,'crc64338477404e88479c']]],
+  ['fragmentmanager_5fonbackstackchangedlistenerimplementor_12',['FragmentManager_OnBackStackChangedListenerImplementor',['../classmono_1_1androidx_1_1fragment_1_1app_1_1_fragment_manager___on_back_stack_changed_listener_implementor.html',1,'mono::androidx::fragment::app']]],
+  ['fragmentmanagerextensions_5fcallbacks_13',['FragmentManagerExtensions_CallBacks',['../classcrc6452ffdc5b34af3a0f_1_1_fragment_manager_extensions___call_backs.html',1,'crc6452ffdc5b34af3a0f']]],
+  ['fragmentonattachlistenerimplementor_14',['FragmentOnAttachListenerImplementor',['../classmono_1_1androidx_1_1fragment_1_1app_1_1_fragment_on_attach_listener_implementor.html',1,'mono::androidx::fragment::app']]],
+  ['fragmentresultlistenerimplementor_15',['FragmentResultListenerImplementor',['../classmono_1_1androidx_1_1fragment_1_1app_1_1_fragment_result_listener_implementor.html',1,'mono::androidx::fragment::app']]],
+  ['fragmentstateadapter_5ffragmenttransactioncallback_5fonposteventlistenerimplementor_16',['FragmentStateAdapter_FragmentTransactionCallback_OnPostEventListenerImplementor',['../classmono_1_1androidx_1_1viewpager2_1_1adapter_1_1_fragment_state_adapter___fragment_transaction0b70f4bc184e6ceb678e19653b92cc50.html',1,'mono::androidx::viewpager2::adapter']]],
+  ['fragmentstrictmode_5fonviolationlistenerimplementor_17',['FragmentStrictMode_OnViolationListenerImplementor',['../classmono_1_1androidx_1_1fragment_1_1app_1_1strictmode_1_1_fragment_strict_mode___on_violation_listener_implementor.html',1,'mono::androidx::fragment::app::strictmode']]],
+  ['framerenderer_18',['FrameRenderer',['../classcrc64e1fb321c08285b90_1_1_frame_renderer.html',1,'crc64e1fb321c08285b90']]],
+  ['fullmakro_19',['FullMakro',['../namespace_fit_aura_1_1_services.html#a572848996c6d566aa4ef0693c5f7dcc4',1,'FitAura::Services']]]
+];

@@ -1,0 +1,98 @@
+\doxysection{Fit\+Aura.\+Models.\+Records Namespace Reference}
+\hypertarget{namespace_fit_aura_1_1_models_1_1_records}{}\label{namespace_fit_aura_1_1_models_1_1_records}\index{FitAura.Models.Records@{FitAura.Models.Records}}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+record \doxymbox{\hyperlink{namespace_fit_aura_1_1_models_1_1_records_a85d161a920b50e318724e9bb76a9faa1}{Add\+Meal\+Record}} (string Name, int Kcal, int Protein, int Fats, int Carbs, int Day\+Id, ICollection$<$ Meal\+Item $>$ Meal\+Items)
+\begin{DoxyCompactList}\small\item\em Reprezentuje obiekt danych (DTO) służący do tworzenia nowego posiłku. \end{DoxyCompactList}\item 
+record \doxymbox{\hyperlink{namespace_fit_aura_1_1_models_1_1_records_a098f52789237afd2ba397182a86e53cb}{Add\+Measurement\+Record}} (decimal Weight, decimal Pulse, decimal Sugar, int Day\+Id)
+\begin{DoxyCompactList}\small\item\em Reprezentuje obiekt danych (DTO) służący do tworzenia nowego pomiaru ciała. \end{DoxyCompactList}\item 
+record \doxymbox{\hyperlink{namespace_fit_aura_1_1_models_1_1_records_a349e83c7b4ba7828d04b933d862c8825}{Edit\+Day}} (int Id, int Steps, int Sleep\+Level, decimal Kcal\+Burned, ICollection$<$ \doxymbox{\hyperlink{namespace_fit_aura_1_1_models_1_1_records_a098f52789237afd2ba397182a86e53cb}{Add\+Measurement\+Record}} $>$ Measurements, ICollection$<$ \doxymbox{\hyperlink{namespace_fit_aura_1_1_models_1_1_records_a85d161a920b50e318724e9bb76a9faa1}{Add\+Meal\+Record}} $>$? Meals)
+\begin{DoxyCompactList}\small\item\em Reprezentuje obiekt danych (DTO) służący do aktualizacji istniejącego wpisu dnia. \end{DoxyCompactList}\item 
+\Hypertarget{namespace_fit_aura_1_1_models_1_1_records_ac70b248e09cf02dae7860c0790a07b58}\label{namespace_fit_aura_1_1_models_1_1_records_ac70b248e09cf02dae7860c0790a07b58} 
+record {\bfseries Meal\+Item} (string Type, int? Product\+Id, int? Recipe\+Id, int Amount)
+\item 
+\Hypertarget{namespace_fit_aura_1_1_models_1_1_records_a860218f972070c69bdd2ab9ee479eba2}\label{namespace_fit_aura_1_1_models_1_1_records_a860218f972070c69bdd2ab9ee479eba2} 
+record {\bfseries Product\+Makro} (string Name, int Kcal, int Protein, int Fats, int Carbs)
+\item 
+\Hypertarget{namespace_fit_aura_1_1_models_1_1_records_a91a20e832cb1d4e63663c0c165639bbb}\label{namespace_fit_aura_1_1_models_1_1_records_a91a20e832cb1d4e63663c0c165639bbb} 
+record {\bfseries Product\+Name} (int Id, string Name, int Kcal, string Unit, string? Image\+Url)
+\end{DoxyCompactItemize}
+
+
+\label{namespace_fit_aura_1_1_models_1_1_records_doc-func-members}
+\Hypertarget{namespace_fit_aura_1_1_models_1_1_records_doc-func-members}
+\doxysubsection{Function Documentation}
+\Hypertarget{namespace_fit_aura_1_1_models_1_1_records_a85d161a920b50e318724e9bb76a9faa1}\index{FitAura.Models.Records@{FitAura.Models.Records}!AddMealRecord@{AddMealRecord}}
+\index{AddMealRecord@{AddMealRecord}!FitAura.Models.Records@{FitAura.Models.Records}}
+\doxysubsubsection{\texorpdfstring{AddMealRecord()}{AddMealRecord()}}
+{\footnotesize\ttfamily \label{namespace_fit_aura_1_1_models_1_1_records_a85d161a920b50e318724e9bb76a9faa1} 
+record Fit\+Aura.\+Models.\+Records.\+Add\+Meal\+Record (\begin{DoxyParamCaption}\item[{string}]{Name}{, }\item[{int}]{Kcal}{, }\item[{int}]{Protein}{, }\item[{int}]{Fats}{, }\item[{int}]{Carbs}{, }\item[{int}]{Day\+Id}{, }\item[{ICollection$<$ Meal\+Item $>$}]{Meal\+Items}{}\end{DoxyParamCaption})}
+
+
+
+Reprezentuje obiekt danych (DTO) służący do tworzenia nowego posiłku. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Name} & Nazwa posiłku.\\
+\hline
+{\em Kcal} & Kalorie w posiłku.\\
+\hline
+{\em Protein} & Białko w posiłku.\\
+\hline
+{\em Fats} & Tłuszcze w posiłku.\\
+\hline
+{\em Carbs} & Węglowodany w posiłku.\\
+\hline
+{\em Day\+Id} & Identyfikator dnia.\\
+\hline
+{\em Meal\+Items} & Lista składników posiłku.\\
+\hline
+\end{DoxyParams}
+\Hypertarget{namespace_fit_aura_1_1_models_1_1_records_a098f52789237afd2ba397182a86e53cb}\index{FitAura.Models.Records@{FitAura.Models.Records}!AddMeasurementRecord@{AddMeasurementRecord}}
+\index{AddMeasurementRecord@{AddMeasurementRecord}!FitAura.Models.Records@{FitAura.Models.Records}}
+\doxysubsubsection{\texorpdfstring{AddMeasurementRecord()}{AddMeasurementRecord()}}
+{\footnotesize\ttfamily \label{namespace_fit_aura_1_1_models_1_1_records_a098f52789237afd2ba397182a86e53cb} 
+record Fit\+Aura.\+Models.\+Records.\+Add\+Measurement\+Record (\begin{DoxyParamCaption}\item[{decimal}]{Weight}{, }\item[{decimal}]{Pulse}{, }\item[{decimal}]{Sugar}{, }\item[{int}]{Day\+Id}{}\end{DoxyParamCaption})}
+
+
+
+Reprezentuje obiekt danych (DTO) służący do tworzenia nowego pomiaru ciała. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Weight} & Masa ciała użytkownika.\\
+\hline
+{\em Pulse} & Tętno użytkownika.\\
+\hline
+{\em Sugar} & Poziom cukru we krwi użytkownika.\\
+\hline
+{\em Day\+Id} & Identyfikator dnia.\\
+\hline
+\end{DoxyParams}
+\Hypertarget{namespace_fit_aura_1_1_models_1_1_records_a349e83c7b4ba7828d04b933d862c8825}\index{FitAura.Models.Records@{FitAura.Models.Records}!EditDay@{EditDay}}
+\index{EditDay@{EditDay}!FitAura.Models.Records@{FitAura.Models.Records}}
+\doxysubsubsection{\texorpdfstring{EditDay()}{EditDay()}}
+{\footnotesize\ttfamily \label{namespace_fit_aura_1_1_models_1_1_records_a349e83c7b4ba7828d04b933d862c8825} 
+record Fit\+Aura.\+Models.\+Records.\+Edit\+Day (\begin{DoxyParamCaption}\item[{int}]{Id}{, }\item[{int}]{Steps}{, }\item[{int}]{Sleep\+Level}{, }\item[{decimal}]{Kcal\+Burned}{, }\item[{ICollection$<$ \doxymbox{\hyperlink{namespace_fit_aura_1_1_models_1_1_records_a098f52789237afd2ba397182a86e53cb}{Add\+Measurement\+Record}} $>$}]{Measurements}{, }\item[{ICollection$<$ \doxymbox{\hyperlink{namespace_fit_aura_1_1_models_1_1_records_a85d161a920b50e318724e9bb76a9faa1}{Add\+Meal\+Record}} $>$?}]{Meals}{}\end{DoxyParamCaption})}
+
+
+
+Reprezentuje obiekt danych (DTO) służący do aktualizacji istniejącego wpisu dnia. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Id} & Unikalny identyfikator dnia.\\
+\hline
+{\em Steps} & Całkowita liczba kroków.\\
+\hline
+{\em Sleep\+Level} & Ocena jakości snu.\\
+\hline
+{\em Kcal\+Burned} & Całkowita liczba spalonych kalorii.\\
+\hline
+{\em Measurements} & Lista pomiarów.\\
+\hline
+{\em Meals} & Opcjonalna lista posiłków.\\
+\hline
+\end{DoxyParams}

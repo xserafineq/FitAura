@@ -1,0 +1,67 @@
+\doxysection{Fit\+Aura.\+Services.\+Measurement\+Service Class Reference}
+\hypertarget{class_fit_aura_1_1_services_1_1_measurement_service}{}\label{class_fit_aura_1_1_services_1_1_measurement_service}\index{FitAura.Services.MeasurementService@{FitAura.Services.MeasurementService}}
+
+
+Serwis obsługujący operacje związane z zapisywaniem pomiarów zdrowotnych użytkownika.  
+
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\doxymbox{\hyperlink{class_fit_aura_1_1_services_1_1_measurement_service_a9cceb91c5cb614a87856579c7992214a}{Measurement\+Service}} (Http\+Client http\+Client, \doxymbox{\hyperlink{class_day_state}{Day\+State}} day\+State)
+\begin{DoxyCompactList}\small\item\em Inicjalizuje nową instancję serwisu Measurement\+Service. \end{DoxyCompactList}\item 
+async Task \doxymbox{\hyperlink{class_fit_aura_1_1_services_1_1_measurement_service_a3c1821d317d039f74972744cd33e5496}{Add\+Measurement}} (\doxymbox{\hyperlink{namespace_fit_aura_1_1_models_1_1_records_a098f52789237afd2ba397182a86e53cb}{Add\+Measurement\+Record}} measurement)
+\begin{DoxyCompactList}\small\item\em Wysyła żądanie zapisu nowego pomiaru. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Serwis obsługujący operacje związane z zapisywaniem pomiarów zdrowotnych użytkownika. 
+
+\label{class_fit_aura_1_1_services_1_1_measurement_service_doc-constructors}
+\Hypertarget{class_fit_aura_1_1_services_1_1_measurement_service_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_fit_aura_1_1_services_1_1_measurement_service_a9cceb91c5cb614a87856579c7992214a}\index{FitAura.Services.MeasurementService@{FitAura.Services.MeasurementService}!MeasurementService@{MeasurementService}}
+\index{MeasurementService@{MeasurementService}!FitAura.Services.MeasurementService@{FitAura.Services.MeasurementService}}
+\doxysubsubsection{\texorpdfstring{MeasurementService()}{MeasurementService()}}
+{\footnotesize\ttfamily \label{class_fit_aura_1_1_services_1_1_measurement_service_a9cceb91c5cb614a87856579c7992214a} 
+Fit\+Aura.\+Services.\+Measurement\+Service.\+Measurement\+Service (\begin{DoxyParamCaption}\item[{Http\+Client}]{http\+Client}{, }\item[{\doxymbox{\hyperlink{class_day_state}{Day\+State}}}]{day\+State}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Inicjalizuje nową instancję serwisu Measurement\+Service. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em http\+Client} & Klient HTTP używany do komunikacji z API.\\
+\hline
+{\em day\+State} & Stan bieżącego dnia (do ewentualnej synchronizacji w przyszłości).\\
+\hline
+\end{DoxyParams}
+
+
+\label{class_fit_aura_1_1_services_1_1_measurement_service_doc-func-members}
+\Hypertarget{class_fit_aura_1_1_services_1_1_measurement_service_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_fit_aura_1_1_services_1_1_measurement_service_a3c1821d317d039f74972744cd33e5496}\index{FitAura.Services.MeasurementService@{FitAura.Services.MeasurementService}!AddMeasurement@{AddMeasurement}}
+\index{AddMeasurement@{AddMeasurement}!FitAura.Services.MeasurementService@{FitAura.Services.MeasurementService}}
+\doxysubsubsection{\texorpdfstring{AddMeasurement()}{AddMeasurement()}}
+{\footnotesize\ttfamily \label{class_fit_aura_1_1_services_1_1_measurement_service_a3c1821d317d039f74972744cd33e5496} 
+async Task Fit\+Aura.\+Services.\+Measurement\+Service.\+Add\+Measurement (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{namespace_fit_aura_1_1_models_1_1_records_a098f52789237afd2ba397182a86e53cb}{Add\+Measurement\+Record}}}]{measurement}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Wysyła żądanie zapisu nowego pomiaru. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em measurement} & Obiekt rekordu (Add\+Measurement\+Record) zawierający dane pomiarowe (np. waga, tętno).\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Zadanie asynchroniczne reprezentujące operację.
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file:\+\begin{DoxyCompactItemize}
+\item 
+Services/\+Measurement\+Service.\+cs\end{DoxyCompactItemize}
