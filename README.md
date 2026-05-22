@@ -153,5 +153,5 @@ Na poniższych zrzutach ekranu zaprezentowana jest responsywność aplikacji.
 ![Opis zdjęcia](assets/responsywnosc3.png)
 
 ## Dalszy rozwój aplikacji
-Jako dalszy rozwój aplikacji planowane jest wsparcie urządzeń mobilnych oraz wprowadzenie bardziej zaawansowanej filtracji przepisów, oraz dodanie możliwości zbierania większej ilości informacji, które użytkowników będzie mógł podsumować w statystykach.
+Jako dalszy rozwój aplikacji planowane jest wsparcie urządzeń mobilnych oraz wprowadzenie bardziej zaawansowanej filtracji przepisów, oraz dodanie możliwości zbierania większej ilości informacji, które użytkowników będzie mógł podsumować w statystykach. Również planowane jest poprawienie algorytmu odczytywania kodów kreskowych, by mógł obsługiwać również gorzej wykonane zdjęcia kodu kreskowego.
 
