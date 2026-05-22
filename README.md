@@ -73,6 +73,7 @@ dnia tj. spalone kalorie, liczba kroków, jakość snu oraz pomiary medyczne.
 ### Funkcjonalności
 
 1. Rejestracja
+   
 ![Opis zdjęcia](assets/rejestracja.png)
 
 
