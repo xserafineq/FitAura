@@ -119,8 +119,27 @@ Użytkownik w ciągu dnia może wprowadzić wiele pomiarów, może również je 
 ![Opis zdjęcia](assets/podglad_posilku_zakonczonego.png)
 
 
+6. Przepisy - w aplikacji mamy dostępną bazę przepisów, która stale się rozwija, ponieważ jest ona tworzona przez użytkowników aplikacji.
 
+- wyszukiwanie przepisów może odbywać się po kategorii, zakresie kaloryczności potrawy, autorze przepisu lub nazwie przepisu.
 
+![Opis zdjęcia](assets/wyszukiwanie_przepisow.png)
+
+- po kliknięciu na przepis, możemy podglądnąć jego listę składników, kroki przygotowania oraz kaloryczność i makro składniki.
+
+![Opis zdjęcia](assets/poglad_przepisu.png)
+
+- możemy również dodać nowy przepis, poprzez kliknięcie na ikonkę plusa obok wyszukiwarki. Podczas dodawania przepisu uwzględniamy składniki (oraz ich ilość w g lub ml) oraz kroki przygotowania, a także nazwę oraz kategorię. Przepis możemy również edytować, po wyszukaniu przepisu po kategorii "Moje".
+
+![Opis zdjęcia](assets/poglad_tworzonego_przepisu.png)
+
+7. Profil użytkownika - użytkownik może zmienić swoje podstawowe dane, jak wzrost, wagę oraz hasło do konta.
+
+![Opis zdjęcia](assets/profil_uzytkownika.png)
+
+8. Statystyki - użytkownik może sprawdzić swoje statystyki ze wszystkich dni z danego zakresu. Dzięki temu może sprawdzić średnią ilość spalonych kalorii, liczbę kroków, średni poziom cukru oraz tętna, a także jakość snu oraz wykres bmi.
+
+![Opis zdjęcia](assets/statystyki.png)
 
 
 
