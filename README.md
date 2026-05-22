@@ -124,6 +124,7 @@ Użytkownik w ciągu dnia może wprowadzić wiele pomiarów, może również je 
 - wyszukiwanie przepisów może odbywać się po kategorii, zakresie kaloryczności potrawy, autorze przepisu lub nazwie przepisu.
 
 ![Opis zdjęcia](assets/wyszukiwania_przepisow.png)
+![Opis zdjęcia](assets/moje_przepisy.png)
 
 - po kliknięciu na przepis, możemy podglądnąć jego listę składników, kroki przygotowania oraz kaloryczność i makro składniki.
 
@@ -133,7 +134,7 @@ Użytkownik w ciągu dnia może wprowadzić wiele pomiarów, może również je 
 
 ![Opis zdjęcia](assets/dodawanie_przepisu.png)
 
-![Opis zdjęcia](assets/moje_przepisy.png)
+
 
 7. Profil użytkownika - użytkownik może zmienić swoje podstawowe dane, jak wzrost, wagę oraz hasło do konta.
 
