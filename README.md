@@ -145,7 +145,11 @@ Użytkownik w ciągu dnia może wprowadzić wiele pomiarów, może również je 
 
 ![Opis zdjęcia](assets/statystyki.png)
 
-
+## Responsywność
+Na poniższych zrzutach ekranu zaprezentowana jest responsywność aplikacji.
+![Opis zdjęcia](assets/responsywnosc1.png)
+![Opis zdjęcia](assets/responsywnosc2.png)
+![Opis zdjęcia](assets/responsywnosc3.png)
 
 ## Dalszy rozwój aplikacji
 Jako dalszy rozwój aplikacji planowane jest wsparcie urządzeń mobilnych oraz wprowadzenie bardziej zaawansowanej filtracji przepisów, oraz dodanie możliwości zbierania większej ilości informacji, które użytkowników będzie mógł podsumować w statystykach.
