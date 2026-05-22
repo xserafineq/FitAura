@@ -82,7 +82,12 @@ dnia tj. spalone kalorie, liczba kroków, jakość snu oraz pomiary medyczne.
 
 3. Dashboard - po podaniu poprawnych danych logowania, możemy przejść do dashboardu, które jest głównym centrum działania aplikacji. W nim użytkownik może dodawać nowo zdjedzone posiłki oraz zapisywać dzienne aktywności oraz pomiary medyczne.
 
+- dashboard startowy (początek danego dnia)
+
 ![Opis zdjęcia](assets/dashboard.png)
+
+- dashboard uzupełniony
+![Opis zdjęcia](assets/dashboard_uzupelniony.png)
 
 4. Aktywności - użytkownik może zapisywać dzienne aktywności (spalone kalorie, liczba kroków, jakość snu oraz pomiary medyczne).
 
@@ -92,6 +97,28 @@ dnia tj. spalone kalorie, liczba kroków, jakość snu oraz pomiary medyczne.
 ![Opis zdjęcia](assets/nowy_pomiar.png)
 
 Użytkownik w ciągu dnia może wprowadzić wiele pomiarów, może również je edytować lub usunąć.
+![Opis zdjęcia](assets/pomiary.png)
+![Opis zdjęcia](assets/edycja_pomiaru.png)
+
+5. Posiłki - użytkownik w ciągu dnia może tworzyć wiele posiłku, nadawać im własną nazwę oraz przypisywać do nich dowolną ilość produktów lub przepisów w podanych przez siebie ilościach.
+
+- zmiana nazwy posiłku z domyślnej
+
+![Opis zdjęcia](assets/nowy_posilek_nazwa.png)
+
+- dodanie produktu / przepisu do posiłku
+
+![Opis zdjęcia](assets/podglad_tworzonego_posilku.png)
+
+- po zakończeniu tworzenia przepis zostaje on dodany do ekranu głównego, gdzie widzimy jego nazwę oraz łączną kaloryczność
+
+![Opis zdjęcia](assets/posilek_card.png)
+
+- możemy również po kliknięciu na posiłek podglądnąć z czego się składał
+
+![Opis zdjęcia](assets/podglad_posilku_zakonczonego.png)
+
+
 
 
 
