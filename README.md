@@ -52,6 +52,8 @@ dnia tj. spalone kalorie, liczba kroków, jakość snu oraz pomiary medyczne.
 - **System operacyjny**: Windows 11
 - **SDK**: .NET 10
 - **Baza Danych**: PostgreSQL 17
+  
+*W chwilii obecnej aplikacja jest wyłącznie dostępna w wersji Desktopowej.*
 
 ## Instrukcja uruchomienia
 
