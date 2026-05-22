@@ -23,8 +23,6 @@ dnia tj. spalone kalorie, liczba kroków, jakość snu oraz pomiary medyczne.
 | **PostgreSQL** | 17 | [postgresql.org.pl](https://www.postgresql.org.pl)
 
 
-
-
 ## Wymagania do uruchomienia projektu
 
 - **System operacyjny**: Windows 11
@@ -37,22 +35,14 @@ dnia tj. spalone kalorie, liczba kroków, jakość snu oraz pomiary medyczne.
 - git clone https://github.com/xserafineq/FitAura
 - git clone https://github.com/xserafineq/FitAuraApi
 
-2. Uruchomienie obu programów za pomocą komend
+2. Seedowanie bazy danych 
+
+3. Uruchomienie obu programów za pomocą komend
 - (**FitAura**) dotnet run --framework net10.0-windows10.0.19041.0 
 - (**FitAuraApi**) dotnet run --launch-profile https                     
-      
 
-   
-
-Instrukcja "krok po kroku", która prowadzi za rękę. Zakładaj, że osoba uruchamiająca projekt nie zna użytego frameworka.1. Jak pobrać projekt (np. `git clone <url>`).2. Jak zainstalować zależności (np. `npm install`, `dotnet restore`, `pip install -r requirements.txt`).### Proces konfiguracji
-
-
-
-Opisz wszystko to, co programista musi ustawić na swojej maszynie przed pierwszym uruchomieniem:1. **Zmienne środowiskowe:** np. utwórz plik `.env` na podstawie `.env.example` i wpisz tam klucze API.2. **Baza danych:** jak skonfigurować *connection string* (połączenie z bazą).3. **Migracje:** komenda do stworzenia struktury bazy (np. `dotnet ef database update`, `python manage.py migrate`).4. **Dane początkowe (Seed):** jak wygenerować dane testowe i jakie są domyślne dane logowania dla konta administratora (login/hasło).**Uruchomienie projektu w terminalu:** Podaj dokładną komendę, która uruchomi aplikację (np. `dotnet run`, `npm run dev`) wraz z informacją, pod jakim adresem aplikacja będzie dostępna w przeglądarce (np. `http://localhost:5000`).## Uruchomienie projektu (user)
-
-
-
-Ta sekcja jest przeznaczona dla użytkownika końcowego, którego nie interesuje kod.- Jeśli to aplikacja webowa: podaj link do opublikowanej aplikacji (zdeployowanej w sieci).- Jeśli to aplikacja desktopowa/mobilna: opisz skąd pobrać gotowy instalator (np. plik `.exe`, `.apk` w zakładce Releases na GitHubie) i jak go zainstalować.- Jakie są wymagania sprzętowe, aby aplikacja działała płynnie?## Podręcznik użytkownika
+  
+## Podręcznik użytkownika
 
 
 
