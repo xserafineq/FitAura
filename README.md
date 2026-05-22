@@ -70,8 +70,9 @@ dnia tj. spalone kalorie, liczba kroków, jakość snu oraz pomiary medyczne.
 ## Podręcznik użytkownika
 
 
+### Funkcjonalności
 
-W tej części skup się na **biznesowej stronie aplikacji** (najlepiej wspomagając się zrzutami ekranu z działającego projektu).- Pokaż ścieżki użytkownika (tzw. *user flow*): "Jak dodać nowy produkt", "Jak opłacić zamówienie", "Jak wygenerować raport".- Wyjaśnij zasady działania najważniejszych funkcji.- Opisz role w systemie (co może zwykły klient, a jakie dodatkowe zakładki widzi administrator).- Opisz przypadki brzegowe jakie system obsługuje np. wpisanie tekstu w pole przeznaczone dla liczb.- Opisz jakie dane system przechowuje i udostępnia.- Pokaż (np. na zrzutach ekranu), jak interfejs dostosowuje się do mniejszych ekranów (responsywność / wersja mobilna).- Wyjaśnij, jak działa najważniejszy mechanizm aplikacji, np. filtrowanie danych, obliczanie sum, czy proces wysyłki formularza.
+1. Rejestracja
 
 
 
