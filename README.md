@@ -6,8 +6,27 @@ Głównym celem projektu jest udostępnienie platformy, która pozwoli w prosty 
 zapisywać posiłki, które spożyliśmy w ciągu dnia oraz zapisywać nasze aktywności w ciągu
 dnia tj. spalone kalorie, liczba kroków, jakość snu oraz pomiary medyczne.
 
+## Główne funkcjonalności
+- rejestracja / logowanie
+- zarządzanie naszym dniem:
+  - zapisywanie zjedzonych przez nas posiłków (produktów / przepisów)
+  - możliwość prowadzenia dzienniczka aktywność (spalone kalorie, jakość snu, liczba kroków, podstawowe pomiary medyczne)
+- obliczanie deficytu kalorycznego na podstawie bieżącej wagi oraz wzrostu
+- automatycznie zliczanie spożytej liczby kalorii wciągu dnia oraz makro składników (białka, węgli oraz tłuszczy)
+- statystyki z danego okresu:
+  - średnie (jakości snu, zjedzonych kalorii, liczby kroków, tętna, cukru)
+  - wykres bmi
+- przepisy
+  - tworzenie własnych przepisów
+  - edytowanie przepisów
+  - zaawansowane wyszukiwanie przepisów poprzez (kategorie, zakres kcal, rosnąco / malejąco, autora przepisu, po nazwie)
+- profil użytkownika
+  - zmiana danych typu waga, wzrost, hasło
 
-
+## Innowacyjność
+- Przepis przelicza nam składniki potrzebne do ugotowania dania względem spożytych kalorii.
+- Ocena jakości snu w danym okresie (statystyka).
+ 
 ## Technologie
 
 | Technologia / Pakiet | Wersja | Oficjalna strona |
