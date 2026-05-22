@@ -13,8 +13,9 @@ dnia tj. spalone kalorie, liczba kroków, jakość snu oraz pomiary medyczne.
 | :--- | :--- | :--- |
 | **.NET MAUI** | 10.0.20 | [dotnet.microsoft.com](https://dotnet.microsoft.com/apps/maui) |
 | **Entity Framework Core** | 10.0.7 | [learn.microsoft.com](https://learn.microsoft.com/ef/core/) |
+| **.ASP NET CORE | 10.0.20 | [dotnet.microsoft.com](https://dotnet.microsoft.com/en-us/apps/aspnet) |
 | **MudBlazor** | 9.4.0 | [mudblazor.com](https://mudblazor.com/) |
-| **Npgsql (EF Core Provider)** | 10.0.1 | [npgsql.org](https://www.npgsql.org/efcore/) |
+| **Npgsql** | 10.0.1 | [npgsql.org](https://www.npgsql.org/efcore/) |
 | **SkiaSharp** | 3.119.2 | [skiasharp.com](https://github.com/mono/SkiaSharp) |
 | **ZXing.Net** | 0.16.11 | [github.com/micjahn/ZXing.Net](https://github.com/micjahn/ZXing.Net) |
 | **ZXing.Net.Bindings.SkiaSharp**| 0.16.22 | [github.com/Redth/ZXing.Net.Bindings.SkiaSharp](https://github.com/Redth/ZXing.Net.Bindings.SkiaSharp) |
