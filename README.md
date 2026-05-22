@@ -1,5 +1,5 @@
 # FitAura
-W dzisiejszych czasach bardzo popularne jest prowadzenie odpowiedniej diety oraz reguralne
+W dzisiejszych czasach bardzo powszechne jest prowadzenie odpowiedniej diety oraz reguralne
 sprawdzanie podstawowych pomiarów medycznych. 
 
 Głównym celem projektu jest udostępnienie platformy, która pozwoli w prosty sposób
@@ -52,6 +52,8 @@ dnia tj. spalone kalorie, liczba kroków, jakość snu oraz pomiary medyczne.
 - **System operacyjny**: Windows 11
 - **SDK**: .NET 10
 - **Baza Danych**: PostgreSQL 17
+  
+*W chwilii obecnej aplikacja jest wyłącznie dostępna w wersji Desktopowej.*
 
 ## Instrukcja uruchomienia
 
@@ -87,6 +89,7 @@ dnia tj. spalone kalorie, liczba kroków, jakość snu oraz pomiary medyczne.
 ![Opis zdjęcia](assets/dashboard.png)
 
 - dashboard uzupełniony
+
 ![Opis zdjęcia](assets/dashboard_uzupelniony.png)
 
 4. Aktywności - użytkownik może zapisywać dzienne aktywności (spalone kalorie, liczba kroków, jakość snu oraz pomiary medyczne).
@@ -124,6 +127,7 @@ Użytkownik w ciągu dnia może wprowadzić wiele pomiarów, może również je 
 - wyszukiwanie przepisów może odbywać się po kategorii, zakresie kaloryczności potrawy, autorze przepisu lub nazwie przepisu.
 
 ![Opis zdjęcia](assets/wyszukiwania_przepisow.png)
+![Opis zdjęcia](assets/moje_przepisy.png)
 
 - po kliknięciu na przepis, możemy podglądnąć jego listę składników, kroki przygotowania oraz kaloryczność i makro składniki.
 
@@ -131,7 +135,7 @@ Użytkownik w ciągu dnia może wprowadzić wiele pomiarów, może również je 
 
 - możemy również dodać nowy przepis, poprzez kliknięcie na ikonkę plusa obok wyszukiwarki. Podczas dodawania przepisu uwzględniamy składniki (oraz ich ilość w g lub ml) oraz kroki przygotowania, a także nazwę oraz kategorię. Przepis możemy również edytować, po wyszukaniu przepisu po kategorii "Moje".
 
-![Opis zdjęcia](assets/podglad_tworzonego_przepisu.png)
+![Opis zdjęcia](assets/dodawanie_przepisu.png)
 
 7. Profil użytkownika - użytkownik może zmienić swoje podstawowe dane, jak wzrost, wagę oraz hasło do konta.
 
@@ -143,6 +147,6 @@ Użytkownik w ciągu dnia może wprowadzić wiele pomiarów, może również je 
 
 
 
-Każde zdjęcie powinno mieć opis, który wyjaśnia, co jest na zdjęciu.## Plany rozbudowy
+## Dalszy rozwój aplikacji
+Jako dalszy rozwój aplikacji planowane jest wsparcie urządzeń mobilnych oraz wprowadzenie bardziej zaawansowanej filtracji przepisów, oraz dodanie możliwości zbierania większej ilości informacji, które użytkowników będzie mógł podsumować w statystykach.
 
-- Czego zabrakło w pierwszej wersji projektu?- Jakie funkcjonalności mogłyby powstać w "v2.0" (np. integracja z płatnościami, system powiadomień mailowych)?- Gdzie dostrzegacie potencjał na optymalizację (np. dodanie cache'owania, zmiana bazy danych)?
