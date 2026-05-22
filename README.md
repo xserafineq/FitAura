@@ -87,6 +87,7 @@ dnia tj. spalone kalorie, liczba kroków, jakość snu oraz pomiary medyczne.
 ![Opis zdjęcia](assets/dashboard.png)
 
 - dashboard uzupełniony
+
 ![Opis zdjęcia](assets/dashboard_uzupelniony.png)
 
 4. Aktywności - użytkownik może zapisywać dzienne aktywności (spalone kalorie, liczba kroków, jakość snu oraz pomiary medyczne).
