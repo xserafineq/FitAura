@@ -16,6 +16,11 @@ dnia tj. spalone kalorie, liczba kroków, jakość snu oraz pomiary medyczne.
 - statystyki z danego okresu:
   - średnie (jakości snu, zjedzonych kalorii, liczby kroków, tętna, cukru)
   - wykres bmi
+- posiłki:
+  - mogą składać się z przepisu lub produktu
+  - możemy podać ile gramów zjedliśmy danego produktu i przeliczone zostaną odpowiednio kalorie oraz makroskładniki
+  - mozemy podać ile gramów / bądź kcal chcemy zjeść w danym przepisie i zostanie odpowiednio przeliczone ile składniku danego uzyć
+  - podgląd posiłku, nazywanie posiłku
 - przepisy
   - tworzenie własnych przepisów
   - edytowanie przepisów
