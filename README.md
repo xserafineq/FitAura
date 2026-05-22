@@ -84,6 +84,13 @@ dnia tj. spalone kalorie, liczba kroków, jakość snu oraz pomiary medyczne.
 
 ![Opis zdjęcia](assets/dashboard.png)
 
+4. Aktywności - użytkownik może zapisywać dzienne aktywności (spalone kalorie, liczba kroków, jakość snu oraz pomiary medyczne).
+
+![Opis zdjęcia](assets/trening.png)
+![Opis zdjęcia](assets/kroki.png)
+![Opis zdjęcia](assets/sen.png)
+![Opis zdjęcia](assets/pomiary.png)
+
 
 
 Każde zdjęcie powinno mieć opis, który wyjaśnia, co jest na zdjęciu.## Plany rozbudowy
