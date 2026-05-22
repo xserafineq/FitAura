@@ -123,7 +123,7 @@ Użytkownik w ciągu dnia może wprowadzić wiele pomiarów, może również je 
 
 - wyszukiwanie przepisów może odbywać się po kategorii, zakresie kaloryczności potrawy, autorze przepisu lub nazwie przepisu.
 
-![Opis zdjęcia](assets/wyszukiwanie_przepisow.png)
+![Opis zdjęcia](assets/wyszukiwania_przepisow.png)
 
 - po kliknięciu na przepis, możemy podglądnąć jego listę składników, kroki przygotowania oraz kaloryczność i makro składniki.
 
