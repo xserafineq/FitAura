@@ -19,7 +19,7 @@
             {
                 foreach (var meal in meals)
                 {
-                    <Meal name="@meal.Name" kcal="@meal.Kcal" mealItems="@meal.MealItems" isFilled="true"></Meal>
+                    <Meal name="@meal.Name" kcal="@meal.Kcal" mealItems="@meal.MealItems" isFilled="true" MealId="@meal.Id" OnDeleted="() => HandleMealDeleted(meal)"></Meal>
                 }
             }
             <Meal name="Nowy posiłek" />
@@ -133,5 +133,10 @@
         CalculateCaloricDemand();
         RefreshData();
         InvokeAsync(StateHasChanged);
+    }
+
+    private void HandleMealDeleted(AddMealRecord meal)
+    {
+        DayState.RemoveMeal(meal);
     }
 }

@@ -39,6 +39,18 @@
                             <div class="kcal-label">kcal</div>
                         </div>
                     </div>
+                    @if (item.IsRecipe && item.Steps != null && item.Steps.Any())
+                    {
+                        <div class="recipe-steps-box">
+                            <h4 class="recipe-steps-title">Sposób przygotowania</h4>
+                            <ol class="recipe-steps-list">
+                                @foreach (var step in item.Steps)
+                                {
+                                    <li>@step</li>
+                                }
+                            </ol>
+                        </div>
+                    }
                 }
             }
             else
@@ -51,6 +63,16 @@
         </div>
     </DialogContent>
     <DialogActions>
+        @if (MealId > 0)
+        {
+            <MudButton OnClick="HandleDelete"
+                       Color="Color.Error"
+                       Variant="Variant.Filled"
+                       StartIcon="@Icons.Material.Filled.Delete"
+                       Disabled="isDeleting">
+                @(isDeleting ? "Usuwanie..." : "Usuń posiłek")
+            </MudButton>
+        }
         <MudButton OnClick="Cancel" Color="Color.Default" Variant="Variant.Text">Zamknij</MudButton>
     </DialogActions>
 </MudDialog>
@@ -58,9 +80,12 @@
 @code {
     [CascadingParameter] private IMudDialogInstance MudDialog { get; set; } = null!;
     [Parameter] public ICollection<MealItem> MealItems { get; set; } = new List<MealItem>();
+    [Parameter] public int MealId { get; set; } = 0;
+    [Parameter] public EventCallback OnDeleted { get; set; }
 
     private List<MealItemDisplay> displayItems = new();
     private bool isLoading = true;
+    private bool isDeleting = false;
 
     private void Cancel() => MudDialog.Cancel();
 
@@ -87,7 +112,8 @@
                             Kcal = macros?.Kcal ?? 0,
                             Protein = macros?.Protein ?? 0,
                             Carbs = macros?.Carbs ?? 0,
-                            Fats = macros?.Fats ?? 0
+                            Fats = macros?.Fats ?? 0,
+                            Steps = recipe.Steps ?? new List<string>()
                         });
                     }
                 }
@@ -121,6 +147,23 @@
         }
     }
 
+    private async Task HandleDelete()
+    {
+        isDeleting = true;
+        var success = await MealService.DeleteMealAsync(MealId);
+        isDeleting = false;
+
+        if (success)
+        {
+            await OnDeleted.InvokeAsync();
+            MudDialog.Close(DialogResult.Ok(true));
+        }
+        else
+        {
+            Console.WriteLine("Nie udało się usunąć posiłku.");
+        }
+    }
+
     private string GetImageSource(MealItemDisplay item)
     {
         if (string.IsNullOrEmpty(item.ImageUrl)) return "images/img-not-found.png";
@@ -139,5 +182,6 @@
         public int Protein { get; set; }
         public int Carbs { get; set; }
         public int Fats { get; set; }
+        public List<string> Steps { get; set; } = new();
     }
 }

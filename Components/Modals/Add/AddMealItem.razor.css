@@ -276,7 +276,7 @@
     flex: 1;
 }
 
-.recipe-ingredients-list {
+.recipe-ingredients-list, .recipe-steps-list {
     background: #fcfcfc;
     border-radius: 10px;
     padding: 10px;
@@ -299,4 +299,16 @@
 .recipe-ingredient-amount {
     font-weight: bold;
     color: var(--green);
+}
+
+.recipe-steps-list {
+    margin: 0;
+    padding-left: 20px;
+    padding-top: 5px;
+}
+
+.recipe-steps-list li {
+    margin-bottom: 6px;
+    line-height: 1.4;
+    color: #555;
 }

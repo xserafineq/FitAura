@@ -21,7 +21,7 @@
                 <label>Do:</label>
                 <input type="date" @bind="endDate" />
             </div>
-            <button class="btn-refresh" @onclick="LoadStatistics">Aktualizuj</button>
+            <button class="btn-refresh" @onclick="LoadStatistics">Sprawdź</button>
         </div>
 
         @if (isLoading)
@@ -34,7 +34,7 @@
         else if (daysList == null || daysList.Count == 0)
         {
             <div class="no-data">
-                Brak danych dla wybranego okresu. Wprowadź posiłki, kroki lub pomiary na ekranie głównym!
+                Brak danych dla wybranego okresu.
             </div>
         }
         else
@@ -60,7 +60,7 @@
                 </div>
 
                 <div class="metric-box">
-                    <div class="metric-icon"><img src="images/fi-bs-hamburger.svg" width="25" height="25" /></div>
+                    <div class="metric-icon"><img src="images/sugar.svg" width="25" height="25" /></div>
                     <div class="metric-title">Średni cukier</div>
                     <div class="metric-value">@(avgSugar > 0 ? avgSugar.ToString("F1") : "-")</div>
                 </div>

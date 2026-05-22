@@ -42,6 +42,13 @@
     [Parameter]
     public ICollection<MealItem> mealItems { get; set; } = new List<MealItem>();
 
+    /// <summary>Id posiłku z bazy danych. Wymagane do obsługi usuwania.</summary>
+    [Parameter]
+    public int MealId { get; set; } = 0;
+
+    /// <summary>Callback wywoływany po pomyślnym usunięciu posiłku z API.</summary>
+    [Parameter]
+    public EventCallback OnDeleted { get; set; }
 
     private async Task HandleButtonClick()
     {
@@ -49,7 +56,12 @@
 
         if (isFilled)
         {
-            var parameters = new DialogParameters<ShowMeal> { { x => x.MealItems, mealItems } };
+            var parameters = new DialogParameters<ShowMeal>
+            {
+                { x => x.MealItems, mealItems },
+                { x => x.MealId, MealId },
+                { x => x.OnDeleted, OnDeleted }
+            };
             await DialogService.ShowAsync<ShowMeal>("Podgląd", parameters, options);
         }
         else

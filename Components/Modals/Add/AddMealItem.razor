@@ -129,6 +129,19 @@
                                 }
                             </div>
                         }
+                        
+                        @if (recipeSteps.Any())
+                        {
+                            <div class="recipe-steps-list-container">
+                                <div class="section-title" style="margin-top: 15px; margin-bottom: 5px;">Sposób przygotowania:</div>
+                                <ol class="recipe-steps-list">
+                                    @foreach(var step in recipeSteps)
+                                    {
+                                        <li>@step</li>
+                                    }
+                                </ol>
+                            </div>
+                        }
                     }
                     else
                     {
@@ -166,6 +179,8 @@
     private SearchItem? selectedDisplayItem;
 
     private List<FitAura.Services.RecipeIngredientDetailDto> recipeIngredients = new();
+    
+    private List<string> recipeSteps = new();
 
 
 
@@ -383,6 +398,7 @@
             var details = await RecipeService.GetRecipeAsync(recipe.Id);
             
             recipeIngredients = details?.Ingredients ?? new();
+            recipeSteps = details?.Steps ?? new();
             
             int totalWeight = recipe.TotalWeight;
             if (totalWeight <= 0 && details != null)

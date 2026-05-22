@@ -55,6 +55,25 @@ namespace FitAura.Services
         }
 
         /// <summary>
+        /// Usuwa posiłek wraz z jego składnikami (MealItems) z bazy danych.
+        /// </summary>
+        /// <param name="mealId">Identyfikator posiłku do usunięcia.</param>
+        /// <returns>True jeśli usunięto pomyślnie, false w przypadku błędu.</returns>
+        public async Task<bool> DeleteMealAsync(int mealId)
+        {
+            try
+            {
+                var response = await _httpClient.DeleteAsync($"/api/Meals/{mealId}");
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Błąd przy usuwaniu posiłku: {ex.Message}");
+                return false;
+            }
+        }
+
+        /// <summary>
         /// Pobiera listę wszystkich posiłków przypisanych do konkretnego dnia.
         /// </summary>
         /// <param name="id">Identyfikator dnia.</param>

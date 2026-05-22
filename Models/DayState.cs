@@ -96,6 +96,24 @@ public class DayState
     }
 
     /// <summary>
+    /// Usuwa posiłek z lokalnego stanu na podstawie jego nazwy i liczby kalorii.
+    /// Wywoływana po pomyślnym usunięciu z API, by odświeżyć UI bez ponownego pobierania danych.
+    /// </summary>
+    /// <param name="meal">Obiekt posiłku do usunięcia ze stanu.</param>
+    public void RemoveMeal(AddMealRecord meal)
+    {
+        if (CurrentDay != null)
+        {
+            var toRemove = CurrentDay.Meals.FirstOrDefault(m => m == meal);
+            if (toRemove != null)
+            {
+                CurrentDay.Meals.Remove(toRemove);
+                OnChange?.Invoke();
+            }
+        }
+    }
+
+    /// <summary>
     /// Wymusza ręczne powiadomienie subskrybentów o zmianie stanu.
     /// </summary>
     public void NotifyChange()

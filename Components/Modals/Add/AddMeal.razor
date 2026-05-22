@@ -10,6 +10,7 @@
 @inject MealService MealService
 @inject DayService DayService
 @inject IDialogService DialogService
+@inject ISnackbar Snackbar
 
 <MudDialog>
     <DialogContent>
@@ -102,6 +103,12 @@
     public async Task Submit()
     {
         var macros = await MealService.CalculateTotalMacros(items);
+        if (macros.Kcal == 0)
+        {
+            Snackbar.Add("Nie można zapisać posiłku z 0 kcal.", Severity.Warning);
+            return;
+        }
+
         var meal = new AddMealRecord(mealName, macros.Kcal, macros.Protein, macros.Fats, macros.Carbs, DayState.CurrentDay.Id, items);
         DayState.SetMeal(meal);
 
