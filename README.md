@@ -89,7 +89,11 @@ dnia tj. spalone kalorie, liczba kroków, jakość snu oraz pomiary medyczne.
 ![Opis zdjęcia](assets/trening.png)
 ![Opis zdjęcia](assets/kroki.png)
 ![Opis zdjęcia](assets/sen.png)
-![Opis zdjęcia](assets/pomiary.png)
+![Opis zdjęcia](assets/nowypomiar.png)
+
+Użytkownik w ciągu dnia może wprowadzić wiele pomiarów, może również je edytować lub usunąć.
+
+
 
 
 
