@@ -25,11 +25,24 @@ dnia tj. spalone kalorie, liczba kroków, jakość snu oraz pomiary medyczne.
 
 
 
-Wypisz narzędzia niezbędne do zbudowania i uruchomienia projektu w trybie deweloperskim na czystym komputerze. Zwróć uwagę na:
+## Wymagania do uruchomienia projektu
 
-- **System operacyjny** (np. Windows 11, macOS, Linux).- **Środowisko uruchomieniowe / SDK** (np. .NET SDK 8.0, Node.js v20+, JDK 17).- **Silnik bazy danych** (np. PostgreSQL 16, MySQL, SQL Server 2022).- **Dodatkowe narzędzia** (np. Docker, Docker Compose, konkretny menedżer pakietów jak `npm` czy `yarn`).### Proces instalacji
+- **System operacyjny**: Windows 11
+- **SDK**: .NET 10
+- **Baza Danych**: PostgreSQL 17
 
+## Instrukcja uruchomienia
 
+1. Sklonowanie obu repozytoriów
+-> git clone https://github.com/xserafineq/FitAura
+-> git clone https://github.com/xserafineq/FitAuraApi
+
+2. Uruchomienie obu programów za pomocą komend
+(FitAura) -> dotnet run --framework net10.0-windows10.0.19041.0 
+(FitAuraApi) -> dotnet run --launch-profile https                     
+      
+
+   
 
 Instrukcja "krok po kroku", która prowadzi za rękę. Zakładaj, że osoba uruchamiająca projekt nie zna użytego frameworka.1. Jak pobrać projekt (np. `git clone <url>`).2. Jak zainstalować zależności (np. `npm install`, `dotnet restore`, `pip install -r requirements.txt`).### Proces konfiguracji
 
