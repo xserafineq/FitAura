@@ -134,8 +134,6 @@ Użytkownik w ciągu dnia może wprowadzić wiele pomiarów, może również je 
 
 ![Opis zdjęcia](assets/dodawanie_przepisu.png)
 
-
-
 7. Profil użytkownika - użytkownik może zmienić swoje podstawowe dane, jak wzrost, wagę oraz hasło do konta.
 
 ![Opis zdjęcia](assets/profil_uzytkownika.png)
