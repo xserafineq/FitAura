@@ -35,7 +35,8 @@ dnia tj. spalone kalorie, liczba kroków, jakość snu oraz pomiary medyczne.
 - git clone https://github.com/xserafineq/FitAura
 - git clone https://github.com/xserafineq/FitAuraApi
 
-2. Seedowanie bazy danych 
+2. Migracja bazy danych
+- dotnet ef database update NazwaMigracji
 
 3. Uruchomienie obu programów za pomocą komend
 - (**FitAura**) dotnet run --framework net10.0-windows10.0.19041.0 
