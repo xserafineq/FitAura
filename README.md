@@ -131,7 +131,9 @@ Użytkownik w ciągu dnia może wprowadzić wiele pomiarów, może również je 
 
 - możemy również dodać nowy przepis, poprzez kliknięcie na ikonkę plusa obok wyszukiwarki. Podczas dodawania przepisu uwzględniamy składniki (oraz ich ilość w g lub ml) oraz kroki przygotowania, a także nazwę oraz kategorię. Przepis możemy również edytować, po wyszukaniu przepisu po kategorii "Moje".
 
-![Opis zdjęcia](assets/podglad_tworzonego_przepisu.png)
+![Opis zdjęcia](assets/dodawanie_przepisu.png)
+
+![Opis zdjęcia](assets/moje_przepisy.png)
 
 7. Profil użytkownika - użytkownik może zmienić swoje podstawowe dane, jak wzrost, wagę oraz hasło do konta.
 
