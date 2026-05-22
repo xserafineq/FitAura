@@ -1,5 +1,5 @@
 # FitAura
-W dzisiejszych czasach bardzo popularne jest prowadzenie odpowiedniej diety oraz reguralne
+W dzisiejszych czasach bardzo powszechne jest prowadzenie odpowiedniej diety oraz reguralne
 sprawdzanie podstawowych pomiarów medycznych. 
 
 Głównym celem projektu jest udostępnienie platformy, która pozwoli w prosty sposób
