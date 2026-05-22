@@ -6,8 +6,32 @@ Głównym celem projektu jest udostępnienie platformy, która pozwoli w prosty 
 zapisywać posiłki, które spożyliśmy w ciągu dnia oraz zapisywać nasze aktywności w ciągu
 dnia tj. spalone kalorie, liczba kroków, jakość snu oraz pomiary medyczne.
 
+## Główne funkcjonalności
+- rejestracja / logowanie
+- zarządzanie naszym dniem:
+  - zapisywanie zjedzonych przez nas posiłków (produktów / przepisów)
+  - możliwość prowadzenia dzienniczka aktywność (spalone kalorie, jakość snu, liczba kroków, podstawowe pomiary medyczne)
+- obliczanie deficytu kalorycznego na podstawie bieżącej wagi oraz wzrostu
+- automatycznie zliczanie spożytej liczby kalorii wciągu dnia oraz makro składników (białka, węgli oraz tłuszczy)
+- statystyki z danego okresu:
+  - średnie (jakości snu, zjedzonych kalorii, liczby kroków, tętna, cukru)
+  - wykres bmi
+- posiłki:
+  - mogą składać się z przepisu lub produktu
+  - możemy podać ile gramów zjedliśmy danego produktu i przeliczone zostaną odpowiednio kalorie oraz makroskładniki
+  - mozemy podać ile gramów / bądź kcal chcemy zjeść w danym przepisie i zostanie odpowiednio przeliczone ile składniku danego uzyć
+  - podgląd posiłku, nazywanie posiłku
+- przepisy
+  - tworzenie własnych przepisów
+  - edytowanie przepisów
+  - zaawansowane wyszukiwanie przepisów poprzez (kategorie, zakres kcal, rosnąco / malejąco, autora przepisu, po nazwie)
+- profil użytkownika
+  - zmiana danych typu waga, wzrost, hasło
 
-
+## Innowacyjność
+- Przepis przelicza nam składniki potrzebne do ugotowania dania względem spożytych kalorii.
+- Ocena jakości snu w danym okresie (statystyka).
+ 
 ## Technologie
 
 | Technologia / Pakiet | Wersja | Oficjalna strona |
@@ -35,7 +59,8 @@ dnia tj. spalone kalorie, liczba kroków, jakość snu oraz pomiary medyczne.
 - git clone https://github.com/xserafineq/FitAura
 - git clone https://github.com/xserafineq/FitAuraApi
 
-2. Seedowanie bazy danych 
+2. Migracja bazy danych
+- dotnet ef database update fitauradb
 
 3. Uruchomienie obu programów za pomocą komend
 - (**FitAura**) dotnet run --framework net10.0-windows10.0.19041.0 
@@ -45,8 +70,9 @@ dnia tj. spalone kalorie, liczba kroków, jakość snu oraz pomiary medyczne.
 ## Podręcznik użytkownika
 
 
+### Funkcjonalności
 
-W tej części skup się na **biznesowej stronie aplikacji** (najlepiej wspomagając się zrzutami ekranu z działającego projektu).- Pokaż ścieżki użytkownika (tzw. *user flow*): "Jak dodać nowy produkt", "Jak opłacić zamówienie", "Jak wygenerować raport".- Wyjaśnij zasady działania najważniejszych funkcji.- Opisz role w systemie (co może zwykły klient, a jakie dodatkowe zakładki widzi administrator).- Opisz przypadki brzegowe jakie system obsługuje np. wpisanie tekstu w pole przeznaczone dla liczb.- Opisz jakie dane system przechowuje i udostępnia.- Pokaż (np. na zrzutach ekranu), jak interfejs dostosowuje się do mniejszych ekranów (responsywność / wersja mobilna).- Wyjaśnij, jak działa najważniejszy mechanizm aplikacji, np. filtrowanie danych, obliczanie sum, czy proces wysyłki formularza.
+1. Rejestracja
 
 
 
